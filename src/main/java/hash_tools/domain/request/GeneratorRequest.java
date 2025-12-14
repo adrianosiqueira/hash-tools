@@ -7,16 +7,20 @@ import hash_tools.domain.result.GeneratorResult;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.function.Supplier;
 
 public record GeneratorRequest(
     ChecksumSource checksumSource,
     List<Algorithm> algorithms
 ) {
 
-    @SafeVarargs
-    public final void process(Function<GeneratorRequest, GeneratorResult> processor, Consumer<GeneratorResult>... consumers) {
-        GeneratorResult result = processor.apply(this);
+    public static GeneratorRequest createUsingSuppliers(Supplier<ChecksumSource> checksumSource, Supplier<List<Algorithm>> algorithms) {
+        return new GeneratorRequest(
+            checksumSource.get(),
+            algorithms.get()
+        );
+    }
+
 
         Stream
             .of(consumers)
