@@ -10,7 +10,7 @@ public abstract class ChecksumExtractor {
     public List<Checksum> extractOfficialChecksums() {
         return extractData()
             .map(Checksum::fromValue)
-            .filter(Checksum::isValid)
+            .filter(Checksum::valid)
             .toList();
     }
 

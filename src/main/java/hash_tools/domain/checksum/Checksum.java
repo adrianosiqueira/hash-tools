@@ -21,11 +21,6 @@ public record Checksum(
 
 
 
-    public boolean isValid() {
-        return algorithm != null
-            && value != null;
-    }
-
     public boolean matches(Checksum other) {
         if (other == null) {
             return false;
@@ -36,5 +31,9 @@ public record Checksum(
         } else {
             return value.equalsIgnoreCase(other.value);
         }
+    }
+
+    public boolean valid() {
+        return valid;
     }
 }

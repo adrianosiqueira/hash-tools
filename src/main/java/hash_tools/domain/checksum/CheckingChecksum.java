@@ -13,7 +13,7 @@ public record CheckingChecksum(
     public boolean isValid() {
         return officialChecksum != null
             && generatedChecksum != null
-            && officialChecksum.isValid()
-            && generatedChecksum.isValid();
+            && officialChecksum.valid()
+            && generatedChecksum.valid();
     }
 }
