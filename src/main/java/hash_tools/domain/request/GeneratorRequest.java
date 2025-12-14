@@ -7,10 +7,19 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public record GeneratorRequest(
-    ChecksumSource checksumSource,
-    List<Algorithm> algorithms
-) {
+public class GeneratorRequest {
+
+    private ChecksumSource checksumSource;
+    private List<Algorithm> algorithms;
+
+
+
+    private GeneratorRequest(ChecksumSource checksumSource, List<Algorithm> algorithms) {
+        this.checksumSource = checksumSource;
+        this.algorithms = algorithms;
+    }
+
+
 
     public static GeneratorRequest createUsingSuppliers(Supplier<ChecksumSource> checksumSource, Supplier<List<Algorithm>> algorithms) {
         return new GeneratorRequest(
@@ -23,5 +32,15 @@ public record GeneratorRequest(
 
     public <R> R process(Function<GeneratorRequest, R> processor) {
         return processor.apply(this);
+    }
+
+
+
+    public ChecksumSource checksumSource() {
+        return checksumSource;
+    }
+
+    public List<Algorithm> algorithms() {
+        return algorithms;
     }
 }
