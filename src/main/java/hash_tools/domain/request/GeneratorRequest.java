@@ -2,10 +2,8 @@ package hash_tools.domain.request;
 
 import hash_tools.domain.checksum.Algorithm;
 import hash_tools.domain.checksum_source.ChecksumSource;
-import hash_tools.domain.result.GeneratorResult;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -22,8 +20,8 @@ public record GeneratorRequest(
     }
 
 
-        Stream
-            .of(consumers)
-            .forEach(result::consume);
+
+    public <R> R process(Function<GeneratorRequest, R> processor) {
+        return processor.apply(this);
     }
 }
