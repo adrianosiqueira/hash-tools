@@ -10,7 +10,8 @@ public record GeneratorResult(
     String identification
 ) {
 
-    public void consume(Consumer<GeneratorResult> consumer) {
+    public GeneratorResult consume(Consumer<GeneratorResult> consumer) {
         consumer.accept(this);
+        return this;
     }
 }
