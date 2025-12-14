@@ -1,22 +1,30 @@
 package hash_tools.domain.checksum;
 
-public record Checksum(
-    Algorithm algorithm,
-    String value
-) {
+import java.util.Optional;
+
+public class Checksum {
+
+    private Algorithm algorithm;
+    private String value;
+    private boolean valid;
+
+
+
+    private Checksum(Algorithm algorithm, String value, boolean valid) {
+        this.algorithm = algorithm;
+        this.value = value;
+        this.valid = valid;
+    }
+
+
 
     public static Checksum fromValue(String value) {
-        if (value == null) {
-            return new Checksum(null, null);
-        }
-
-
-        Algorithm algorithm = Algorithm
-            .fromLength(value.length())
-            .orElse(null);
-
-
-        return new Checksum(algorithm, value);
+        return Optional
+            .ofNullable(value)
+            .map(String::length)
+            .flatMap(Algorithm::fromLength)
+            .map(algorithm -> new Checksum(algorithm, value, true))
+            .orElse(new Checksum(null, null, false));
     }
 
 
@@ -31,6 +39,16 @@ public record Checksum(
         } else {
             return value.equalsIgnoreCase(other.value);
         }
+    }
+
+
+
+    public Algorithm algorithm() {
+        return algorithm;
+    }
+
+    public String value() {
+        return value;
     }
 
     public boolean valid() {

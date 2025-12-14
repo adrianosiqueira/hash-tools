@@ -16,7 +16,7 @@ public abstract class ChecksumSource {
         byte[] bytes = messageDigest.digest();
         String decoded = decode(bytes);
 
-        return new Checksum(algorithm, decoded);
+        return Checksum.fromValue(decoded);
     }
 
 
