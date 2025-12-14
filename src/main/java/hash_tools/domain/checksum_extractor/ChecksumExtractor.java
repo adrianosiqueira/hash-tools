@@ -8,7 +8,8 @@ import java.util.stream.Stream;
 public abstract class ChecksumExtractor {
 
     public List<Checksum> extractOfficialChecksums() {
-        return extractData()
+        return this
+            .extractDataStream()
             .map(Checksum::fromValue)
             .filter(Checksum::valid)
             .toList();
@@ -16,11 +17,11 @@ public abstract class ChecksumExtractor {
 
 
 
-    protected abstract Stream<String> extractData();
+    protected abstract Stream<String> extractDataStream();
 
 
 
-    protected String extractChecksumPart(String string) {
-        return string.split(" ")[0];
+    protected String retrieveChecksumFromLine(String line) {
+        return line.split(" ")[0];
     }
 }

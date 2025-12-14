@@ -15,9 +15,9 @@ public class StringChecksumExtractor extends ChecksumExtractor {
 
 
     @Override
-    protected Stream<String> extractData() {
+    protected Stream<String> extractDataStream() {
         return Stream
             .of(string)
-            .map(this::extractChecksumPart);
+            .map(this::retrieveChecksumFromLine);
     }
 }

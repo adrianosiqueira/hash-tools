@@ -17,9 +17,9 @@ public class FileChecksumExtractor extends ChecksumExtractor {
 
 
     @Override
-    protected Stream<String> extractData() {
+    protected Stream<String> extractDataStream() {
         try (Stream<String> lines = Files.lines(file)) {
-            return lines.map(this::extractChecksumPart);
+            return lines.map(this::retrieveChecksumFromLine);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
