@@ -10,13 +10,19 @@ import java.util.function.Function;
 
 public class CheckerRequestProcessor implements Function<CheckerRequest, CheckerResult> {
 
+    private CheckerRequest request;
+
+
+
     @Override
     public CheckerResult apply(CheckerRequest request) {
+        this.request = request;
+
         List<CheckingChecksum> checksums = request
             .checksumExtractor()
             .extractOfficialChecksums()
             .parallelStream()
-            .map(checksum -> generateChecksum(checksum, request))
+            .map(this::generateChecksum)
             .toList();
 
         double matchingRatio = calculateMatchingRatio(checksums);
@@ -30,7 +36,7 @@ public class CheckerRequestProcessor implements Function<CheckerRequest, Checker
 
 
 
-    private CheckingChecksum generateChecksum(Checksum checksum, CheckerRequest request) {
+    private CheckingChecksum generateChecksum(Checksum checksum) {
         Checksum generated = request
             .checksumSource()
             .generateChecksum(checksum.algorithm());
