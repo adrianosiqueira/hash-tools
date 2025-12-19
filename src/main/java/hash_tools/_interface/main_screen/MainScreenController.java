@@ -6,6 +6,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
@@ -23,8 +24,6 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Pane pnlRoot;
-    @FXML
-    private Pane pnlContent;
     @FXML
     private Pane pnlChecker;
     @FXML
@@ -44,6 +43,10 @@ public class MainScreenController implements Initializable {
     private Label lblGeneratorTitle;
     @FXML
     private Label lblGeneratorDescription;
+
+
+
+    private Scene scene;
 
 
 
@@ -76,9 +79,7 @@ public class MainScreenController implements Initializable {
 
 
     private void restoreDefaultScreen() {
-        pnlRoot
-            .getChildren()
-            .setAll(pnlContent);
+        scene.setRoot(pnlRoot);
     }
 
     private <C extends ClosingObservable> FXMLData<C> loadFXML(String path) {
@@ -95,12 +96,11 @@ public class MainScreenController implements Initializable {
         }
     }
 
-    private <C extends ClosingObservable> void setupScreen(FXMLData<C> data) {
-        pnlRoot
-            .getChildren()
-            .setAll(data.pane());
+    private <C extends ClosingObservable> void setupScreen(FXMLData<C> fxmlData) {
+        scene = pnlRoot.getScene();
+        scene.setRoot(fxmlData.pane());
 
-        data
+        fxmlData
             .controller()
             .performWhenClosed(this::restoreDefaultScreen);
     }
