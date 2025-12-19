@@ -1,44 +1,32 @@
+* {
+    BACKGROUND_COLOR: rgb(255, 255, 255);
+    TEXT_COLOR: rgb(0, 0, 0);
+
+    ACCENT_COLOR: rgb(220, 220, 220);
+    ACCENT_COLOR_HIGHLIGHT: rgb(200, 200, 200);
+    ACCENT_COLOR_SHADOW: rgb(0, 0, 0);
+}
+
+
+
 .label {
-    -fx-text-fill: rgb(0, 0, 0);
+    -fx-text-fill: TEXT_COLOR;
 }
 
 
 
-.label-main-screen-button-description {
-    -fx-font-size: 18;
-}
-
-
-
-.label-main-screen-button-title {
-    -fx-font-size: 36;
-    -fx-font-weight: bold;
-}
-
-
-
-.pane-main-screen-button {
-    -fx-background-color: rgb(220, 220, 220);
+.pane-run-module {
+    -fx-background-color: ACCENT_COLOR;
     -fx-background-radius: 10;
-
-    -fx-padding: 20;
-    -fx-cursor: hand;
 }
 
-.pane-main-screen-button:hover {
-    -fx-background-color: rgb(200, 200, 200);
-}
-
-
-
-.pane-main-screen-content {
-    -fx-spacing: 30;
+.pane-run-module:hover {
+    -fx-background-color: ACCENT_COLOR_HIGHLIGHT;
+    -fx-effect: dropshadow(gaussian, ACCENT_COLOR_SHADOW, 20, 0, 0, 0);
 }
 
 
 
 .pane-root {
-    -fx-background-color: rgb(255, 255, 255);
-
-    -fx-padding: 30;
+    -fx-background-color: BACKGROUND_COLOR;
 }

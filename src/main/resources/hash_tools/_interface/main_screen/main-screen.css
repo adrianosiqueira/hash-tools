@@ -1,0 +1,24 @@
+.label-description {
+    -fx-font-size: 18;
+}
+
+
+
+.label-title {
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+}
+
+
+
+.pane-run-module {
+    -fx-padding: 20;
+    -fx-cursor: hand;
+}
+
+
+
+.pane-root {
+    -fx-padding: 30;
+    -fx-spacing: 30;
+}
