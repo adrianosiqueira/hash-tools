@@ -1,4 +1,4 @@
-package hash_tools.frontend.screen.main_screen;
+package hash_tools.frontend.screen.start;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class ApplicationWindow extends Application {
 
-    private static final String MAIN_SCREEN_PATH = "/hash_tools/frontend/screen/main_screen/main-screen.fxml";
+    private static final String MAIN_SCREEN_PATH = "/hash_tools/frontend/screen/start/main-screen.fxml";
 
 
 

@@ -1,4 +1,4 @@
-package hash_tools.frontend.screen.main_screen;
+package hash_tools.frontend.screen.start;
 
 import hash_tools.frontend.abstraction.ClosingObservable;
 import hash_tools.frontend.screen.checker.CheckerScreenController;
