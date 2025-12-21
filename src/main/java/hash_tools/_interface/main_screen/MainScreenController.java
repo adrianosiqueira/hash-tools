@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class MainScreenController implements Initializable {
 
-    private static final String CHECKER_SCREEN_PATH = "/hash_tools/_interface/checker_screen/checker-screen.fxml";
+    private static final String CHECKER_SCREEN_PATH = "/hash_tools/_interface/checker_screen/main-screen.fxml";
     private static final String COMPARATOR_SCREEN_PATH = "/hash_tools/_interface/comparator_screen/comparator-screen.fxml";
     private static final String GENERATOR_SCREEN_PATH = "/hash_tools/_interface/generator_screen/generator-screen.fxml";
 

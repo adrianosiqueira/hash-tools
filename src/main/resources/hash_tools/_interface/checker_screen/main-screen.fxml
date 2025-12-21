@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<BorderPane fx:controller="hash_tools._interface.checker_screen.CheckerScreenController" fx:id="pnlRoot" prefHeight="640" prefWidth="853" styleClass="pane-root" stylesheets="@../style/light-theme.css,@main-screen.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <HBox fx:id="pnlHeader" styleClass="pane-header">
+            <Button fx:id="btnBack" onAction="#close" styleClass="button-back" text="&lt;"/>
+            <Separator orientation="VERTICAL"/>
+            <Label fx:id="lblHeader" styleClass="label-header" text="Checker"/>
+        </HBox>
+    </top>
+
+
+    <center>
+        <GridPane fx:id="pnlContent" styleClass="pane-content">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
+                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
+                <ColumnConstraints halignment="LEFT" hgrow="NEVER"/>
+                <ColumnConstraints halignment="LEFT" hgrow="NEVER"/>
+            </columnConstraints>
+
+            <rowConstraints>
+                <RowConstraints vgrow="NEVER"/>
+                <RowConstraints vgrow="NEVER"/>
+                <RowConstraints vgrow="NEVER"/>
+            </rowConstraints>
+
+
+            <Label GridPane.columnIndex="0" GridPane.rowIndex="0" fx:id="lblInput" text="Input"/>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="txtInput" promptText="/path/to/input-file"/>
+            <CheckBox GridPane.columnIndex="2" GridPane.rowIndex="0" fx:id="chkUseInputFile" maxHeight="1E6" selected="true" text="File"/>
+            <Button GridPane.columnIndex="3" GridPane.rowIndex="0" fx:id="btnOpenInputFile" onAction="#openInputFile" text="..."/>
+
+
+            <Label GridPane.columnIndex="0" GridPane.rowIndex="1" fx:id="lblChecksum" text="Checksum"/>
+            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="txtChecksum" promptText="/path/to/checksum-file"/>
+            <CheckBox GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="chkUseChecksumFile" selected="true" text="File"/>
+            <Button GridPane.columnIndex="3" GridPane.rowIndex="1" fx:id="btnOpenChecksumFile" onAction="#openChecksumFile" text="..."/>
+
+
+            <Button GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" fx:id="btnRun" onAction="#performCheckingOperation" text="Run"/>
+        </GridPane>
+    </center>
+</BorderPane>

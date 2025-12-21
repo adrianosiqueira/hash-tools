@@ -1,0 +1,33 @@
+.button-back {
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0 5;
+}
+
+
+
+.label-header {
+    -fx-font-size: 36;
+}
+
+
+
+.pane-header {
+    -fx-alignment: center-left;
+    -fx-spacing: 20;
+}
+
+
+
+.pane-content {
+    -fx-alignment: center;
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+
+
+.pane-root {
+    -fx-padding: 30;
+}
