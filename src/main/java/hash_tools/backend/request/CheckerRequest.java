@@ -1,7 +1,7 @@
 package hash_tools.backend.request;
 
 import hash_tools.backend.checksum.extractor.ChecksumExtractor;
-import hash_tools.backend.checksum.checksum_source.ChecksumSource;
+import hash_tools.backend.checksum.source.ChecksumSource;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

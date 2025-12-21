@@ -1,4 +1,4 @@
-package hash_tools.backend.checksum.checksum_source;
+package hash_tools.backend.checksum.source;
 
 import java.security.MessageDigest;
 
