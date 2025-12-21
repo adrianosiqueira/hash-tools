@@ -6,6 +6,7 @@ module hash.tools {
     exports hash_tools;
     exports hash_tools._interface.abstraction;
     exports hash_tools._interface.checker_screen;
+    exports hash_tools._interface.dialog;
     exports hash_tools._interface.main_screen;
     exports hash_tools.domain.checksum;
     exports hash_tools.domain.checksum_extractor;
@@ -17,6 +18,7 @@ module hash.tools {
     opens hash_tools;
     opens hash_tools._interface.abstraction;
     opens hash_tools._interface.checker_screen;
+    opens hash_tools._interface.dialog;
     opens hash_tools._interface.main_screen;
     opens hash_tools.domain.checksum;
     opens hash_tools.domain.checksum_extractor;
