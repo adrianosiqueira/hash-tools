@@ -1,4 +1,4 @@
-package hash_tools.backend.checksum.checksum_extractor;
+package hash_tools.backend.checksum.extractor;
 
 import java.util.stream.Stream;
 
