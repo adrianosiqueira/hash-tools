@@ -1,4 +1,4 @@
-package hash_tools._interface.abstraction;
+package hash_tools.frontend.abstraction;
 
 public interface ClosingObservable {
 

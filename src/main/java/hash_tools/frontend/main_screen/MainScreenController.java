@@ -1,7 +1,7 @@
-package hash_tools._interface.main_screen;
+package hash_tools.frontend.main_screen;
 
-import hash_tools._interface.abstraction.ClosingObservable;
-import hash_tools._interface.checker_screen.CheckerScreenController;
+import hash_tools.frontend.abstraction.ClosingObservable;
+import hash_tools.frontend.checker_screen.CheckerScreenController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +16,9 @@ import java.util.ResourceBundle;
 
 public class MainScreenController implements Initializable {
 
-    private static final String CHECKER_SCREEN_PATH = "/hash_tools/_interface/checker_screen/main-screen.fxml";
-    private static final String COMPARATOR_SCREEN_PATH = "/hash_tools/_interface/comparator_screen/comparator-screen.fxml";
-    private static final String GENERATOR_SCREEN_PATH = "/hash_tools/_interface/generator_screen/generator-screen.fxml";
+    private static final String CHECKER_SCREEN_PATH = "/hash_tools/frontend/checker_screen/main-screen.fxml";
+    private static final String COMPARATOR_SCREEN_PATH = "/hash_tools/frontend/comparator_screen/comparator-screen.fxml";
+    private static final String GENERATOR_SCREEN_PATH = "/hash_tools/frontend/generator_screen/generator-screen.fxml";
 
 
 

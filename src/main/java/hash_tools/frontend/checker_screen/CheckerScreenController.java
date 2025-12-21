@@ -1,8 +1,8 @@
-package hash_tools._interface.checker_screen;
+package hash_tools.frontend.checker_screen;
 
-import hash_tools._interface.abstraction.ClosingObservable;
-import hash_tools._interface.dialog.FileDialog;
-import hash_tools._interface.dialog.FileExtension;
+import hash_tools.frontend.abstraction.ClosingObservable;
+import hash_tools.frontend.dialog.FileDialog;
+import hash_tools.frontend.dialog.FileExtension;
 import hash_tools.domain.checksum_extractor.ChecksumExtractor;
 import hash_tools.domain.checksum_extractor.FileChecksumExtractor;
 import hash_tools.domain.checksum_extractor.StringChecksumExtractor;
@@ -11,7 +11,6 @@ import hash_tools.domain.checksum_source.FileChecksumSource;
 import hash_tools.domain.checksum_source.StringChecksumSource;
 import hash_tools.domain.request.CheckerRequest;
 import hash_tools.domain.request_processor.CheckerRequestProcessor;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
