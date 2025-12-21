@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<BorderPane fx:controller="hash_tools.frontend.screen.checker_screen.CheckerScreenController" fx:id="pnlRoot" prefHeight="640" prefWidth="853" styleClass="pane-root" stylesheets="@../theme/light.css,@main-screen.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml">
+<BorderPane fx:controller="hash_tools.frontend.screen.checker.CheckerScreenController" fx:id="pnlRoot" prefHeight="640" prefWidth="853" styleClass="pane-root" stylesheets="@../theme/light.css,@main-screen.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml">
     <top>
         <HBox fx:id="pnlHeader" styleClass="pane-header">
             <Button fx:id="btnBack" onAction="#close" styleClass="button-back" text="&lt;"/>
