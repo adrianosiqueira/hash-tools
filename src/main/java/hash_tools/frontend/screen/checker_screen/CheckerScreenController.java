@@ -1,4 +1,4 @@
-package hash_tools.frontend.checker_screen;
+package hash_tools.frontend.screen.checker_screen;
 
 import hash_tools.frontend.abstraction.ClosingObservable;
 import hash_tools.frontend.dialog.FileDialog;

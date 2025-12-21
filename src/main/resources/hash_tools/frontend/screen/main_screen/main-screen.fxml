@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="CENTER" fx:controller="hash_tools.frontend.main_screen.MainScreenController" fx:id="pnlRoot" prefHeight="480.0" prefWidth="853.0" styleClass="pane-root" stylesheets="@main-screen.css,@../theme/light.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<VBox alignment="CENTER" fx:controller="hash_tools.frontend.screen.main_screen.MainScreenController" fx:id="pnlRoot" prefHeight="480.0" prefWidth="853.0" styleClass="pane-root" stylesheets="@main-screen.css,@../theme/light.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <VBox fx:id="pnlChecker" spacing="5" styleClass="pane-run-module">
         <Label fx:id="lblCheckerTitle" styleClass="label-title" text="Checker"/>
         <Label fx:id="lblCheckerDescription" styleClass="label-description" text="Checks the file integrity."/>
