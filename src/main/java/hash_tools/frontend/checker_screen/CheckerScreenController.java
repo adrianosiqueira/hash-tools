@@ -10,7 +10,7 @@ import hash_tools.backend.checksum.source.ChecksumSource;
 import hash_tools.backend.checksum.source.FileChecksumSource;
 import hash_tools.backend.checksum.source.StringChecksumSource;
 import hash_tools.backend.request.CheckerRequest;
-import hash_tools.backend.request_processor.CheckerRequestProcessor;
+import hash_tools.backend.request.request_processor.CheckerRequestProcessor;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
