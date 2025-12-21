@@ -1,4 +1,4 @@
-package hash_tools.backend.checksum_extractor;
+package hash_tools.backend.checksum.checksum_extractor;
 
 import hash_tools.backend.checksum.Checksum;
 

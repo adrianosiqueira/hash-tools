@@ -5,8 +5,8 @@ module hash.tools {
 
     exports hash_tools;
     exports hash_tools.backend.checksum;
-    exports hash_tools.backend.checksum_extractor;
-    exports hash_tools.backend.checksum_source;
+    exports hash_tools.backend.checksum.checksum_extractor;
+    exports hash_tools.backend.checksum.checksum_source;
     exports hash_tools.backend.request;
     exports hash_tools.backend.request_processor;
     exports hash_tools.backend.result;
@@ -17,8 +17,8 @@ module hash.tools {
 
     opens hash_tools;
     opens hash_tools.backend.checksum;
-    opens hash_tools.backend.checksum_extractor;
-    opens hash_tools.backend.checksum_source;
+    opens hash_tools.backend.checksum.checksum_extractor;
+    opens hash_tools.backend.checksum.checksum_source;
     opens hash_tools.backend.request;
     opens hash_tools.backend.request_processor;
     opens hash_tools.backend.result;
