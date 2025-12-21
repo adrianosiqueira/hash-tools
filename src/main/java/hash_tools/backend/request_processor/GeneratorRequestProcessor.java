@@ -1,8 +1,8 @@
-package hash_tools.domain.request_processor;
+package hash_tools.backend.request_processor;
 
-import hash_tools.domain.checksum.Checksum;
-import hash_tools.domain.request.GeneratorRequest;
-import hash_tools.domain.result.GeneratorResult;
+import hash_tools.backend.checksum.Checksum;
+import hash_tools.backend.request.GeneratorRequest;
+import hash_tools.backend.result.GeneratorResult;
 
 import java.util.List;
 import java.util.function.Function;

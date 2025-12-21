@@ -1,9 +1,9 @@
-package hash_tools.domain.request_processor;
+package hash_tools.backend.request_processor;
 
-import hash_tools.domain.checksum.CheckingChecksum;
-import hash_tools.domain.checksum.Checksum;
-import hash_tools.domain.request.CheckerRequest;
-import hash_tools.domain.result.CheckerResult;
+import hash_tools.backend.checksum.CheckingChecksum;
+import hash_tools.backend.checksum.Checksum;
+import hash_tools.backend.request.CheckerRequest;
+import hash_tools.backend.result.CheckerResult;
 
 import java.util.List;
 import java.util.function.Function;

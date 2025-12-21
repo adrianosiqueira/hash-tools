@@ -1,4 +1,4 @@
-package hash_tools.domain.checksum_extractor;
+package hash_tools.backend.checksum_extractor;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

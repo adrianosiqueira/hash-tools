@@ -1,7 +1,7 @@
-package hash_tools.domain.request;
+package hash_tools.backend.request;
 
-import hash_tools.domain.checksum.Algorithm;
-import hash_tools.domain.checksum_source.ChecksumSource;
+import hash_tools.backend.checksum.Algorithm;
+import hash_tools.backend.checksum_source.ChecksumSource;
 
 import java.util.List;
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package hash_tools.domain.checksum;
+package hash_tools.backend.checksum;
 
 public class ComparingChecksum {
 

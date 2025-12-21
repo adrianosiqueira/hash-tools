@@ -1,6 +1,6 @@
-package hash_tools.domain.checksum_extractor;
+package hash_tools.backend.checksum_extractor;
 
-import hash_tools.domain.checksum.Checksum;
+import hash_tools.backend.checksum.Checksum;
 
 import java.util.List;
 import java.util.stream.Stream;

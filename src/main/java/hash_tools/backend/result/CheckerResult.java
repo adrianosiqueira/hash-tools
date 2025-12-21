@@ -1,6 +1,6 @@
-package hash_tools.domain.result;
+package hash_tools.backend.result;
 
-import hash_tools.domain.checksum.CheckingChecksum;
+import hash_tools.backend.checksum.CheckingChecksum;
 
 import java.util.List;
 import java.util.function.Consumer;

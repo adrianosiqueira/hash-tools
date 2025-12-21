@@ -1,7 +1,7 @@
-package hash_tools.domain.checksum_source;
+package hash_tools.backend.checksum_source;
 
-import hash_tools.domain.checksum.Algorithm;
-import hash_tools.domain.checksum.Checksum;
+import hash_tools.backend.checksum.Algorithm;
+import hash_tools.backend.checksum.Checksum;
 
 import java.security.MessageDigest;
 import java.util.stream.Collectors;
