@@ -1,4 +1,4 @@
-package hash_tools.backend.request.request_processor;
+package hash_tools.backend.request.processor;
 
 import hash_tools.backend.checksum.CheckingChecksum;
 import hash_tools.backend.checksum.Checksum;

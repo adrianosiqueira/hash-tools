@@ -8,7 +8,7 @@ module hash.tools {
     exports hash_tools.backend.checksum.extractor;
     exports hash_tools.backend.checksum.source;
     exports hash_tools.backend.request;
-    exports hash_tools.backend.request.request_processor;
+    exports hash_tools.backend.request.processor;
     exports hash_tools.backend.result;
     exports hash_tools.frontend.abstraction;
     exports hash_tools.frontend.checker_screen;
@@ -20,7 +20,7 @@ module hash.tools {
     opens hash_tools.backend.checksum.extractor;
     opens hash_tools.backend.checksum.source;
     opens hash_tools.backend.request;
-    opens hash_tools.backend.request.request_processor;
+    opens hash_tools.backend.request.processor;
     opens hash_tools.backend.result;
     opens hash_tools.frontend.abstraction;
     opens hash_tools.frontend.checker_screen;
