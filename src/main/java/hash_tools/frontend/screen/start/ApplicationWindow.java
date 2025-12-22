@@ -1,7 +1,7 @@
 package hash_tools.frontend.screen.start;
 
+import hash_tools.frontend.window.FXMLFile;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -24,12 +24,11 @@ public class ApplicationWindow extends Application {
 
 
     @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource(MAIN_SCREEN_PATH));
-
-        Pane pnlRoot = loader.load();
-        changeScene(pnlRoot);
+    public void start(Stage stage) {
+        new FXMLFile()
+            .location(MAIN_SCREEN_PATH)
+            .load()
+            .usePane(ApplicationWindow::changeScene);
 
         stage.setTitle("Hash Tools");
         stage.setScene(SCENE);

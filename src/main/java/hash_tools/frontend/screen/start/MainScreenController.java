@@ -1,15 +1,13 @@
 package hash_tools.frontend.screen.start;
 
 import hash_tools.frontend.abstraction.ClosingObservable;
-import hash_tools.frontend.screen.checker.CheckerScreenController;
+import hash_tools.frontend.window.FXMLFile;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -55,20 +53,27 @@ public class MainScreenController implements Initializable {
 
 
     private void openCheckerScreen(Event unused) {
-        FXMLData<CheckerScreenController> data = loadFXML(CHECKER_SCREEN_PATH);
-        setupScreen(data);
+        new FXMLFile()
+            .location(CHECKER_SCREEN_PATH)
+            .<ClosingObservable>load()
+            .usePane(ApplicationWindow::changeScene)
+            .useController(c -> c.performWhenClosed(this::restoreDefaultScreen));
     }
 
     private void openComparatorScreen(Event unused) {
-        // TODO Use the correct controller type
-        FXMLData<CheckerScreenController> data = loadFXML(COMPARATOR_SCREEN_PATH);
-        setupScreen(data);
+        new FXMLFile()
+            .location(COMPARATOR_SCREEN_PATH)
+            .<ClosingObservable>load()
+            .usePane(ApplicationWindow::changeScene)
+            .useController(c -> c.performWhenClosed(this::restoreDefaultScreen));
     }
 
     private void openGeneratorScreen(Event unused) {
-        // TODO Use the correct controller type
-        FXMLData<CheckerScreenController> data = loadFXML(GENERATOR_SCREEN_PATH);
-        setupScreen(data);
+        new FXMLFile()
+            .location(GENERATOR_SCREEN_PATH)
+            .<ClosingObservable>load()
+            .usePane(ApplicationWindow::changeScene)
+            .useController(c -> c.performWhenClosed(this::restoreDefaultScreen));
     }
 
 
@@ -76,30 +81,4 @@ public class MainScreenController implements Initializable {
     private void restoreDefaultScreen() {
         ApplicationWindow.changeScene(pnlRoot);
     }
-
-    private <C extends ClosingObservable> FXMLData<C> loadFXML(String path) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource(path));
-
-            Pane pane = loader.load();
-            C controller = loader.getController();
-
-            return new FXMLData<>(pane, controller);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private <C extends ClosingObservable> void setupScreen(FXMLData<C> fxmlData) {
-        ApplicationWindow.changeScene(fxmlData.pane());
-
-        fxmlData
-            .controller()
-            .performWhenClosed(this::restoreDefaultScreen);
-    }
-
-
-
-    private record FXMLData<C extends ClosingObservable>(Pane pane, C controller) {}
 }
