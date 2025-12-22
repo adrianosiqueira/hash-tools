@@ -9,6 +9,17 @@ import javafx.stage.Stage;
 public class ApplicationWindow extends Application {
 
     private static final String MAIN_SCREEN_PATH = "/hash_tools/frontend/screen/start/main-screen.fxml";
+    private static final Scene SCENE = new Scene(new Pane());
+
+
+
+    public static void changeScene(Pane pane) {
+        SCENE.setRoot(pane);
+    }
+
+    public static Pane getSceneContent() {
+        return (Pane) SCENE.getRoot();
+    }
 
 
 
@@ -18,10 +29,10 @@ public class ApplicationWindow extends Application {
         loader.setLocation(getClass().getResource(MAIN_SCREEN_PATH));
 
         Pane pnlRoot = loader.load();
-        Scene scene = new Scene(pnlRoot);
+        changeScene(pnlRoot);
 
         stage.setTitle("Hash Tools");
-        stage.setScene(scene);
+        stage.setScene(SCENE);
         stage.show();
     }
 }
