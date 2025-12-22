@@ -6,7 +6,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
@@ -46,10 +45,6 @@ public class MainScreenController implements Initializable {
 
 
 
-    private Scene scene;
-
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         pnlChecker.setOnMouseClicked(this::openCheckerScreen);
@@ -79,7 +74,7 @@ public class MainScreenController implements Initializable {
 
 
     private void restoreDefaultScreen() {
-        scene.setRoot(pnlRoot);
+        ApplicationWindow.changeScene(pnlRoot);
     }
 
     private <C extends ClosingObservable> FXMLData<C> loadFXML(String path) {
@@ -97,12 +92,11 @@ public class MainScreenController implements Initializable {
     }
 
     private <C extends ClosingObservable> void setupScreen(FXMLData<C> fxmlData) {
-        scene = pnlRoot.getScene();
-        scene.setRoot(fxmlData.pane());
+        ApplicationWindow.changeScene(fxmlData.pane());
 
         fxmlData
-                .controller()
-                .performWhenClosed(this::restoreDefaultScreen);
+            .controller()
+            .performWhenClosed(this::restoreDefaultScreen);
     }
 
 
