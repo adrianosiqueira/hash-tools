@@ -14,6 +14,7 @@ module hash.tools {
     exports hash_tools.frontend.dialog;
     exports hash_tools.frontend.screen.checker;
     exports hash_tools.frontend.screen.start;
+    exports hash_tools.frontend.window;
 
     opens hash_tools;
     opens hash_tools.backend.checksum.extractor;
@@ -26,4 +27,5 @@ module hash.tools {
     opens hash_tools.frontend.dialog;
     opens hash_tools.frontend.screen.checker;
     opens hash_tools.frontend.screen.start;
+    opens hash_tools.frontend.window;
 }

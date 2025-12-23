@@ -1,6 +1,7 @@
 package hash_tools.frontend.screen.start;
 
 import hash_tools.frontend.abstraction.ClosingObservable;
+import hash_tools.frontend.window.ApplicationWindow;
 import hash_tools.frontend.window.FXMLFile;
 import javafx.event.Event;
 import javafx.fxml.FXML;
