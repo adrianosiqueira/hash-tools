@@ -2,6 +2,8 @@ package hash_tools.frontend.dialog;
 
 import javafx.stage.FileChooser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public record FileExtension(
@@ -24,8 +26,25 @@ public record FileExtension(
     public static final FileExtension VIDEO = new FileExtension("Videos", "*.3gp", "*.avi", "*.flv", "*.mkv", "*.mp4", "*.mpeg", "*.mpg", "*.ogv", "*.rmvb", "*.webm", "*.wmv");
 
 
-    public static final FileExtension ALL = new FileExtension("All", "*.*");
-    public static final FileExtension CHECKSUM = new FileExtension("Checksum", "*.*");
+
+    public static List<FileExtension> getAllExtensions() {
+        return new ArrayList<>(List.of(
+            ALL,
+            CHECKSUM,
+            COMPRESSED,
+            DISK_IMAGE,
+            DOCUMENT,
+            MARKDOWN,
+            MARKUP,
+            MUSIC,
+            PICTURE,
+            RUNNABLE,
+            SCRIPT,
+            SOURCE_CODE,
+            STYLESHEET,
+            VIDEO
+        ));
+    }
 
 
 
