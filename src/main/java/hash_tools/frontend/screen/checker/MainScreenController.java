@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CheckerScreenController implements Initializable, ClosingObservable {
+public class MainScreenController implements Initializable, ClosingObservable {
 
     @FXML
     private Pane pnlRoot;
