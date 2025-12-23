@@ -13,12 +13,17 @@
 
 .pane-run-module {
     -fx-padding: 20;
+    -fx-spacing: 5;
     -fx-cursor: hand;
 }
 
 
 
 .pane-root {
+    -fx-alignment: center;
     -fx-padding: 30;
     -fx-spacing: 30;
+
+    -fx-pref-height: 480;
+    -fx-pref-width: 853;
 }
