@@ -1,8 +1,5 @@
 package hash_tools.frontend.screen.checker;
 
-import hash_tools.frontend.abstraction.ClosingObservable;
-import hash_tools.frontend.dialog.FileDialog;
-import hash_tools.frontend.dialog.FileExtension;
 import hash_tools.backend.checksum.extractor.ChecksumExtractor;
 import hash_tools.backend.checksum.extractor.FileChecksumExtractor;
 import hash_tools.backend.checksum.extractor.StringChecksumExtractor;
@@ -11,6 +8,9 @@ import hash_tools.backend.checksum.source.FileChecksumSource;
 import hash_tools.backend.checksum.source.StringChecksumSource;
 import hash_tools.backend.request.CheckerRequest;
 import hash_tools.backend.request.processor.CheckerRequestProcessor;
+import hash_tools.frontend.abstraction.ClosingObservable;
+import hash_tools.frontend.dialog.FileDialog;
+import hash_tools.frontend.dialog.FileExtension;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -87,51 +87,47 @@ public class MainScreenController implements Initializable, ClosingObservable {
     private void performCheckingOperation() {
         // TODO Properly consume the result
         CheckerRequest
-                .createUsingSuppliers(
-                        this::createChecksumSource,
-                        this::createChecksumExtractor)
-                .process(new CheckerRequestProcessor())
-                .consume(IO::println);
+            .createUsingSuppliers(
+                this::createChecksumSource,
+                this::createChecksumExtractor)
+            .process(new CheckerRequestProcessor())
+            .consume(IO::println);
     }
 
     @FXML
     private void openInputFile() {
-        FileDialog
-                .startSetup()
-                .localized(resources)
-                .title("Select the file to check")
-                .addExtensionFilter(FileExtension.ALL)
-                .addExtensionFilter(FileExtension.CHECKSUM)
-                .openFile()
-                .map(Path::toString)
-                .ifPresent(txtInput::setText);
+        new FileDialog()
+            .title("Select the file to check")
+            .resources(resources)
+            .defaultExtension(FileExtension.ALL)
+            .openFile()
+            .map(Path::toString)
+            .ifPresent(txtInput::setText);
     }
 
     @FXML
     private void openChecksumFile() {
-        FileDialog
-                .startSetup()
-                .localized(resources)
-                .title("Select the checksums file")
-                .addExtensionFilter(FileExtension.CHECKSUM)
-                .addExtensionFilter(FileExtension.ALL)
-                .openFile()
-                .map(Path::toString)
-                .ifPresent(txtChecksum::setText);
+        new FileDialog()
+            .title("Select the checksum file")
+            .resources(resources)
+            .defaultExtension(FileExtension.CHECKSUM)
+            .openFile()
+            .map(Path::toString)
+            .ifPresent(txtChecksum::setText);
     }
 
 
 
     private ChecksumSource createChecksumSource() {
         return chkUseInputFile.isSelected()
-                ? new FileChecksumSource(Path.of(txtInput.getText()))
-                : new StringChecksumSource(txtInput.getText());
+            ? new FileChecksumSource(Path.of(txtInput.getText()))
+            : new StringChecksumSource(txtInput.getText());
     }
 
     private ChecksumExtractor createChecksumExtractor() {
         return chkUseChecksumFile.isSelected()
-                ? new FileChecksumExtractor(Path.of(txtChecksum.getText()))
-                : new StringChecksumExtractor(txtChecksum.getText());
+            ? new FileChecksumExtractor(Path.of(txtChecksum.getText()))
+            : new StringChecksumExtractor(txtChecksum.getText());
     }
 
 
