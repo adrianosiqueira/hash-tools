@@ -12,6 +12,7 @@ module hash.tools {
     exports hash_tools.backend.result;
     exports hash_tools.frontend.abstraction;
     exports hash_tools.frontend.dialog;
+    exports hash_tools.frontend.fxml;
     exports hash_tools.frontend.screen.checker;
     exports hash_tools.frontend.screen.start;
     exports hash_tools.frontend.window;
@@ -25,6 +26,7 @@ module hash.tools {
     opens hash_tools.backend.result;
     opens hash_tools.frontend.abstraction;
     opens hash_tools.frontend.dialog;
+    opens hash_tools.frontend.fxml;
     opens hash_tools.frontend.screen.checker;
     opens hash_tools.frontend.screen.start;
     opens hash_tools.frontend.window;

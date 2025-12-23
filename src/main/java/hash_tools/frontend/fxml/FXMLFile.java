@@ -1,4 +1,4 @@
-package hash_tools.frontend.window;
+package hash_tools.frontend.fxml;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
