@@ -10,45 +10,145 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<BorderPane fx:controller="hash_tools.frontend.screen.checker.MainScreenController" fx:id="pnlRoot" styleClass="pane-root" stylesheets="@../theme/light.css,@main-screen.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml">
+<BorderPane
+    fx:controller="hash_tools.frontend.screen.checker.MainScreenController"
+    fx:id="pnlRoot"
+    styleClass="pane-root"
+    stylesheets="@../theme/light.css,@main-screen.css"
+    xmlns="http://javafx.com/javafx/"
+    xmlns:fx="http://javafx.com/fxml"
+>
     <top>
-        <HBox fx:id="pnlHeader" styleClass="pane-header">
-            <Button fx:id="btnBack" onAction="#close" styleClass="button-back" text="&lt;"/>
-            <Separator orientation="VERTICAL"/>
-            <Label fx:id="lblHeader" styleClass="label-header" text="Checker"/>
+        <HBox
+            fx:id="pnlHeader"
+            styleClass="pane-header"
+        >
+            <Button
+                fx:id="btnBack"
+                onAction="#close"
+                styleClass="button-back"
+                text="&lt;"
+            />
+            <Separator
+                orientation="VERTICAL"
+            />
+            <Label
+                fx:id="lblHeader"
+                styleClass="label-header"
+                text="Checker"
+            />
         </HBox>
     </top>
 
 
+
     <center>
-        <GridPane fx:id="pnlContent" styleClass="pane-content">
+        <GridPane
+            fx:id="pnlContent"
+            styleClass="pane-content"
+        >
             <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
-                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
-                <ColumnConstraints halignment="LEFT" hgrow="NEVER"/>
-                <ColumnConstraints halignment="LEFT" hgrow="NEVER"/>
+                <ColumnConstraints
+                    halignment="RIGHT"
+                    hgrow="NEVER"
+                />
+                <ColumnConstraints
+                    halignment="LEFT"
+                    hgrow="ALWAYS"
+                />
+                <ColumnConstraints
+                    halignment="LEFT"
+                    hgrow="NEVER"
+                />
+                <ColumnConstraints
+                    halignment="LEFT"
+                    hgrow="NEVER"
+                />
             </columnConstraints>
 
             <rowConstraints>
-                <RowConstraints vgrow="NEVER"/>
-                <RowConstraints vgrow="NEVER"/>
-                <RowConstraints vgrow="NEVER"/>
+                <RowConstraints
+                    vgrow="NEVER"
+                />
+                <RowConstraints
+                    vgrow="NEVER"
+                />
+                <RowConstraints
+                    vgrow="NEVER"
+                />
             </rowConstraints>
 
 
-            <Label GridPane.columnIndex="0" GridPane.rowIndex="0" fx:id="lblInput" text="Input"/>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="txtInput" promptText="/path/to/input-file"/>
-            <CheckBox GridPane.columnIndex="2" GridPane.rowIndex="0" fx:id="chkUseInputFile" selected="true" text="File"/>
-            <Button GridPane.columnIndex="3" GridPane.rowIndex="0" fx:id="btnOpenInputFile" onAction="#openInputFile" text="..."/>
+
+            <!-- pane-content first line -->
+            <Label
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="0"
+                fx:id="lblInput"
+                text="Input"
+            />
+            <TextField
+                GridPane.columnIndex="1"
+                GridPane.rowIndex="0"
+                fx:id="txtInput"
+                promptText="/path/to/input-file"
+            />
+            <CheckBox
+                GridPane.columnIndex="2"
+                GridPane.rowIndex="0"
+                fx:id="chkUseInputFile"
+                selected="true"
+                text="File"
+            />
+            <Button
+                GridPane.columnIndex="3"
+                GridPane.rowIndex="0"
+                fx:id="btnOpenInputFile"
+                onAction="#openInputFile"
+                text="..."
+            />
 
 
-            <Label GridPane.columnIndex="0" GridPane.rowIndex="1" fx:id="lblChecksum" text="Checksum"/>
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="txtChecksum" promptText="/path/to/checksum-file"/>
-            <CheckBox GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="chkUseChecksumFile" selected="true" text="File"/>
-            <Button GridPane.columnIndex="3" GridPane.rowIndex="1" fx:id="btnOpenChecksumFile" onAction="#openChecksumFile" text="..."/>
+
+            <!-- pane-content second line -->
+            <Label
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="1"
+                fx:id="lblChecksum"
+                text="Checksum"
+            />
+            <TextField
+                GridPane.columnIndex="1"
+                GridPane.rowIndex="1"
+                fx:id="txtChecksum"
+                promptText="/path/to/checksum-file"
+            />
+            <CheckBox
+                GridPane.columnIndex="2"
+                GridPane.rowIndex="1"
+                fx:id="chkUseChecksumFile"
+                selected="true"
+                text="File"
+            />
+            <Button
+                GridPane.columnIndex="3"
+                GridPane.rowIndex="1"
+                fx:id="btnOpenChecksumFile"
+                onAction="#openChecksumFile"
+                text="..."
+            />
 
 
-            <Button GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" fx:id="btnRun" onAction="#performCheckingOperation" text="Run"/>
+
+            <!-- pane-content third line -->
+            <Button
+                GridPane.columnIndex="0"
+                GridPane.columnSpan="4"
+                GridPane.rowIndex="2"
+                fx:id="btnRun"
+                onAction="#performCheckingOperation"
+                text="Run"
+            />
         </GridPane>
     </center>
 </BorderPane>

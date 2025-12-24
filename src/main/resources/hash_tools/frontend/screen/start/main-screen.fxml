@@ -2,21 +2,63 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="hash_tools.frontend.screen.start.MainScreenController" fx:id="pnlRoot" styleClass="pane-root" stylesheets="@../theme/light.css,@main-screen.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
-    <VBox fx:id="pnlChecker" styleClass="pane-run-module">
-        <Label fx:id="lblCheckerTitle" styleClass="label-title" text="Checker"/>
-        <Label fx:id="lblCheckerDescription" styleClass="label-description" text="Checks the file integrity."/>
+<VBox
+    fx:controller="hash_tools.frontend.screen.start.MainScreenController"
+    fx:id="pnlRoot"
+    styleClass="pane-root"
+    stylesheets="@../theme/light.css,@main-screen.css"
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+>
+    <VBox
+        fx:id="pnlChecker"
+        styleClass="pane-run-module"
+    >
+        <Label
+            fx:id="lblCheckerTitle"
+            styleClass="label-title"
+            text="Checker"
+        />
+        <Label
+            fx:id="lblCheckerDescription"
+            styleClass="label-description"
+            text="Checks the file integrity."
+        />
     </VBox>
 
 
-    <VBox fx:id="pnlComparator" styleClass="pane-run-module">
-        <Label fx:id="lblComparatorTitle" styleClass="label-title" text="Comparator"/>
-        <Label fx:id="lblComparatorDescription" styleClass="label-description" text="Compares two files."/>
+
+    <VBox
+        fx:id="pnlComparator"
+        styleClass="pane-run-module"
+    >
+        <Label
+            fx:id="lblComparatorTitle"
+            styleClass="label-title"
+            text="Comparator"
+        />
+        <Label
+            fx:id="lblComparatorDescription"
+            styleClass="label-description"
+            text="Compares two files."
+        />
     </VBox>
 
 
-    <VBox fx:id="pnlGenerator" styleClass="pane-run-module">
-        <Label fx:id="lblGeneratorTitle" styleClass="label-title" text="Generator"/>
-        <Label fx:id="lblGeneratorDescription" styleClass="label-description" text="Generates the hash checksums."/>
+
+    <VBox
+        fx:id="pnlGenerator"
+        styleClass="pane-run-module"
+    >
+        <Label
+            fx:id="lblGeneratorTitle"
+            styleClass="label-title"
+            text="Generator"
+        />
+        <Label
+            fx:id="lblGeneratorDescription"
+            styleClass="label-description"
+            text="Generates the hash checksums."
+        />
     </VBox>
 </VBox>
