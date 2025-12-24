@@ -1,10 +1,16 @@
 # To-do list
 
-- [ ] Decouple the header content into a shared package.
-- [ ] Reference the header content in all the screens.
-- [ ] Check if it is possible to use the same controller on two fxml files. If so, we reuse the screen controller in the referenced header content.
-- [ ] Normalize the use of the css to setup both layout and styling.
+- [x] Normalize the use of the css to setup both layout and styling.
+- [ ] Split the shared css file into:
+  - [ ] light-color
+  - [ ] dark-color (low priority)
+  - [ ] layout
+- [ ] Make buttons appearance more concise between button and pane-run-module.
 
 ---
 
-# Done tasks
+# Canceled tasks
+
+- [x] Decouple the header content into a shared package.
+- [x] Reference the header content in all the screens.
+- [x] Check if it is possible to use the same controller on two fxml files. If so, we reuse the screen controller in the referenced header content.
