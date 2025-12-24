@@ -6,13 +6,13 @@
     fx:controller="hash_tools.frontend.screen.start.MainScreenController"
     fx:id="pnlRoot"
     styleClass="pane-root"
-    stylesheets="@../theme/light.css,@main-screen.css"
+    stylesheets="@../theme/light-color.css,@../theme/theme.css,@main-screen.css"
     xmlns="http://javafx.com/javafx"
     xmlns:fx="http://javafx.com/fxml"
 >
     <VBox
         fx:id="pnlChecker"
-        styleClass="pane-run-module"
+        styleClass="button"
     >
         <Label
             fx:id="lblCheckerTitle"
@@ -30,7 +30,7 @@
 
     <VBox
         fx:id="pnlComparator"
-        styleClass="pane-run-module"
+        styleClass="button"
     >
         <Label
             fx:id="lblComparatorTitle"
@@ -48,7 +48,7 @@
 
     <VBox
         fx:id="pnlGenerator"
-        styleClass="pane-run-module"
+        styleClass="button"
     >
         <Label
             fx:id="lblGeneratorTitle"

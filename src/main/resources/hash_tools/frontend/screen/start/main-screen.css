@@ -1,20 +1,19 @@
 .label-description {
-    -fx-font-size: 18;
+    -fx-alignment: center-left;
+    -fx-max-width: infinity;
+
+    -fx-wrap-text: true;
+    -fx-text-alignment: justify;
 }
 
 
 
 .label-title {
+    -fx-alignment: center-left;
+    -fx-max-width: infinity;
+
     -fx-font-size: 36;
     -fx-font-weight: bold;
-}
-
-
-
-.pane-run-module {
-    -fx-padding: 20;
-    -fx-spacing: 5;
-    -fx-cursor: hand;
 }
 
 
@@ -24,6 +23,6 @@
     -fx-padding: 30;
     -fx-spacing: 30;
 
-    -fx-pref-height: 480;
-    -fx-pref-width: 853;
+    -fx-pref-height: 540;
+    -fx-pref-width: 960;
 }
