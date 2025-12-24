@@ -1,0 +1,25 @@
+.root {
+    BACKGROUND_COLOR: rgb(0, 0, 0);
+    BACKGROUND_COLOR: rgb(50, 50, 0);
+    BACKGROUND_COLOR: rgb(200, 200, 0);
+    BACKGROUND_COLOR: rgb(0, 255, 0);
+    BACKGROUND_COLOR: rgb(255, 255, 255);
+
+    ACCENT_COLOR: ladder(
+        BACKGROUND_COLOR,
+        derive(BACKGROUND_COLOR, 20%) 49%,
+        derive(BACKGROUND_COLOR, -10%) 50%
+    );
+
+    TEXT_COLOR: ladder(
+        BACKGROUND_COLOR,
+        rgb(255, 255, 255) 49%,
+        rgb(0, 0, 0) 50%
+    );
+
+    SHADOW_COLOR: ladder(
+        BACKGROUND_COLOR,
+        derive(BACKGROUND_COLOR, 90%) 49%,
+        derive(BACKGROUND_COLOR, -60%) 50%
+    );
+}
