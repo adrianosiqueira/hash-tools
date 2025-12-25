@@ -1,14 +1,22 @@
 .root {
-    BACKGROUND_COLOR: rgb(0, 0, 0);
     BACKGROUND_COLOR: rgb(50, 50, 0);
-    BACKGROUND_COLOR: rgb(200, 200, 0);
     BACKGROUND_COLOR: rgb(0, 255, 0);
+    BACKGROUND_COLOR: rgb(200, 200, 0);
+    BACKGROUND_COLOR: rgb(0, 0, 0);
     BACKGROUND_COLOR: rgb(255, 255, 255);
 
+    /* Used in buttons background, for example */
     ACCENT_COLOR: ladder(
         BACKGROUND_COLOR,
         derive(BACKGROUND_COLOR, 20%) 49%,
         derive(BACKGROUND_COLOR, -10%) 50%
+    );
+
+    /* Used when hovering buttons, for example */
+    ACCENT_COLOR_INTENSE: ladder(
+        BACKGROUND_COLOR,
+        derive(BACKGROUND_COLOR, 30%) 49%,
+        derive(BACKGROUND_COLOR, -20%) 50%
     );
 
     TEXT_COLOR: ladder(

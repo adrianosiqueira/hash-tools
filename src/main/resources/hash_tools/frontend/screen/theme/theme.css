@@ -5,15 +5,52 @@
     -fx-border-color: TEXT_COLOR;
     -fx-border-radius: 10;
 
+    -fx-text-fill: TEXT_COLOR;
     -fx-font-size: 18;
     -fx-cursor: hand;
 
-    -fx-padding: 10;
     -fx-spacing: 20;
+}
+
+.button:armed,
+.button:armed:hover {
+    -fx-background-color: ACCENT_COLOR_INTENSE;
 }
 
 .button:hover {
     -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+}
+
+
+
+.check-box {
+    -fx-text-fill: TEXT_COLOR;
+    -fx-font-size: 18;
+}
+
+
+
+.check-box .box {
+    -fx-background-color: BACKGROUND_COLOR;
+    -fx-background-radius: 7;
+
+    -fx-border-color: TEXT_COLOR;
+    -fx-border-radius: 7;
+}
+
+.check-box:armed:hover .box,
+.check-box:armed:hover .box {
+    -fx-background-color: ACCENT_COLOR_INTENSE;
+}
+
+.check-box:hover .box {
+    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+}
+
+
+
+.check-box:selected .box .mark {
+    -fx-background-color: TEXT_COLOR;
 }
 
 
@@ -25,6 +62,59 @@
 
 
 
+.pane-header {
+    -fx-alignment: center-left;
+    -fx-spacing: 20;
+}
+
+
+
+.pane-header .button-back {
+    -fx-background-color: BACKGROUND_COLOR;
+    -fx-border-color: transparent;
+
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0 5;
+}
+
+
+
+.pane-header .label-header {
+    -fx-font-size: 36;
+}
+
+
+
 .pane-root {
     -fx-background-color: BACKGROUND_COLOR;
+
+    -fx-pref-width: 960;
+    -fx-pref-height: 540;
+}
+
+
+
+.separator .line {
+    -fx-border-color: TEXT_COLOR;
+    -fx-border-width: 1;
+}
+
+
+
+.text-field {
+    -fx-background-color: ACCENT_COLOR;
+    -fx-background-radius: 10;
+
+    -fx-border-color: TEXT_COLOR;
+    -fx-border-radius: 10;
+
+    -fx-text-fill: TEXT_COLOR;
+    -fx-prompt-text-fill: grey;
+    -fx-font-size: 18;
+}
+
+.text-field:hover {
+    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
 }

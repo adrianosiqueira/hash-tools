@@ -14,7 +14,7 @@
     fx:controller="hash_tools.frontend.screen.checker.MainScreenController"
     fx:id="pnlRoot"
     styleClass="pane-root"
-    stylesheets="@../theme/light.css,@main-screen.css"
+    stylesheets="@../theme/light-color.css,@../theme/theme.css,@main-screen.css"
     xmlns="http://javafx.com/javafx/"
     xmlns:fx="http://javafx.com/fxml"
 >
