@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<BorderPane
+    fx:controller="hash_tools.frontend.screen.generator.MainScreenController"
+    fx:id="pnlRoot"
+    styleClass="pane-root"
+    stylesheets="@../theme/light-color.css,@../theme/theme.css,@main-screen.css"
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+>
+    <top>
+        <HBox
+            fx:id="pnlHeader"
+            styleClass="pane-header"
+        >
+            <Button
+                fx:id="btnBack"
+                onAction="#close"
+                styleClass="button-back"
+                text="&lt;"
+            />
+            <Separator
+                orientation="VERTICAL"
+            />
+            <Label
+                fx:id="lblHeader"
+                styleClass="label-header"
+                text="Checker"
+            />
+        </HBox>
+    </top>
+
+
+
+    <center>
+        <GridPane
+            fx:id="pnlContent"
+            styleClass="pane-content"
+        >
+            <columnConstraints>
+                <ColumnConstraints
+                    halignment="RIGHT"
+                    hgrow="NEVER"
+                />
+                <ColumnConstraints
+                    halignment="LEFT"
+                    hgrow="ALWAYS"
+                />
+                <ColumnConstraints
+                    halignment="LEFT"
+                    hgrow="NEVER"
+                />
+                <ColumnConstraints
+                    halignment="LEFT"
+                    hgrow="NEVER"
+                />
+            </columnConstraints>
+
+            <rowConstraints>
+                <RowConstraints
+                    valignment="CENTER"
+                    vgrow="NEVER"
+                />
+                <RowConstraints
+                    valignment="TOP"
+                    vgrow="NEVER"
+                />
+                <RowConstraints
+                    valignment="CENTER"
+                    vgrow="NEVER"
+                />
+            </rowConstraints>
+
+
+
+            <!-- pane-content first line -->
+            <Label
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="0"
+                fx:id="lblInput"
+                text="Input"
+            />
+            <TextField
+                GridPane.columnIndex="1"
+                GridPane.rowIndex="0"
+                fx:id="txtInput"
+                promptText="/path/to/input-file"
+            />
+            <CheckBox
+                GridPane.columnIndex="2"
+                GridPane.rowIndex="0"
+                fx:id="chkUseInputFile"
+                selected="true"
+                text="File"
+            />
+            <Button
+                GridPane.columnIndex="3"
+                GridPane.rowIndex="0"
+                fx:id="btnOpenInputFile"
+                onAction="#openInputFile"
+                text="..."
+            />
+
+
+
+            <!-- pane-content second line -->
+            <Label
+                GridPane.columnIndex="0"
+                GridPane.rowIndex="1"
+                fx:id="lblAlgorithm"
+                text="Algorithm"
+            />
+            <GridPane
+                GridPane.columnIndex="1"
+                GridPane.columnSpan="3"
+                GridPane.rowIndex="1"
+                fx:id="pnlAlgorithm"
+                styleClass="pane-algorithm"
+            >
+                <columnConstraints>
+                    <ColumnConstraints
+                        hgrow="ALWAYS"
+                    />
+                    <ColumnConstraints
+                        hgrow="ALWAYS"
+                    />
+                    <ColumnConstraints
+                        hgrow="ALWAYS"
+                    />
+                </columnConstraints>
+
+                <rowConstraints>
+                    <RowConstraints
+                        vgrow="NEVER"
+                    />
+                    <RowConstraints
+                        vgrow="NEVER"
+                    />
+                </rowConstraints>
+
+
+
+                <!-- pane algorithm first line -->
+                <CheckBox
+                    GridPane.columnIndex="0"
+                    GridPane.rowIndex="0"
+                    fx:id="chkMd5"
+                    selected="true"
+                    text="MD5"
+                />
+                <CheckBox
+                    GridPane.columnIndex="1"
+                    GridPane.rowIndex="0"
+                    fx:id="chkSha1"
+                    selected="true"
+                    text="SHA-1"
+                />
+                <CheckBox
+                    GridPane.columnIndex="2"
+                    GridPane.rowIndex="0"
+                    fx:id="chkSha224"
+                    selected="true"
+                    text="SHA-224"
+                />
+
+
+
+                <!-- pane algorithm second line -->
+                <CheckBox GridPane.columnIndex="0"
+                    GridPane.rowIndex="1"
+                    fx:id="chkSha256"
+                    selected="true"
+                    text="SHA-256"
+                />
+                <CheckBox
+                    GridPane.columnIndex="1"
+                    GridPane.rowIndex="1"
+                    fx:id="chkSha384"
+                    selected="true"
+                    text="SHA-384"
+                />
+                <CheckBox
+                    GridPane.columnIndex="2"
+                    GridPane.rowIndex="1"
+                    fx:id="chkSha512"
+                    selected="true"
+                    text="SHA-512"
+                />
+            </GridPane>
+
+
+
+            <!-- pane-content third line -->
+            <Button
+                GridPane.columnIndex="0"
+                GridPane.columnSpan="4"
+                GridPane.rowIndex="2"
+                fx:id="btnRun"
+                onAction="#performGenerationOperation"
+                text="Run"
+            />
+        </GridPane>
+    </center>
+</BorderPane>
