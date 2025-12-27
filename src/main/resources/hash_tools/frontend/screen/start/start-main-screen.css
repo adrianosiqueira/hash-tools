@@ -1,0 +1,20 @@
+.button {
+    -fx-max-width: infinity;
+}
+
+
+
+.pane-button {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+}
+
+
+
+.pane-root {
+    -fx-padding: 20;
+    -fx-spacing: 40;
+
+    -fx-pref-width: 960;
+    -fx-pref-height: 540;
+}

@@ -90,9 +90,6 @@
 
 .pane-root {
     -fx-background-color: BACKGROUND_COLOR;
-
-    -fx-pref-width: 960;
-    -fx-pref-height: 540;
 }
 
 
