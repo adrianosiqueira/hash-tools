@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<GridPane
+    fx:controller="hash_tools.frontend.screen.checker.CheckerMainScreenController"
+    fx:id="pnlRoot"
+    styleClass="pane-root"
+    stylesheets="@../theme/light-color.css,@../theme/theme.css,@checker-main-screen.css"
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+>
+    <columnConstraints>
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="NEVER"
+        />
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="ALWAYS"
+        />
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="NEVER"
+        />
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+    </rowConstraints>
+
+
+
+    <!-- pane-root first line -->
+    <Label
+        GridPane.columnIndex="0"
+        GridPane.rowIndex="0"
+        fx:id="lblInput"
+        text="Input"
+    />
+    <HBox
+        GridPane.columnIndex="1"
+        GridPane.rowIndex="0"
+        fx:id="pnlInput"
+        styleClass="pane-input-file"
+    >
+        <TextField
+            HBox.hgrow="ALWAYS"
+            fx:id="txtInput"
+        />
+        <Button
+            HBox.hgrow="NEVER"
+            fx:id="btnOpenInputFile"
+            onAction="#openInputFile"
+            text="..."
+        />
+    </HBox>
+    <CheckBox
+        GridPane.columnIndex="2"
+        GridPane.rowIndex="0"
+        fx:id="chkUseInputFile"
+        selected="true"
+        text="File"
+    />
+
+
+
+    <!-- pane-root second line -->
+    <Label
+        GridPane.columnIndex="0"
+        GridPane.rowIndex="1"
+        fx:id="lblChecksum"
+        text="Checksum"
+    />
+    <HBox
+        GridPane.columnIndex="1"
+        GridPane.rowIndex="1"
+        fx:id="pnlChecksum"
+        styleClass="pane-input-file"
+    >
+        <TextField
+            HBox.hgrow="ALWAYS"
+            fx:id="txtChecksum"
+        />
+        <Button
+            HBox.hgrow="NEVER"
+            fx:id="btnOpenChecksumFile"
+            onAction="#openChecksumFile"
+            text="..."
+        />
+    </HBox>
+    <CheckBox
+        GridPane.columnIndex="2"
+        GridPane.rowIndex="1"
+        fx:id="chkUseChecksumFile"
+        selected="true"
+        text="File"
+    />
+
+
+
+    <!-- pane-root third line-->
+    <Button
+        GridPane.columnIndex="0"
+        GridPane.columnSpan="3"
+        GridPane.rowIndex="2"
+        fx:id="btnCheck"
+        onAction="#performCheckingOperation"
+        text="Check"
+    />
+</GridPane>

@@ -116,3 +116,25 @@
 .text-field:hover {
     -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
 }
+
+
+
+.pane-input-file:hover {
+    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+}
+
+
+
+.pane-input-file .button {
+    -fx-background-radius: 0 10 10 0;
+    -fx-border-radius: 0 10 10 0;
+    -fx-effect: none;
+}
+
+
+
+.pane-input-file .text-field {
+    -fx-background-radius: 10 0 0 10;
+    -fx-border-radius: 10 0 0 10;
+    -fx-effect: none;
+}
