@@ -1,15 +1,12 @@
-package hash_tools.frontend.screen.checker;
+package hash_tools.frontend.screen.generator;
 
-import hash_tools.backend.checksum.CheckingChecksum;
-import hash_tools.backend.checksum.extractor.ChecksumExtractor;
-import hash_tools.backend.checksum.extractor.FileChecksumExtractor;
-import hash_tools.backend.checksum.extractor.StringChecksumExtractor;
+import hash_tools.backend.checksum.Algorithm;
 import hash_tools.backend.checksum.source.ChecksumSource;
 import hash_tools.backend.checksum.source.FileChecksumSource;
 import hash_tools.backend.checksum.source.StringChecksumSource;
-import hash_tools.backend.request.CheckerRequest;
-import hash_tools.backend.request.processor.CheckerRequestProcessor;
-import hash_tools.backend.result.CheckerResult;
+import hash_tools.backend.request.GeneratorRequest;
+import hash_tools.backend.request.processor.GeneratorRequestProcessor;
+import hash_tools.backend.result.GeneratorResult;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
 import javafx.fxml.FXML;
@@ -22,9 +19,11 @@ import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class CheckerMainScreenController implements Initializable {
+public class GeneratorMainScreenController implements Initializable {
 
     @FXML
     private Pane pnlRoot;
@@ -41,18 +40,24 @@ public class CheckerMainScreenController implements Initializable {
     private CheckBox chkUseInputFile;
 
     @FXML
-    private Pane pnlChecksum;
+    private Pane pnlAlgorithm;
     @FXML
-    private Label lblChecksum;
+    private Label lblAlgorithm;
     @FXML
-    private TextField txtChecksum;
+    private CheckBox chkMd5;
     @FXML
-    private Button btnOpenChecksumFile;
+    private CheckBox chkSha1;
     @FXML
-    private CheckBox chkUseChecksumFile;
+    private CheckBox chkSha224;
+    @FXML
+    private CheckBox chkSha256;
+    @FXML
+    private CheckBox chkSha384;
+    @FXML
+    private CheckBox chkSha512;
 
     @FXML
-    private Button btnCheck;
+    private Button btnGenerate;
 
 
     private ResourceBundle resources;
@@ -67,34 +72,22 @@ public class CheckerMainScreenController implements Initializable {
 
 
     @FXML
-    private void performCheckingOperation() {
-        CheckerRequest
+    private void performGenerationOperation() {
+        GeneratorRequest
             .createUsingSuppliers(
                 this::createChecksumSource,
-                this::createChecksumExtractor)
-            .process(new CheckerRequestProcessor())
+                this::createAlgorithmList)
+            .process(new GeneratorRequestProcessor())
             .consume(this::consumeResult);
     }
 
     @FXML
     private void openInputFile() {
         new FileDialog()
-            .title("Select the file to check")
+            .title("Select the file to generate")
             .resources(resources)
-            .ownerWindow(pnlRoot.getScene().getWindow())
             .defaultExtension(FileExtension.ALL)
-            .openFile()
-            .map(Path::toString)
-            .ifPresent(txtInput::setText);
-    }
-
-    @FXML
-    private void openChecksumFile() {
-        new FileDialog()
-            .title("Select the checksums file")
-            .resources(resources)
             .ownerWindow(pnlRoot.getScene().getWindow())
-            .defaultExtension(FileExtension.CHECKSUM)
             .openFile()
             .map(Path::toString)
             .ifPresent(txtInput::setText);
@@ -108,17 +101,23 @@ public class CheckerMainScreenController implements Initializable {
             : new StringChecksumSource(txtInput.getText());
     }
 
-    private ChecksumExtractor createChecksumExtractor() {
-        return chkUseChecksumFile.isSelected()
-            ? new FileChecksumExtractor(Path.of(txtChecksum.getText()))
-            : new StringChecksumExtractor(txtChecksum.getText());
+    private List<Algorithm> createAlgorithmList() {
+        return pnlAlgorithm
+            .getChildren()
+            .stream()
+            .filter(CheckBox.class::isInstance)
+            .map(CheckBox.class::cast)
+            .filter(CheckBox::isSelected)
+            .map(CheckBox::getText)
+            .map(Algorithm::fromName)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
     }
 
-    private void consumeResult(CheckerResult result) {
+    private void consumeResult(GeneratorResult result) {
         result
             .checksums()
-            .stream()
-            .map(CheckingChecksum::toString)
             .forEach(IO::println);
     }
 }

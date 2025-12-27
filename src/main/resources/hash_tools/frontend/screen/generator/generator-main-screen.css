@@ -1,0 +1,11 @@
+.pane-algorithm {
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+
+
+.pane-root {
+    -fx-hgap: 20;
+    -fx-vgap: 40;
+}

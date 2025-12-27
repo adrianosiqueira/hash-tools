@@ -27,6 +27,7 @@
     -fx-text-fill: TEXT_COLOR;
     -fx-font-size: 18;
     -fx-max-width: infinity;
+    -fx-cursor: hand;
 }
 
 

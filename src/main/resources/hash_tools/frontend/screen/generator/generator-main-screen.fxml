@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<GridPane
+    fx:controller="hash_tools.frontend.screen.generator.GeneratorMainScreenController"
+    fx:id="pnlRoot"
+    styleClass="pane-root"
+    stylesheets="@../theme/light-color.css,@../theme/theme.css,@generator-main-screen.css"
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+>
+    <columnConstraints>
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="NEVER"
+        />
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="ALWAYS"
+        />
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="NEVER"
+        />
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+        <RowConstraints
+            valignment="TOP"
+            vgrow="NEVER"
+        />
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+    </rowConstraints>
+
+
+
+    <!-- pane-root first line -->
+    <Label
+        GridPane.columnIndex="0"
+        GridPane.rowIndex="0"
+        fx:id="lblInput"
+        text="Input"
+    />
+    <HBox
+        GridPane.columnIndex="1"
+        GridPane.rowIndex="0"
+        fx:id="pnlInput"
+        styleClass="pane-input-file"
+    >
+        <TextField
+            HBox.hgrow="ALWAYS"
+            fx:id="txtInput"
+        />
+        <Button
+            HBox.hgrow="NEVER"
+            fx:id="btnOpenInputFile"
+            onAction="#openInputFile"
+            text="..."
+        />
+    </HBox>
+    <CheckBox
+        GridPane.columnIndex="2"
+        GridPane.rowIndex="0"
+        fx:id="chkUseInputFile"
+        selected="true"
+        text="File"
+    />
+
+
+
+    <!-- pane-root second line -->
+    <Label
+        GridPane.columnIndex="0"
+        GridPane.rowIndex="1"
+        fx:id="lblAlgorithm"
+        text="Algorithm"
+    />
+    <GridPane
+        GridPane.columnIndex="1"
+        GridPane.columnSpan="2"
+        GridPane.rowIndex="1"
+        fx:id="pnlAlgorithm"
+        styleClass="pane-algorithm"
+    >
+        <columnConstraints>
+            <ColumnConstraints
+                hgrow="ALWAYS"
+            />
+            <ColumnConstraints
+                hgrow="ALWAYS"
+            />
+            <ColumnConstraints
+                hgrow="ALWAYS"
+            />
+        </columnConstraints>
+
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+        </rowConstraints>
+
+
+
+        <!-- pane-algorithm first line -->
+        <CheckBox
+            GridPane.columnIndex="0"
+            GridPane.rowIndex="0"
+            fx:id="chkMd5"
+            selected="true"
+            text="MD5"
+        />
+        <CheckBox
+            GridPane.columnIndex="1"
+            GridPane.rowIndex="0"
+            fx:id="chkSha1"
+            selected="true"
+            text="SHA-1"
+        />
+        <CheckBox
+            GridPane.columnIndex="2"
+            GridPane.rowIndex="0"
+            fx:id="chkSha224"
+            selected="true"
+            text="SHA-224"
+        />
+
+
+
+        <!-- pane-algorithm second line -->
+        <CheckBox
+            GridPane.columnIndex="0"
+            GridPane.rowIndex="1"
+            fx:id="chkSha256"
+            selected="true"
+            text="SHA-256"
+        />
+        <CheckBox
+            GridPane.columnIndex="1"
+            GridPane.rowIndex="1"
+            fx:id="chkSha384"
+            selected="true"
+            text="SHA-384"
+        />
+        <CheckBox
+            GridPane.columnIndex="2"
+            GridPane.rowIndex="1"
+            fx:id="chkSha512"
+            selected="true"
+            text="SHA-512"
+        />
+    </GridPane>
+
+
+
+    <!-- pane-root third line-->
+    <Button
+        GridPane.columnIndex="0"
+        GridPane.columnSpan="3"
+        GridPane.rowIndex="2"
+        fx:id="btnGenerate"
+        onAction="#performGenerationOperation"
+        text="Generate"
+    />
+</GridPane>
