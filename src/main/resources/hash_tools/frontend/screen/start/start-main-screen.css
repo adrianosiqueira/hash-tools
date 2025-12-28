@@ -1,13 +1,13 @@
-.button {
-    -fx-max-width: infinity;
-}
-
-
-
 .pane-button {
     -fx-alignment: center;
     -fx-spacing: 20;
 }
+
+
+
+.pane-button .button {
+     -fx-max-width: infinity;
+ }
 
 
 
