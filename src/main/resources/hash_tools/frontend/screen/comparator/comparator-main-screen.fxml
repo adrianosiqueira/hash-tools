@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<GridPane
+    fx:controller="hash_tools.frontend.screen.comparator.ComparatorMainScreenController"
+    fx:id="pnlRoot"
+    styleClass="pane-root"
+    stylesheets="@../theme/light-color.css,@../theme/theme.css,@comparator-main-screen.css"
+    xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+>
+    <columnConstraints>
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="NEVER"
+        />
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="ALWAYS"
+        />
+        <ColumnConstraints
+            halignment="RIGHT"
+            hgrow="NEVER"
+        />
+    </columnConstraints>
+
+    <rowConstraints>
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+        <RowConstraints
+            valignment="TOP"
+            vgrow="NEVER"
+        />
+        <RowConstraints
+            valignment="CENTER"
+            vgrow="NEVER"
+        />
+    </rowConstraints>
+
+
+
+    <!-- pane-root first line -->
+    <Label
+        GridPane.columnIndex="0"
+        GridPane.rowIndex="0"
+        fx:id="lblInput1"
+        text="Input 1"
+    />
+    <HBox
+        GridPane.columnIndex="1"
+        GridPane.rowIndex="0"
+        fx:id="pnlInput1"
+        styleClass="pane-input-file"
+    >
+        <TextField
+            HBox.hgrow="ALWAYS"
+            fx:id="txtInput1"
+        />
+        <Button
+            HBox.hgrow="NEVER"
+            fx:id="btnOpenInputFile1"
+            onAction="#openInputFile1"
+            text="..."
+        />
+    </HBox>
+    <CheckBox
+        GridPane.columnIndex="2"
+        GridPane.rowIndex="0"
+        fx:id="chkUseInputFile1"
+        selected="true"
+        text="File"
+    />
+
+
+
+    <!-- pane-root second line -->
+    <Label
+        GridPane.columnIndex="0"
+        GridPane.rowIndex="1"
+        fx:id="lblInput2"
+        text="Input 2"
+    />
+    <HBox
+        GridPane.columnIndex="1"
+        GridPane.rowIndex="1"
+        fx:id="pnlInput2"
+        styleClass="pane-input-file"
+    >
+        <TextField
+            HBox.hgrow="ALWAYS"
+            fx:id="txtInput2"
+        />
+        <Button
+            HBox.hgrow="NEVER"
+            fx:id="btnOpenInputFile2"
+            onAction="#openInputFile2"
+            text="..."
+        />
+    </HBox>
+    <CheckBox
+        GridPane.columnIndex="2"
+        GridPane.rowIndex="1"
+        fx:id="chkUseInputFile2"
+        selected="true"
+        text="File"
+    />
+
+
+
+    <!-- pane-root third line -->
+    <Label
+        GridPane.columnIndex="0"
+        GridPane.rowIndex="2"
+        fx:id="lblPrecision"
+        text="Precision"
+    />
+    <Slider
+        GridPane.columnIndex="1"
+        GridPane.columnSpan="2"
+        GridPane.rowIndex="2"
+        fx:id="sldPrecision"
+        majorTickUnit="5"
+        max="5"
+        minorTickCount="4"
+        onScroll="#changePrecision"
+        showTickLabels="true"
+        showTickMarks="true"
+        snapToTicks="true"
+    />
+
+
+
+    <!-- pane-root fourth line-->
+    <Button
+        GridPane.columnIndex="0"
+        GridPane.columnSpan="3"
+        GridPane.rowIndex="3"
+        fx:id="btnCompare"
+        onAction="#performComparisonOperation"
+        text="Compare"
+    />
+</GridPane>

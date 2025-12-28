@@ -102,6 +102,71 @@
 
 
 
+.slider {
+    -fx-cursor: hand;
+}
+
+
+
+.slider .axis {
+    /* Change the tick label style */
+
+    -fx-tick-label-fill: TEXT_COLOR;
+    -fx-tick-label-font: 14 system;
+    -fx-tick-length: 2;
+}
+
+
+
+.slider .axis .axis-tick-mark,
+.slider .axis .axis-minor-tick-mark {
+    /* Change the tick mark style */
+
+    -fx-stroke: TEXT_COLOR;
+    -fx-stroke-width: 3;
+}
+
+
+
+.slider .thumb {
+    /* Change the ball style */
+
+    -fx-background-color: ACCENT_COLOR;
+    -fx-background-radius: 10;
+
+    -fx-border-color: TEXT_COLOR;
+    -fx-border-radius: 10;
+
+    -fx-cursor: hand;
+}
+
+.slider:hover .thumb {
+    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+}
+
+.slider:pressed .thumb {
+    -fx-background-color: ACCENT_COLOR_INTENSE;
+}
+
+
+
+.slider .track {
+    /* Change the bar behind the ball style */
+
+    -fx-background-color: BACKGROUND_COLOR;
+    -fx-background-radius: 10;
+
+    -fx-border-color: ACCENT_COLOR_INTENSE;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+}
+
+.slider:hover .track {
+    -fx-border-width: 2;
+}
+
+
+
 .text-field {
     -fx-background-color: ACCENT_COLOR;
     -fx-background-radius: 10;
