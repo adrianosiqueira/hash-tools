@@ -42,7 +42,7 @@ public class StartMainScreenController implements Initializable {
     @FXML
     private void openCheckerScreen() {
         new FXMLFile()
-            .location("")
+            .location("/hash_tools/frontend/screen/checker/checker-main-screen.fxml")
             .resources(resources)
             .load()
             .usePane(pnlContent.getChildren()::setAll);
@@ -51,7 +51,7 @@ public class StartMainScreenController implements Initializable {
     @FXML
     private void openGeneratorScreen() {
         new FXMLFile()
-            .location("")
+            .location("/hash_tools/frontend/screen/generator/generator-main-screen.fxml")
             .resources(resources)
             .load()
             .usePane(pnlContent.getChildren()::setAll);
@@ -60,7 +60,7 @@ public class StartMainScreenController implements Initializable {
     @FXML
     private void openComparatorScreen() {
         new FXMLFile()
-            .location("")
+            .location("/hash_tools/frontend/screen/comparator/comparator-main-screen.fxml")
             .resources(resources)
             .load()
             .usePane(pnlContent.getChildren()::setAll);

@@ -26,7 +26,7 @@ public class ApplicationWindow extends Application {
     @Override
     public void start(Stage stage) {
         new FXMLFile()
-            .location(MAIN_SCREEN_PATH)
+            .location("/hash_tools/frontend/screen/start/start-main-screen.fxml")
             .load()
             .usePane(ApplicationWindow::changeScene);
 
