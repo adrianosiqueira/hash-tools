@@ -46,10 +46,10 @@ public class StartMainScreenController implements Initializable {
         new FXMLFile()
             .location("/hash_tools/frontend/screen/checker/checker-main-screen.fxml")
             .resources(resources)
-            .<ProcessingObservable>load()
+            .load()
             .usePane(pnlContent.getChildren()::setAll)
-            .useController(c -> c.performWhenProcessingStarts(this::startSplash))
-            .useController(c -> c.performWhenProcessingStops(this::stopSplash));
+            .<ProcessingObservable>useController(c -> c.performWhenProcessingStarts(this::startSplash))
+            .<ProcessingObservable>useController(c -> c.performWhenProcessingStops(this::stopSplash));
     }
 
     @FXML
@@ -57,10 +57,10 @@ public class StartMainScreenController implements Initializable {
         new FXMLFile()
             .location("/hash_tools/frontend/screen/generator/generator-main-screen.fxml")
             .resources(resources)
-            .<ProcessingObservable>load()
+            .load()
             .usePane(pnlContent.getChildren()::setAll)
-            .useController(c -> c.performWhenProcessingStarts(this::startSplash))
-            .useController(c -> c.performWhenProcessingStops(this::stopSplash));
+            .<ProcessingObservable>useController(c -> c.performWhenProcessingStarts(this::startSplash))
+            .<ProcessingObservable>useController(c -> c.performWhenProcessingStops(this::stopSplash));
     }
 
     @FXML
@@ -68,10 +68,10 @@ public class StartMainScreenController implements Initializable {
         new FXMLFile()
             .location("/hash_tools/frontend/screen/comparator/comparator-main-screen.fxml")
             .resources(resources)
-            .<ProcessingObservable>load()
+            .load()
             .usePane(pnlContent.getChildren()::setAll)
-            .useController(c -> c.performWhenProcessingStarts(this::startSplash))
-            .useController(c -> c.performWhenProcessingStops(this::stopSplash));
+            .<ProcessingObservable>useController(c -> c.performWhenProcessingStarts(this::startSplash))
+            .<ProcessingObservable>useController(c -> c.performWhenProcessingStops(this::stopSplash));
     }
 
 

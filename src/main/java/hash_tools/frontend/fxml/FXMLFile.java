@@ -45,7 +45,7 @@ public class FXMLFile {
 
 
 
-    public <CONTROLLER_TYPE> FXMLData<CONTROLLER_TYPE> load() {
+    public FXMLData load() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
@@ -56,10 +56,10 @@ public class FXMLFile {
 
 
             Pane pane = loader.load();
-            CONTROLLER_TYPE controller = loader.getController();
+            Object controller = loader.getController();
 
 
-            return new FXMLData<>(pane, controller);
+            return new FXMLData(pane, controller);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
