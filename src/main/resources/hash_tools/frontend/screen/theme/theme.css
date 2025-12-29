@@ -40,7 +40,6 @@
     -fx-border-radius: 7;
 }
 
-.check-box:armed:hover .box,
 .check-box:armed:hover .box {
     -fx-background-color: ACCENT_COLOR_INTENSE;
 }
@@ -60,31 +59,6 @@
 .label {
     -fx-text-fill: TEXT_COLOR;
     -fx-font-size: 18;
-}
-
-
-
-.pane-header {
-    -fx-alignment: center-left;
-    -fx-spacing: 20;
-}
-
-
-
-.pane-header .button-back {
-    -fx-background-color: BACKGROUND_COLOR;
-    -fx-border-color: transparent;
-
-    -fx-font-size: 36;
-    -fx-font-weight: bold;
-
-    -fx-padding: 0 5;
-}
-
-
-
-.pane-header .label-header {
-    -fx-font-size: 36;
 }
 
 

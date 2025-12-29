@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 public class ApplicationWindow extends Application {
 
-    private static final String MAIN_SCREEN_PATH = "/hash_tools/frontend/screen/start/main-screen.fxml";
     private static final Scene SCENE = new Scene(new Pane());
 
 
