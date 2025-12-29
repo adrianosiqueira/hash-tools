@@ -9,7 +9,7 @@
 - [x] Remove old screens.
 - [x] Organize css files.
 - [ ] Create dedicated screens do show the results.
-- [ ] Create a visual indication os background execution.
+- [x] Create a visual indication os background execution.
 
 ---
 

@@ -7,6 +7,7 @@ import hash_tools.backend.checksum.source.StringChecksumSource;
 import hash_tools.backend.request.ComparatorRequest;
 import hash_tools.backend.request.processor.ComparatorRequestProcessor;
 import hash_tools.backend.result.ComparatorResult;
+import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
 import hash_tools.frontend.javafx.AsyncRunner;
@@ -23,9 +24,11 @@ import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class ComparatorMainScreenController implements Initializable {
+public class ComparatorMainScreenController implements Initializable, ProcessingObservable {
 
     @FXML
     private Pane pnlRoot;
@@ -63,6 +66,8 @@ public class ComparatorMainScreenController implements Initializable {
 
     private ResourceBundle resources;
     private AsyncRunner runner;
+    private List<Runnable> startingTasks;
+    private List<Runnable> stoppingTasks;
 
 
 
@@ -70,6 +75,8 @@ public class ComparatorMainScreenController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
         this.runner = new AsyncRunner();
+        this.startingTasks = new ArrayList<>();
+        this.stoppingTasks = new ArrayList<>();
 
         sldPrecision.setLabelFormatter(formatSliderPrecisionLabels());
     }
@@ -86,7 +93,11 @@ public class ComparatorMainScreenController implements Initializable {
             .process(new ComparatorRequestProcessor())
             .consume(this::consumeResult);
 
-        runner.runAsync(runnable);
+        runner.runAsync(
+            this::performStartingTasks,
+            runnable,
+            this::performStoppingTasks
+        );
     }
 
     @FXML
@@ -202,5 +213,25 @@ public class ComparatorMainScreenController implements Initializable {
                 return 0.0;
             }
         };
+    }
+
+
+
+    @Override
+    public void performWhenProcessingStarts(Runnable runnable) {
+        startingTasks.add(runnable);
+    }
+
+    private void performStartingTasks() {
+        startingTasks.forEach(Runnable::run);
+    }
+
+    @Override
+    public void performWhenProcessingStops(Runnable runnable) {
+        stoppingTasks.add(runnable);
+    }
+
+    private void performStoppingTasks() {
+        stoppingTasks.forEach(Runnable::run);
     }
 }

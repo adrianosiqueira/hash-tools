@@ -1,8 +1,10 @@
 package hash_tools.frontend.screen.start;
 
+import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.fxml.FXMLFile;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
@@ -44,8 +46,10 @@ public class StartMainScreenController implements Initializable {
         new FXMLFile()
             .location("/hash_tools/frontend/screen/checker/checker-main-screen.fxml")
             .resources(resources)
-            .load()
-            .usePane(pnlContent.getChildren()::setAll);
+            .<ProcessingObservable>load()
+            .usePane(pnlContent.getChildren()::setAll)
+            .useController(c -> c.performWhenProcessingStarts(this::startSplash))
+            .useController(c -> c.performWhenProcessingStops(this::stopSplash));
     }
 
     @FXML
@@ -53,8 +57,10 @@ public class StartMainScreenController implements Initializable {
         new FXMLFile()
             .location("/hash_tools/frontend/screen/generator/generator-main-screen.fxml")
             .resources(resources)
-            .load()
-            .usePane(pnlContent.getChildren()::setAll);
+            .<ProcessingObservable>load()
+            .usePane(pnlContent.getChildren()::setAll)
+            .useController(c -> c.performWhenProcessingStarts(this::startSplash))
+            .useController(c -> c.performWhenProcessingStops(this::stopSplash));
     }
 
     @FXML
@@ -62,8 +68,10 @@ public class StartMainScreenController implements Initializable {
         new FXMLFile()
             .location("/hash_tools/frontend/screen/comparator/comparator-main-screen.fxml")
             .resources(resources)
-            .load()
-            .usePane(pnlContent.getChildren()::setAll);
+            .<ProcessingObservable>load()
+            .usePane(pnlContent.getChildren()::setAll)
+            .useController(c -> c.performWhenProcessingStarts(this::startSplash))
+            .useController(c -> c.performWhenProcessingStops(this::stopSplash));
     }
 
 
