@@ -65,4 +65,20 @@ public class StartMainScreenController implements Initializable {
             .load()
             .usePane(pnlContent.getChildren()::setAll);
     }
+
+
+
+    private void startSplash() {
+        pnlRoot.setCursor(Cursor.WAIT);
+        pnlRoot
+            .getChildren()
+            .forEach(node -> node.setDisable(true));
+    }
+
+    private void stopSplash() {
+        pnlRoot.setCursor(Cursor.DEFAULT);
+        pnlRoot
+            .getChildren()
+            .forEach(node -> node.setDisable(false));
+    }
 }
