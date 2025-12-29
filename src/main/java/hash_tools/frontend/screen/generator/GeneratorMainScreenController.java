@@ -9,6 +9,7 @@ import hash_tools.backend.request.processor.GeneratorRequestProcessor;
 import hash_tools.backend.result.GeneratorResult;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
+import hash_tools.frontend.javafx.AsyncRunner;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -61,24 +62,28 @@ public class GeneratorMainScreenController implements Initializable {
 
 
     private ResourceBundle resources;
+    private AsyncRunner runner;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
+        this.runner = new AsyncRunner();
     }
 
 
 
     @FXML
     private void performGenerationOperation() {
-        GeneratorRequest
+        Runnable runnable = () -> GeneratorRequest
             .createUsingSuppliers(
                 this::createChecksumSource,
                 this::createAlgorithmList)
             .process(new GeneratorRequestProcessor())
             .consume(this::consumeResult);
+
+        runner.runAsync(runnable);
     }
 
     @FXML

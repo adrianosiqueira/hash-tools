@@ -5,7 +5,7 @@
   - [x] light-color
   - [x] dark-color (low priority)
   - [x] layout
-- [ ] Make all calls from gui to be async.
+- [x] Make calls from gui that performs intense tasks to be async.
 - [x] Remove old screens.
 - [x] Organize css files.
 - [ ] Create dedicated screens do show the results.

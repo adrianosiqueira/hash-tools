@@ -9,6 +9,7 @@ import hash_tools.backend.request.processor.ComparatorRequestProcessor;
 import hash_tools.backend.result.ComparatorResult;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
+import hash_tools.frontend.javafx.AsyncRunner;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -61,12 +62,14 @@ public class ComparatorMainScreenController implements Initializable {
 
 
     private ResourceBundle resources;
+    private AsyncRunner runner;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
+        this.runner = new AsyncRunner();
 
         sldPrecision.setLabelFormatter(formatSliderPrecisionLabels());
     }
@@ -75,13 +78,15 @@ public class ComparatorMainScreenController implements Initializable {
 
     @FXML
     private void performComparisonOperation() {
-        ComparatorRequest
+        Runnable runnable = () -> ComparatorRequest
             .createUsingSuppliers(
                 this::createChecksumSource1,
                 this::createChecksumSource2,
                 this::determineAlgorithm)
             .process(new ComparatorRequestProcessor())
             .consume(this::consumeResult);
+
+        runner.runAsync(runnable);
     }
 
     @FXML

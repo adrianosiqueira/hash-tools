@@ -12,6 +12,7 @@ import hash_tools.backend.request.processor.CheckerRequestProcessor;
 import hash_tools.backend.result.CheckerResult;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
+import hash_tools.frontend.javafx.AsyncRunner;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -56,24 +57,28 @@ public class CheckerMainScreenController implements Initializable {
 
 
     private ResourceBundle resources;
+    private AsyncRunner runner;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
+        this.runner = new AsyncRunner();
     }
 
 
 
     @FXML
     private void performCheckingOperation() {
-        CheckerRequest
+        Runnable runnable = () -> CheckerRequest
             .createUsingSuppliers(
                 this::createChecksumSource,
                 this::createChecksumExtractor)
             .process(new CheckerRequestProcessor())
             .consume(this::consumeResult);
+
+        runner.runAsync(runnable);
     }
 
     @FXML
