@@ -7,7 +7,7 @@
   - [x] layout
 - [ ] Make all calls from gui to be async.
 - [x] Remove old screens.
-- [ ] Organize css files.
+- [x] Organize css files.
 - [ ] Create dedicated screens do show the results.
 - [ ] Create a visual indication os background execution.
 

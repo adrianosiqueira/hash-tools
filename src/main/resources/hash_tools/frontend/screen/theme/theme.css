@@ -63,12 +63,6 @@
 
 
 
-.pane-root {
-    -fx-background-color: BACKGROUND_COLOR;
-}
-
-
-
 .separator .line {
     -fx-border-color: TEXT_COLOR;
     -fx-border-width: 1;
@@ -177,4 +171,10 @@
     -fx-background-radius: 10 0 0 10;
     -fx-border-radius: 10 0 0 10;
     -fx-effect: none;
+}
+
+
+
+.pane-root {
+    -fx-background-color: BACKGROUND_COLOR;
 }
