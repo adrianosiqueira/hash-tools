@@ -11,6 +11,17 @@ public class AsyncRunner {
             .start(runnable);
     }
 
+    public void runAsync(Runnable beforeTask, Runnable task, Runnable afterTask) {
+        runAsync(() -> {
+            try {
+                beforeTask.run();
+                task.run();
+            } finally {
+                afterTask.run();
+            }
+        });
+    }
+
     public void runAsyncFx(Runnable runnable) {
         runAsync(() -> Platform.runLater(runnable));
     }
