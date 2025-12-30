@@ -1,7 +1,7 @@
 package hash_tools.frontend.screen.start;
 
 import hash_tools.frontend.abstraction.ProcessingObservable;
-import hash_tools.frontend.fxml.FXMLFile;
+import hash_tools.frontend.javafx.JavaFxFile;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -43,35 +43,17 @@ public class StartMainScreenController implements Initializable {
 
     @FXML
     private void openCheckerScreen() {
-        new FXMLFile()
-            .location("/hash_tools/frontend/screen/checker/checker-main-screen.fxml")
-            .resources(resources)
-            .load()
-            .usePane(pnlContent.getChildren()::setAll)
-            .<ProcessingObservable>useController(c -> c.performWhenProcessingStarts(this::startSplash))
-            .<ProcessingObservable>useController(c -> c.performWhenProcessingStops(this::stopSplash));
+        openScreen("/hash_tools/frontend/screen/checker/checker-main-screen.fxml");
     }
 
     @FXML
     private void openGeneratorScreen() {
-        new FXMLFile()
-            .location("/hash_tools/frontend/screen/generator/generator-main-screen.fxml")
-            .resources(resources)
-            .load()
-            .usePane(pnlContent.getChildren()::setAll)
-            .<ProcessingObservable>useController(c -> c.performWhenProcessingStarts(this::startSplash))
-            .<ProcessingObservable>useController(c -> c.performWhenProcessingStops(this::stopSplash));
+        openScreen("/hash_tools/frontend/screen/generator/generator-main-screen.fxml");
     }
 
     @FXML
     private void openComparatorScreen() {
-        new FXMLFile()
-            .location("/hash_tools/frontend/screen/comparator/comparator-main-screen.fxml")
-            .resources(resources)
-            .load()
-            .usePane(pnlContent.getChildren()::setAll)
-            .<ProcessingObservable>useController(c -> c.performWhenProcessingStarts(this::startSplash))
-            .<ProcessingObservable>useController(c -> c.performWhenProcessingStops(this::stopSplash));
+        openScreen("/hash_tools/frontend/screen/comparator/comparator-main-screen.fxml");
     }
 
 
@@ -88,5 +70,18 @@ public class StartMainScreenController implements Initializable {
         pnlRoot
             .getChildren()
             .forEach(node -> node.setDisable(false));
+    }
+
+
+
+    private void openScreen(String location) {
+        new JavaFxFile()
+            .location(location)
+            .resources(resources)
+            .consumePane(pnlContent.getChildren()::setAll)
+            .<ProcessingObservable>consumeController(c -> c.performWhenProcessingStarts(this::startSplash))
+            .<ProcessingObservable>consumeController(c -> c.performWhenProcessingStops(this::stopSplash))
+            .handleException(Exception::printStackTrace)
+            .process();
     }
 }

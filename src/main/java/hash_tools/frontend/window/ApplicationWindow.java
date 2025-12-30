@@ -1,6 +1,6 @@
 package hash_tools.frontend.window;
 
-import hash_tools.frontend.fxml.FXMLFile;
+import hash_tools.frontend.javafx.JavaFxFile;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -24,10 +24,10 @@ public class ApplicationWindow extends Application {
 
     @Override
     public void start(Stage stage) {
-        new FXMLFile()
+        new JavaFxFile()
             .location("/hash_tools/frontend/screen/start/start-main-screen.fxml")
-            .load()
-            .usePane(ApplicationWindow::changeScene);
+            .consumePane(ApplicationWindow::changeScene)
+            .process();
 
         stage.setTitle("Hash Tools");
         stage.setScene(SCENE);
