@@ -10,7 +10,7 @@ import hash_tools.backend.result.ComparatorResult;
 import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
-import hash_tools.frontend.javafx.AsyncRunner;
+import hash_tools.frontend.javafx.Execution;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -65,7 +65,6 @@ public class ComparatorMainScreenController implements Initializable, Processing
 
 
     private ResourceBundle resources;
-    private AsyncRunner runner;
     private List<Runnable> startingTasks;
     private List<Runnable> stoppingTasks;
 
@@ -74,7 +73,6 @@ public class ComparatorMainScreenController implements Initializable, Processing
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
-        this.runner = new AsyncRunner();
         this.startingTasks = new ArrayList<>();
         this.stoppingTasks = new ArrayList<>();
 
@@ -85,18 +83,18 @@ public class ComparatorMainScreenController implements Initializable, Processing
 
     @FXML
     private void performComparisonOperation() {
-        Runnable runnable = () -> new ComparatorRequest()
+        Runnable comparisonOperation = () -> new ComparatorRequest()
             .checksumSource1(this::createChecksumSource1)
             .checksumSource2(this::createChecksumSource2)
             .algorithm(this::determineAlgorithm)
             .process(new ComparatorRequestProcessor())
             .consume(this::consumeResult);
 
-        runner.runAsync(
-            this::performStartingTasks,
-            runnable,
-            this::performStoppingTasks
-        );
+        new Execution()
+            .addTask(this::performStartingTasks)
+            .addTask(comparisonOperation)
+            .addTask(this::performStoppingTasks)
+            .executeSequential();
     }
 
     @FXML

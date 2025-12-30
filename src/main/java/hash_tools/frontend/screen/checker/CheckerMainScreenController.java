@@ -13,7 +13,7 @@ import hash_tools.backend.result.CheckerResult;
 import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
-import hash_tools.frontend.javafx.AsyncRunner;
+import hash_tools.frontend.javafx.Execution;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -60,7 +60,6 @@ public class CheckerMainScreenController implements Initializable, ProcessingObs
 
 
     private ResourceBundle resources;
-    private AsyncRunner runner;
     private List<Runnable> startingTasks;
     private List<Runnable> stoppingTasks;
 
@@ -69,7 +68,6 @@ public class CheckerMainScreenController implements Initializable, ProcessingObs
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
-        this.runner = new AsyncRunner();
         this.startingTasks = new ArrayList<>();
         this.stoppingTasks = new ArrayList<>();
     }
@@ -78,17 +76,17 @@ public class CheckerMainScreenController implements Initializable, ProcessingObs
 
     @FXML
     private void performCheckingOperation() {
-        Runnable runnable = () -> new CheckerRequest()
+        Runnable checkingOperation = () -> new CheckerRequest()
             .checksumSource(this::createChecksumSource)
             .checksumExtractor(this::createChecksumExtractor)
             .process(new CheckerRequestProcessor())
             .consume(this::consumeResult);
 
-        runner.runAsync(
-            this::performStartingTasks,
-            runnable,
-            this::performStoppingTasks
-        );
+        new Execution()
+            .addTask(this::performStartingTasks)
+            .addTask(checkingOperation)
+            .addTask(this::performStoppingTasks)
+            .executeSequential();
     }
 
     @FXML

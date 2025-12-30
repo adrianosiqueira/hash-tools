@@ -10,7 +10,7 @@ import hash_tools.backend.result.GeneratorResult;
 import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
-import hash_tools.frontend.javafx.AsyncRunner;
+import hash_tools.frontend.javafx.Execution;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -64,7 +64,6 @@ public class GeneratorMainScreenController implements Initializable, ProcessingO
 
 
     private ResourceBundle resources;
-    private AsyncRunner runner;
     private List<Runnable> startingTasks;
     private List<Runnable> stoppingTasks;
 
@@ -73,7 +72,6 @@ public class GeneratorMainScreenController implements Initializable, ProcessingO
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
-        this.runner = new AsyncRunner();
         this.startingTasks = new ArrayList<>();
         this.stoppingTasks = new ArrayList<>();
     }
@@ -82,17 +80,17 @@ public class GeneratorMainScreenController implements Initializable, ProcessingO
 
     @FXML
     private void performGenerationOperation() {
-        Runnable runnable = () -> new GeneratorRequest()
+        Runnable generationOperation = () -> new GeneratorRequest()
             .checksumSource(this::createChecksumSource)
             .algorithms(this::createAlgorithmList)
             .process(new GeneratorRequestProcessor())
             .consume(this::consumeResult);
 
-        runner.runAsync(
-            this::performStartingTasks,
-            runnable,
-            this::performStoppingTasks
-        );
+        new Execution()
+            .addTask(this::performStartingTasks)
+            .addTask(generationOperation)
+            .addTask(this::performStoppingTasks)
+            .executeSequential();
     }
 
     @FXML
