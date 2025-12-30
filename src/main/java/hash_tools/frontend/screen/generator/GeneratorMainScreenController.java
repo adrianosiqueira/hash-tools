@@ -82,10 +82,9 @@ public class GeneratorMainScreenController implements Initializable, ProcessingO
 
     @FXML
     private void performGenerationOperation() {
-        Runnable runnable = () -> GeneratorRequest
-            .createUsingSuppliers(
-                this::createChecksumSource,
-                this::createAlgorithmList)
+        Runnable runnable = () -> new GeneratorRequest()
+            .checksumSource(this::createChecksumSource)
+            .algorithms(this::createAlgorithmList)
             .process(new GeneratorRequestProcessor())
             .consume(this::consumeResult);
 

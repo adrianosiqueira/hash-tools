@@ -14,22 +14,6 @@ public class GeneratorRequest {
 
 
 
-    private GeneratorRequest(ChecksumSource checksumSource, List<Algorithm> algorithms) {
-        this.checksumSource = checksumSource;
-        this.algorithms = algorithms;
-    }
-
-
-
-    public static GeneratorRequest createUsingSuppliers(Supplier<ChecksumSource> checksumSource, Supplier<List<Algorithm>> algorithms) {
-        return new GeneratorRequest(
-            checksumSource.get(),
-            algorithms.get()
-        );
-    }
-
-
-
     public <R> R process(Function<GeneratorRequest, R> processor) {
         return processor.apply(this);
     }
@@ -40,7 +24,17 @@ public class GeneratorRequest {
         return checksumSource;
     }
 
+    public GeneratorRequest checksumSource(Supplier<ChecksumSource> checksumSource) {
+        this.checksumSource = checksumSource.get();
+        return this;
+    }
+
     public List<Algorithm> algorithms() {
         return algorithms;
+    }
+
+    public GeneratorRequest algorithms(Supplier<List<Algorithm>> algorithms) {
+        this.algorithms = algorithms.get();
+        return this;
     }
 }

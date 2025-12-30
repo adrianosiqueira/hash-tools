@@ -78,10 +78,9 @@ public class CheckerMainScreenController implements Initializable, ProcessingObs
 
     @FXML
     private void performCheckingOperation() {
-        Runnable runnable = () -> CheckerRequest
-            .createUsingSuppliers(
-                this::createChecksumSource,
-                this::createChecksumExtractor)
+        Runnable runnable = () -> new CheckerRequest()
+            .checksumSource(this::createChecksumSource)
+            .checksumExtractor(this::createChecksumExtractor)
             .process(new CheckerRequestProcessor())
             .consume(this::consumeResult);
 

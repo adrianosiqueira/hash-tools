@@ -13,22 +13,6 @@ public class CheckerRequest {
 
 
 
-    private CheckerRequest(ChecksumSource checksumSource, ChecksumExtractor checksumExtractor) {
-        this.checksumSource = checksumSource;
-        this.checksumExtractor = checksumExtractor;
-    }
-
-
-
-    public static CheckerRequest createUsingSuppliers(Supplier<ChecksumSource> checksumSource, Supplier<ChecksumExtractor> checksumExtractor) {
-        return new CheckerRequest(
-            checksumSource.get(),
-            checksumExtractor.get()
-        );
-    }
-
-
-
     public <R> R process(Function<CheckerRequest, R> processor) {
         return processor.apply(this);
     }
@@ -39,7 +23,17 @@ public class CheckerRequest {
         return checksumSource;
     }
 
+    public CheckerRequest checksumSource(Supplier<ChecksumSource> checksumSource) {
+        this.checksumSource = checksumSource.get();
+        return this;
+    }
+
     public ChecksumExtractor checksumExtractor() {
         return checksumExtractor;
+    }
+
+    public CheckerRequest checksumExtractor(Supplier<ChecksumExtractor> checksumExtractor) {
+        this.checksumExtractor = checksumExtractor.get();
+        return this;
     }
 }

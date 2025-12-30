@@ -85,11 +85,10 @@ public class ComparatorMainScreenController implements Initializable, Processing
 
     @FXML
     private void performComparisonOperation() {
-        Runnable runnable = () -> ComparatorRequest
-            .createUsingSuppliers(
-                this::createChecksumSource1,
-                this::createChecksumSource2,
-                this::determineAlgorithm)
+        Runnable runnable = () -> new ComparatorRequest()
+            .checksumSource1(this::createChecksumSource1)
+            .checksumSource2(this::createChecksumSource2)
+            .algorithm(this::determineAlgorithm)
             .process(new ComparatorRequestProcessor())
             .consume(this::consumeResult);
 

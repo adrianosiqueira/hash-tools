@@ -14,24 +14,6 @@ public class ComparatorRequest {
 
 
 
-    private ComparatorRequest(ChecksumSource checksumSource1, ChecksumSource checksumSource2, Algorithm algorithm) {
-        this.checksumSource1 = checksumSource1;
-        this.checksumSource2 = checksumSource2;
-        this.algorithm = algorithm;
-    }
-
-
-
-    public static ComparatorRequest createUsingSuppliers(Supplier<ChecksumSource> checksumSource1, Supplier<ChecksumSource> checksumSource2, Supplier<Algorithm> algorithm) {
-        return new ComparatorRequest(
-            checksumSource1.get(),
-            checksumSource2.get(),
-            algorithm.get()
-        );
-    }
-
-
-
     public <R> R process(Function<ComparatorRequest, R> processor) {
         return processor.apply(this);
     }
@@ -42,11 +24,26 @@ public class ComparatorRequest {
         return checksumSource1;
     }
 
+    public ComparatorRequest checksumSource1(Supplier<ChecksumSource> checksumSource1) {
+        this.checksumSource1 = checksumSource1.get();
+        return this;
+    }
+
     public ChecksumSource checksumSource2() {
         return checksumSource2;
     }
 
+    public ComparatorRequest checksumSource2(Supplier<ChecksumSource> checksumSource2) {
+        this.checksumSource2 = checksumSource2.get();
+        return this;
+    }
+
     public Algorithm algorithm() {
         return algorithm;
+    }
+
+    public ComparatorRequest algorithm(Supplier<Algorithm> algorithm) {
+        this.algorithm = algorithm.get();
+        return this;
     }
 }
