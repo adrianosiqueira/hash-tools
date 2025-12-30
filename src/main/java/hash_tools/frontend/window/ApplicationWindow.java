@@ -8,29 +8,21 @@ import javafx.stage.Stage;
 
 public class ApplicationWindow extends Application {
 
-    private static final Scene SCENE = new Scene(new Pane());
-
-
-
-    public static void changeScene(Pane pane) {
-        SCENE.setRoot(pane);
-    }
-
-    public static Pane getSceneContent() {
-        return (Pane) SCENE.getRoot();
-    }
-
-
-
     @Override
     public void start(Stage stage) {
         new JavaFxFile()
             .location("/hash_tools/frontend/screen/start/start-main-screen.fxml")
-            .consumePane(ApplicationWindow::changeScene)
+            .consumePane(pane -> changeScene(pane, stage))
             .process();
 
         stage.setTitle("Hash Tools");
-        stage.setScene(SCENE);
         stage.show();
+    }
+
+
+
+    private void changeScene(Pane pane, Stage stage) {
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
     }
 }
