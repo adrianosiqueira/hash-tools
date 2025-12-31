@@ -12,7 +12,7 @@
     fx:controller="hash_tools.frontend.screen.checker.CheckerMainScreenController"
     fx:id="pnlRoot"
     styleClass="pane-root"
-    stylesheets="@../theme/light-color.css,@../theme/theme.css,@checker-main-screen.css"
+    stylesheets="@../theme/light-theme.css,@../theme/theme.css,@checker-main-screen.css"
     xmlns="http://javafx.com/javafx"
     xmlns:fx="http://javafx.com/fxml"
 >
