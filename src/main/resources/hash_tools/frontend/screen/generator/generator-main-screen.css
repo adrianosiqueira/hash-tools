@@ -1,11 +1,11 @@
-.pane-algorithm {
+.generator-screen-pane-root {
     -fx-hgap: 20;
-    -fx-vgap: 20;
+    -fx-vgap: 40;
 }
 
 
 
-.pane-root {
+.generator-screen-pane-root .pane-algorithm {
     -fx-hgap: 20;
-    -fx-vgap: 40;
+    -fx-vgap: 20;
 }

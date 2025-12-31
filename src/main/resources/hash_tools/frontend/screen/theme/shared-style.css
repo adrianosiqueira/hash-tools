@@ -172,9 +172,3 @@
     -fx-border-radius: 10 0 0 10;
     -fx-effect: none;
 }
-
-
-
-.pane-root {
-    -fx-background-color: BACKGROUND_COLOR;
-}
