@@ -1,7 +1,7 @@
 package hash_tools.frontend.javafx;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class JavaFxFile {
     private ResourceBundle resources;
 
     private Consumer<Exception> exceptionHandler = this::doNotDoAnything;
-    private List<Consumer<Pane>> paneConsumers = new ArrayList<>();
+    private List<Consumer<Region>> paneConsumers = new ArrayList<>();
     private List<Consumer<Object>> controllerConsumers = new ArrayList<>();
 
 
@@ -40,7 +40,7 @@ public class JavaFxFile {
         return this;
     }
 
-    public JavaFxFile consumePane(Consumer<Pane> consumer) {
+    public JavaFxFile consumePane(Consumer<Region> consumer) {
         paneConsumers.add(consumer);
         return this;
     }
@@ -62,7 +62,7 @@ public class JavaFxFile {
         loader.setResources(resources);
 
         try {
-            Pane pane = loader.load();
+            Region pane = loader.load();
             paneConsumers.forEach(c -> c.accept(pane));
 
             Object controller = loader.getController();
