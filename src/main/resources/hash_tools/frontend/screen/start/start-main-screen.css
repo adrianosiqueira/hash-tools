@@ -2,10 +2,10 @@
     -fx-background-color: BACKGROUND_COLOR;
 
     -fx-padding: 20;
-    -fx-spacing: 40;
-
     -fx-pref-width: 960;
     -fx-pref-height: 540;
+
+    -fx-fit-to-width: true;
 }
 
 
@@ -19,4 +19,10 @@
 
 .start-screen-pane-root .pane-button .button {
     -fx-max-width: infinity;
+}
+
+
+
+.start-screen-pane-root .pane-content {
+    -fx-spacing: 40;
 }

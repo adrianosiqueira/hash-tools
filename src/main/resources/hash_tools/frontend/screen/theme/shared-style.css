@@ -63,6 +63,43 @@
 
 
 
+.scroll-pane .scroll-bar .decrement-button,
+.scroll-pane .scroll-bar .decrement-button .decrement-arrow,
+.scroll-pane .scroll-bar .increment-button,
+.scroll-pane .scroll-bar .increment-button .increment-arrow {
+    /* Remove the scrollbar buttons */
+    -fx-padding: 0;
+}
+
+
+
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: ACCENT_COLOR;
+    -fx-background-radius: 10;
+
+    -fx-border-color: TEXT_COLOR;
+    -fx-border-radius: 10;
+}
+
+.scroll-pane .scroll-bar:hover .thumb {
+    -fx-background-color: ACCENT_COLOR_INTENSE;
+}
+
+
+
+.scroll-pane .scroll-bar .track {
+    -fx-background-color: BACKGROUND_COLOR;
+    -fx-background-radius: 10;
+}
+
+
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+
+
 .separator .line {
     -fx-border-color: TEXT_COLOR;
     -fx-border-width: 1;

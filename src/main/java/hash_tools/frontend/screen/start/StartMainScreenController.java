@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -14,9 +15,11 @@ import java.util.ResourceBundle;
 public class StartMainScreenController implements Initializable {
 
     @FXML
-    private Pane pnlRoot;
+    private ScrollPane pnlRoot;
     @FXML
     private Pane pnlContent;
+    @FXML
+    private Pane pnlForm;
 
     @FXML
     private Pane pnlButton;
@@ -60,14 +63,14 @@ public class StartMainScreenController implements Initializable {
 
     private void startSplash() {
         pnlRoot.setCursor(Cursor.WAIT);
-        pnlRoot
+        pnlContent
             .getChildren()
             .forEach(node -> node.setDisable(true));
     }
 
     private void stopSplash() {
         pnlRoot.setCursor(Cursor.DEFAULT);
-        pnlRoot
+        pnlContent
             .getChildren()
             .forEach(node -> node.setDisable(false));
     }
@@ -78,7 +81,7 @@ public class StartMainScreenController implements Initializable {
         new JavaFxFile()
             .location(location)
             .resources(resources)
-            .consumePane(pnlContent.getChildren()::setAll)
+            .consumePane(pnlForm.getChildren()::setAll)
             .<ProcessingObservable>consumeController(c -> c.performWhenProcessingStarts(this::startSplash))
             .<ProcessingObservable>consumeController(c -> c.performWhenProcessingStops(this::stopSplash))
             .handleException(Exception::printStackTrace)
