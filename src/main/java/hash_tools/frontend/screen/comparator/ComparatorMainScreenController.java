@@ -128,6 +128,8 @@ public class ComparatorMainScreenController implements Initializable, Processing
         } else if (event.getDeltaY() < 0) {
             lowerPrecision();
         }
+
+        event.consume();
     }
 
 
