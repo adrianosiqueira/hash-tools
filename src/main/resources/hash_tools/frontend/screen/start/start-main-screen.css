@@ -1,24 +1,11 @@
 .start-screen-pane-root {
-    -fx-background-color: BACKGROUND_COLOR;
+    -fx-background-color: SCREEN_BACKGROUND;
 
     -fx-padding: 20;
     -fx-pref-width: 960;
     -fx-pref-height: 540;
 
     -fx-fit-to-width: true;
-}
-
-
-
-.start-screen-pane-root .pane-button {
-    -fx-alignment: center;
-    -fx-spacing: 20;
-}
-
-
-
-.start-screen-pane-root .pane-button .button {
-    -fx-max-width: infinity;
 }
 
 

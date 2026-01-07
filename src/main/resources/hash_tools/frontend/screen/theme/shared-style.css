@@ -1,30 +1,31 @@
 .button {
-    -fx-background-color: ACCENT_COLOR;;
+    -fx-background-color: BUTTON_BACKGROUND;
     -fx-background-radius: 10;
 
-    -fx-border-color: TEXT_COLOR;
+    -fx-border-color: BUTTON_BORDER;
     -fx-border-radius: 10;
 
-    -fx-text-fill: TEXT_COLOR;
+    -fx-text-fill: BUTTON_TEXT;
     -fx-font-size: 18;
     -fx-cursor: hand;
-
-    -fx-spacing: 20;
 }
 
-.button:armed,
 .button:armed:hover {
-    -fx-background-color: ACCENT_COLOR_INTENSE;
+    -fx-background-color: BUTTON_BACKGROUND_ARMED;
+    -fx-border-color: BUTTON_BORDER_ARMED;
+    -fx-text-fill: BUTTON_TEXT_ARMED;
 }
 
 .button:hover {
-    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+    -fx-background-color: BUTTON_BACKGROUND_HOVER;
+    -fx-border-color: BUTTON_BORDER_HOVER;
+    -fx-text-fill: BUTTON_TEXT_HOVER;
 }
 
 
 
 .check-box {
-    -fx-text-fill: TEXT_COLOR;
+    -fx-text-fill: CHECKBOX_TEXT;
     -fx-font-size: 18;
     -fx-max-width: infinity;
     -fx-cursor: hand;
@@ -33,31 +34,38 @@
 
 
 .check-box .box {
-    -fx-background-color: BACKGROUND_COLOR;
+    -fx-background-color: CHECKBOX_BACKGROUND;
     -fx-background-radius: 7;
 
-    -fx-border-color: TEXT_COLOR;
+    -fx-border-color: CHECKBOX_BORDER;
     -fx-border-radius: 7;
 }
 
 .check-box:armed:hover .box {
-    -fx-background-color: ACCENT_COLOR_INTENSE;
+    -fx-background-color: CHECKBOX_BACKGROUND_ARMED;
+    -fx-border-color: CHECKBOX_BORDER_ARMED;
 }
 
 .check-box:hover .box {
-    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+    -fx-background-color: CHECKBOX_BACKGROUND_HOVER;
+    -fx-border-color: CHECKBOX_BORDER_HOVER;
+}
+
+.check-box:selected .box {
+    -fx-background-color: CHECKBOX_BACKGROUND_SELECTED;
+    -fx-border-color: CHECKBOX_BORDER_SELECTED;
 }
 
 
 
 .check-box:selected .box .mark {
-    -fx-background-color: TEXT_COLOR;
+    -fx-background-color: CHECKBOX_MARK;
 }
 
 
 
 .label {
-    -fx-text-fill: TEXT_COLOR;
+    -fx-text-fill: LABEL_TEXT;
     -fx-font-size: 18;
 }
 
@@ -74,22 +82,41 @@
 
 
 .scroll-pane .scroll-bar .thumb {
-    -fx-background-color: ACCENT_COLOR;
+    -fx-background-color: SCROLLPANE_THUMB_BACKGROUND;
     -fx-background-radius: 10;
 
-    -fx-border-color: TEXT_COLOR;
+    -fx-border-color: SCROLLPANE_THUMB_BORDER;
     -fx-border-radius: 10;
 }
 
 .scroll-pane .scroll-bar:hover .thumb {
-    -fx-background-color: ACCENT_COLOR_INTENSE;
+    -fx-background-color: SCROLLPANE_THUMB_BACKGROUND_HOVER;
+    -fx-border-color: SCROLLPANE_THUMB_BORDER_HOVER;
+}
+
+.scroll-pane .scroll-bar:pressed .thumb {
+    -fx-background-color: SCROLLPANE_THUMB_BACKGROUND_PRESSED;
+    -fx-border-color: SCROLLPANE_THUMB_BORDER_PRESSED;
 }
 
 
 
 .scroll-pane .scroll-bar .track {
-    -fx-background-color: BACKGROUND_COLOR;
+    -fx-background-color: SCROLLPANE_TRACK_BACKGROUND;
     -fx-background-radius: 10;
+
+    -fx-border-color: SCROLLPANE_TRACK_BORDER;
+    -fx-border-radius: 10;
+}
+
+.scroll-pane .scroll-bar:hover .track {
+    -fx-background-color: SCROLLPANE_TRACK_BACKGROUND_HOVER;
+    -fx-border-color: SCROLLPANE_TRACK_BORDER_HOVER;
+}
+
+.scroll-pane .scroll-bar:pressed .track {
+    -fx-background-color: SCROLLPANE_TRACK_BACKGROUND_PRESSED;
+    -fx-border-color: SCROLLPANE_TRACK_BORDER_PRESSED;
 }
 
 
@@ -101,7 +128,7 @@
 
 
 .separator .line {
-    -fx-border-color: TEXT_COLOR;
+    -fx-border-color: LABEL_TEXT;
     -fx-border-width: 1;
 }
 
@@ -116,7 +143,7 @@
 .slider .axis {
     /* Change the tick label style */
 
-    -fx-tick-label-fill: TEXT_COLOR;
+    -fx-tick-label-fill: SLIDER_TEXT;
     -fx-tick-label-font: 14 system;
     -fx-tick-length: 2;
 }
@@ -127,7 +154,7 @@
 .slider .axis .axis-minor-tick-mark {
     /* Change the tick mark style */
 
-    -fx-stroke: TEXT_COLOR;
+    -fx-stroke: SLIDER_TEXT;
     -fx-stroke-width: 3;
 }
 
@@ -136,21 +163,22 @@
 .slider .thumb {
     /* Change the ball style */
 
-    -fx-background-color: ACCENT_COLOR;
+    -fx-background-color: SLIDER_THUMB_BACKGROUND;
     -fx-background-radius: 10;
 
-    -fx-border-color: TEXT_COLOR;
+    -fx-border-color: SLIDER_THUMB_BORDER;
     -fx-border-radius: 10;
-
-    -fx-cursor: hand;
+    -fx-border-width: 1;
 }
 
 .slider:hover .thumb {
-    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+    -fx-background-color: SLIDER_THUMB_BACKGROUND_HOVER;
+    -fx-border-color: SLIDER_THUMB_BORDER_HOVER;
 }
 
 .slider:pressed .thumb {
-    -fx-background-color: ACCENT_COLOR_INTENSE;
+    -fx-background-color: SLIDER_THUMB_BACKGROUND_ARMED;
+    -fx-border-color: SLIDER_THUMB_BORDER_ARMED;
 }
 
 
@@ -158,54 +186,133 @@
 .slider .track {
     /* Change the bar behind the ball style */
 
-    -fx-background-color: BACKGROUND_COLOR;
+    -fx-background-color: SLIDER_TRACK_BACKGROUND;
     -fx-background-radius: 10;
 
-    -fx-border-color: ACCENT_COLOR_INTENSE;
+    -fx-border-color: SLIDER_TRACK_BORDER;
     -fx-border-radius: 10;
     -fx-border-width: 1;
 }
 
 .slider:hover .track {
-    -fx-border-width: 2;
+    -fx-background-color: SLIDER_TRACK_BACKGROUND_HOVER;
+    -fx-border-color: SLIDER_TRACK_BORDER_HOVER;
+}
+
+.slider:pressed .track {
+    -fx-background-color: SLIDER_TRACK_BACKGROUND_ARMED;
+    -fx-border-color: SLIDER_TRACK_BORDER_ARMED;
 }
 
 
 
-.text-field {
-    -fx-background-color: ACCENT_COLOR;
+.toggle-button {
+    -fx-background-color: TOGGLE_BUTTON_BACKGROUND;
     -fx-background-radius: 10;
 
-    -fx-border-color: TEXT_COLOR;
+    -fx-border-color: TOGGLE_BUTTON_BORDER;
     -fx-border-radius: 10;
 
-    -fx-text-fill: TEXT_COLOR;
-    -fx-prompt-text-fill: grey;
+    -fx-text-fill: TOGGLE_BUTTON_TEXT;
     -fx-font-size: 18;
+
+    -fx-cursor: hand;
 }
 
-.text-field:hover {
-    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+.toggle-button:hover {
+    -fx-background-color: TOGGLE_BUTTON_BACKGROUND_HOVER;
+    -fx-border-color: TOGGLE_BUTTON_BORDER_HOVER;
+    -fx-text-fill: TOGGLE_BUTTON_TEXT;
+}
+
+.toggle-button:selected {
+    -fx-background-color: TOGGLE_BUTTON_BACKGROUND_SELECTED;
+    -fx-border-color: TOGGLE_BUTTON_BORDER_SELECTED;
+    -fx-text-fill: TOGGLE_BUTTON_TEXT_SELECTED;
 }
 
 
 
-.pane-input-file:hover {
-    -fx-effect: dropshadow(gaussian, SHADOW_COLOR, 20, 0, 0, 0);
+.pane-input-file {
+    -fx-background-color: PANE_INPUT_BACKGROUND;
+    -fx-background-radius: 10;
+
+    -fx-border-color: PANE_INPUT_BORDER;
+    -fx-border-radius: 10;
+    -fx-border-width: 5;
+}
+
+.pane-input-file:focused {
+    -fx-background-color: PANE_INPUT_BACKGROUND_FOCUSED;
+    -fx-border-color: PANE_INPUT_BORDER_FOCUSED;
 }
 
 
 
 .pane-input-file .button {
+    -fx-background-color: PANE_INPUT_BUTTON_BACKGROUND;
     -fx-background-radius: 0 10 10 0;
+
+    -fx-border-color: PANE_INPUT_BUTTON_BORDER;
     -fx-border-radius: 0 10 10 0;
-    -fx-effect: none;
+
+    -fx-text-fill: PANE_INPUT_BUTTON_TEXT;
+    -fx-font-size: 18;
+    -fx-cursor: hand;
+}
+
+.pane-input-file .button:armed:hover {
+    -fx-background-color: PANE_INPUT_BUTTON_BACKGROUND_ARMED;
+    -fx-border-color: PANE_INPUT_BUTTON_BORDER_ARMED;
+    -fx-text-fill: PANE_INPUT_BUTTON_TEXT_ARMED;
+}
+
+.pane-input-file .button:hover {
+    -fx-background-color: PANE_INPUT_BUTTON_BACKGROUND_HOVER;
+    -fx-border-color: PANE_INPUT_BUTTON_BORDER_HOVER;
+    -fx-text-fill: PANE_INPUT_BUTTON_TEXT_HOVER;
 }
 
 
 
 .pane-input-file .text-field {
+    -fx-background-color: PANE_INPUT_TEXTFIELD_BACKGROUND;
     -fx-background-radius: 10 0 0 10;
+
+    -fx-border-color: PANE_INPUT_TEXTFIELD_BORDER;
     -fx-border-radius: 10 0 0 10;
-    -fx-effect: none;
+
+    -fx-text-fill: PANE_INPUT_TEXTFIELD_TEXT;
+    -fx-font-size: 18;
+}
+
+.pane-input-file .text-field:focused {
+    -fx-background-color: PANE_INPUT_TEXTFIELD_BACKGROUND_FOCUSED;
+    -fx-border-color: PANE_INPUT_TEXTFIELD_BORDER_FOCUSED;
+    -fx-text-fill: PANE_INPUT_TEXTFIELD_TEXT_FOCUSED;
+}
+
+
+
+.pane-island {
+    -fx-background-color: ISLAND_BACKGROUND;
+    -fx-background-radius: 20;
+
+    -fx-padding: 20;
+}
+
+
+
+.pane-island-header {
+    -fx-background-color: ISLAND_BACKGROUND;
+    -fx-background-radius: 10;
+
+    -fx-padding: 5;
+    -fx-spacing: 5;
+}
+
+
+
+.pane-island-header .toggle-button {
+    -fx-max-width: infinity;
 }

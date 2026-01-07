@@ -20,7 +20,7 @@
         <HBox
             VBox.vgrow="NEVER"
             fx:id="pnlButton"
-            styleClass="pane-button"
+            styleClass="pane-island-header"
         >
             <ToggleButton
                 HBox.hgrow="ALWAYS"
@@ -51,6 +51,7 @@
         <StackPane
             VBox.vgrow="ALWAYS"
             fx:id="pnlForm"
+            styleClass="pane-island"
         />
     </VBox>
 </ScrollPane>

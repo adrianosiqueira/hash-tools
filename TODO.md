@@ -10,8 +10,8 @@
 - [x] Organize css files.
 - [ ] Create dedicated screens do show the results.
 - [x] Create a visual indication os background execution.
-- [ ] Design a better color handling in css.
-- [ ] Implement the 'island' theme in start screen.
+- [x] Design a better color handling in css.
+- [x] Implement the 'island' theme in start screen.
 
 ---
 
