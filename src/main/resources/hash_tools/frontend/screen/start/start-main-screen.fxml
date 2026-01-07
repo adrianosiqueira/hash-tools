@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -22,24 +22,25 @@
             fx:id="pnlButton"
             styleClass="pane-button"
         >
-            <Button
+            <ToggleButton
                 HBox.hgrow="ALWAYS"
                 fx:id="btnCheck"
-                onAction="#openCheckerScreen"
+                onAction="#handleBtnCheckAction"
+                selected="true"
                 styleClass="button-check"
                 text="Check"
             />
-            <Button
+            <ToggleButton
                 HBox.hgrow="ALWAYS"
                 fx:id="btnGenerate"
-                onAction="#openGeneratorScreen"
+                onAction="#handleBtnGenerateAction"
                 styleClass="button-generate"
                 text="Generate"
             />
-            <Button
+            <ToggleButton
                 HBox.hgrow="ALWAYS"
                 fx:id="btnCompare"
-                onAction="#openComparatorScreen"
+                onAction="#handleBtnCompareAction"
                 styleClass="button-compare"
                 text="Compare"
             />

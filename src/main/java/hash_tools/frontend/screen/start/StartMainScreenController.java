@@ -5,8 +5,9 @@ import hash_tools.frontend.javafx.JavaFxFile;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -24,11 +25,11 @@ public class StartMainScreenController implements Initializable {
     @FXML
     private Pane pnlButton;
     @FXML
-    private Button btnCheck;
+    private ToggleButton btnCheck;
     @FXML
-    private Button btnGenerate;
+    private ToggleButton btnGenerate;
     @FXML
-    private Button btnCompare;
+    private ToggleButton btnCompare;
 
 
     private ResourceBundle resources;
@@ -39,24 +40,48 @@ public class StartMainScreenController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.resources = resources;
 
-        this.openCheckerScreen();
+        new ToggleGroup()
+            .getToggles()
+            .addAll(btnCheck, btnGenerate, btnCompare);
+
+        openCheckerScreen();
     }
 
 
 
     @FXML
-    private void openCheckerScreen() {
-        openScreen("/hash_tools/frontend/screen/checker/checker-main-screen.fxml");
+    private void handleBtnCheckAction() {
+        /*
+         * The if block negates the selected status because
+         * the status is switched before the action trigger.
+         */
+
+        if (!btnCheck.isSelected()) {
+            btnCheck.setSelected(true);
+            return;
+        }
+
+        openCheckerScreen();
     }
 
     @FXML
-    private void openGeneratorScreen() {
-        openScreen("/hash_tools/frontend/screen/generator/generator-main-screen.fxml");
+    private void handleBtnGenerateAction() {
+        if (!btnGenerate.isSelected()) {
+            btnGenerate.setSelected(true);
+            return;
+        }
+
+        openGeneratorScreen();
     }
 
     @FXML
-    private void openComparatorScreen() {
-        openScreen("/hash_tools/frontend/screen/comparator/comparator-main-screen.fxml");
+    private void handleBtnCompareAction() {
+        if (!btnCompare.isSelected()) {
+            btnCompare.setSelected(true);
+            return;
+        }
+
+        openComparatorScreen();
     }
 
 
@@ -76,6 +101,18 @@ public class StartMainScreenController implements Initializable {
     }
 
 
+
+    private void openCheckerScreen() {
+        openScreen("/hash_tools/frontend/screen/checker/checker-main-screen.fxml");
+    }
+
+    private void openGeneratorScreen() {
+        openScreen("/hash_tools/frontend/screen/generator/generator-main-screen.fxml");
+    }
+
+    private void openComparatorScreen() {
+        openScreen("/hash_tools/frontend/screen/comparator/comparator-main-screen.fxml");
+    }
 
     private void openScreen(String location) {
         new JavaFxFile()
