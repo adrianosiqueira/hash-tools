@@ -14,6 +14,7 @@ import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
 import hash_tools.frontend.javafx.Execution;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -29,6 +30,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CheckerMainScreenController implements Initializable, ProcessingObservable {
+
+    private static final PseudoClass FOCUSED = PseudoClass.getPseudoClass("focused");
+
+
 
     @FXML
     private Pane pnlRoot;
@@ -70,11 +75,35 @@ public class CheckerMainScreenController implements Initializable, ProcessingObs
         this.resources = resources;
         this.startingTasks = new ArrayList<>();
         this.stoppingTasks = new ArrayList<>();
+
+        pnlInput
+            .focusWithinProperty()
+            .addListener((_, _, focused) -> pnlInput.pseudoClassStateChanged(FOCUSED, focused));
+
+        pnlChecksum
+            .focusWithinProperty()
+            .addListener((_, _, focused) -> pnlChecksum.pseudoClassStateChanged(FOCUSED, focused));
     }
 
 
 
     @FXML
+    private void handleBtnOpenInputFileAction() {
+        openInputFile();
+    }
+
+    @FXML
+    private void handleBtnOpenChecksumFileAction() {
+        openChecksumFile();
+    }
+
+    @FXML
+    private void handleBtnCheckAction() {
+        performCheckingOperation();
+    }
+
+
+
     private void performCheckingOperation() {
         Runnable checkingOperation = () -> new CheckerRequest()
             .checksumSource(this::createChecksumSource)
@@ -89,7 +118,6 @@ public class CheckerMainScreenController implements Initializable, ProcessingObs
             .executeSequential();
     }
 
-    @FXML
     private void openInputFile() {
         new FileDialog()
             .title("Select the file to check")
@@ -101,7 +129,6 @@ public class CheckerMainScreenController implements Initializable, ProcessingObs
             .ifPresent(txtInput::setText);
     }
 
-    @FXML
     private void openChecksumFile() {
         new FileDialog()
             .title("Select the checksums file")

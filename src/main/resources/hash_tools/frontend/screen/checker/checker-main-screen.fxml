@@ -68,7 +68,7 @@
         <Button
             HBox.hgrow="NEVER"
             fx:id="btnOpenInputFile"
-            onAction="#openInputFile"
+            onAction="#handleBtnOpenInputFileAction"
             text="..."
         />
     </HBox>
@@ -102,7 +102,7 @@
         <Button
             HBox.hgrow="NEVER"
             fx:id="btnOpenChecksumFile"
-            onAction="#openChecksumFile"
+            onAction="#handleBtnOpenChecksumFileAction"
             text="..."
         />
     </HBox>
@@ -122,7 +122,7 @@
         GridPane.columnSpan="3"
         GridPane.rowIndex="2"
         fx:id="btnCheck"
-        onAction="#performCheckingOperation"
+        onAction="#handleBtnCheckAction"
         text="Check"
     />
 </GridPane>
