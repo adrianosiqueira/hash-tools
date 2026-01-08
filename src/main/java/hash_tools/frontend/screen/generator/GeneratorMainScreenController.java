@@ -11,6 +11,7 @@ import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
 import hash_tools.frontend.javafx.Execution;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -27,6 +28,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GeneratorMainScreenController implements Initializable, ProcessingObservable {
+
+    private static final PseudoClass FOCUSED = PseudoClass.getPseudoClass("focused");
+
+
 
     @FXML
     private Pane pnlRoot;
@@ -74,11 +79,26 @@ public class GeneratorMainScreenController implements Initializable, ProcessingO
         this.resources = resources;
         this.startingTasks = new ArrayList<>();
         this.stoppingTasks = new ArrayList<>();
+
+        pnlInput
+            .focusWithinProperty()
+            .addListener((_, _, focused) -> pnlInput.pseudoClassStateChanged(FOCUSED, focused));
     }
 
 
 
     @FXML
+    private void handleBtnOpenInputFileAction() {
+        openInputFile();
+    }
+
+    @FXML
+    private void handleBtnGenerateAction() {
+        performGenerationOperation();
+    }
+
+
+
     private void performGenerationOperation() {
         Runnable generationOperation = () -> new GeneratorRequest()
             .checksumSource(this::createChecksumSource)
@@ -93,7 +113,6 @@ public class GeneratorMainScreenController implements Initializable, ProcessingO
             .executeSequential();
     }
 
-    @FXML
     private void openInputFile() {
         new FileDialog()
             .title("Select the file to generate")

@@ -68,7 +68,7 @@
         <Button
             HBox.hgrow="NEVER"
             fx:id="btnOpenInputFile"
-            onAction="#openInputFile"
+            onAction="#handleBtnOpenInputFileAction"
             text="..."
         />
     </HBox>
@@ -172,7 +172,7 @@
         GridPane.columnSpan="3"
         GridPane.rowIndex="2"
         fx:id="btnGenerate"
-        onAction="#performGenerationOperation"
+        onAction="#handleBtnGenerateAction"
         text="Generate"
     />
 </GridPane>
