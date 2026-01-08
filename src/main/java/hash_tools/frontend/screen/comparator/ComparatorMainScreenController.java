@@ -11,6 +11,7 @@ import hash_tools.frontend.abstraction.ProcessingObservable;
 import hash_tools.frontend.dialog.FileDialog;
 import hash_tools.frontend.dialog.FileExtension;
 import hash_tools.frontend.javafx.Execution;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -29,6 +30,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ComparatorMainScreenController implements Initializable, ProcessingObservable {
+
+    private static final PseudoClass FOCUSED = PseudoClass.getPseudoClass("focused");
+
+
 
     @FXML
     private Pane pnlRoot;
@@ -77,11 +82,46 @@ public class ComparatorMainScreenController implements Initializable, Processing
         this.stoppingTasks = new ArrayList<>();
 
         sldPrecision.setLabelFormatter(formatSliderPrecisionLabels());
+
+        pnlInput1
+            .focusWithinProperty()
+            .addListener((_, _, focused) -> pnlInput1.pseudoClassStateChanged(FOCUSED, focused));
+
+        pnlInput2
+            .focusWithinProperty()
+            .addListener((_, _, focused) -> pnlInput2.pseudoClassStateChanged(FOCUSED, focused));
     }
 
 
 
     @FXML
+    private void handleBtnOpenInputFile1Action() {
+        openInputFile1();
+    }
+
+    @FXML
+    private void handleBtnOpenInputFile2Action() {
+        openInputFile2();
+    }
+
+    @FXML
+    private void handleBtnCompareAction() {
+        performComparisonOperation();
+    }
+
+    @FXML
+    private void handleSldPrecisionScroll(ScrollEvent event) {
+        if (event.getDeltaY() > 0) {
+            raisePrecision();
+        } else if (event.getDeltaY() < 0) {
+            lowerPrecision();
+        }
+
+        event.consume();
+    }
+
+
+
     private void performComparisonOperation() {
         Runnable comparisonOperation = () -> new ComparatorRequest()
             .checksumSource1(this::createChecksumSource1)
@@ -97,7 +137,6 @@ public class ComparatorMainScreenController implements Initializable, Processing
             .executeSequential();
     }
 
-    @FXML
     private void openInputFile1() {
         new FileDialog()
             .title("Select the first file to compare")
@@ -109,7 +148,6 @@ public class ComparatorMainScreenController implements Initializable, Processing
             .ifPresent(txtInput1::setText);
     }
 
-    @FXML
     private void openInputFile2() {
         new FileDialog()
             .title("Select the second file to compare")
@@ -119,17 +157,6 @@ public class ComparatorMainScreenController implements Initializable, Processing
             .openFile()
             .map(Path::toString)
             .ifPresent(txtInput2::setText);
-    }
-
-    @FXML
-    private void changePrecision(ScrollEvent event) {
-        if (event.getDeltaY() > 0) {
-            raisePrecision();
-        } else if (event.getDeltaY() < 0) {
-            lowerPrecision();
-        }
-
-        event.consume();
     }
 
 

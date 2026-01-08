@@ -73,7 +73,7 @@
         <Button
             HBox.hgrow="NEVER"
             fx:id="btnOpenInputFile1"
-            onAction="#openInputFile1"
+            onAction="#handleBtnOpenInputFile1Action"
             text="..."
         />
     </HBox>
@@ -107,7 +107,7 @@
         <Button
             HBox.hgrow="NEVER"
             fx:id="btnOpenInputFile2"
-            onAction="#openInputFile2"
+            onAction="#handleBtnOpenInputFile2Action"
             text="..."
         />
     </HBox>
@@ -136,7 +136,7 @@
         majorTickUnit="5"
         max="5"
         minorTickCount="4"
-        onScroll="#changePrecision"
+        onScroll="#handleSldPrecisionScroll"
         showTickLabels="true"
         showTickMarks="true"
         snapToTicks="true"
@@ -150,7 +150,7 @@
         GridPane.columnSpan="3"
         GridPane.rowIndex="3"
         fx:id="btnCompare"
-        onAction="#performComparisonOperation"
+        onAction="#handleBtnCompareAction"
         text="Compare"
     />
 </GridPane>
