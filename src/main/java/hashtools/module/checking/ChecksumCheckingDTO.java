@@ -3,7 +3,8 @@ package hashtools.module.checking;
 import hashtools.core.model.Algorithm;
 import hashtools.core.model.Checksum;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
-import hashtools.core.strategy.checksumidentifier.NullChecksumIdentifier;
+
+import java.util.Optional;
 
 public class ChecksumCheckingDTO {
 
@@ -16,7 +17,7 @@ public class ChecksumCheckingDTO {
     public ChecksumCheckingDTO() {
         this.officialChecksum = new Checksum();
         this.generatedChecksum = new Checksum();
-        this.identifier = new NullChecksumIdentifier();
+        this.identifier = ChecksumIdentifier.nullImplementation();
     }
 
 
@@ -28,28 +29,34 @@ public class ChecksumCheckingDTO {
 
 
 
-    public Algorithm getAlgorithm() {
-        return officialChecksum.getAlgorithm();
+    public void setOfficialChecksum(Checksum officialChecksum) {
+        this.officialChecksum = Optional
+            .ofNullable(officialChecksum)
+            .orElseGet(Checksum::new);
     }
 
-    public void setOfficialChecksum(Checksum officialChecksum) {
-        this.officialChecksum = officialChecksum;
+    public void setGeneratedChecksum(Checksum generatedChecksum) {
+        this.generatedChecksum = Optional
+            .ofNullable(generatedChecksum)
+            .orElseGet(Checksum::new);
+    }
+
+    public void setIdentifier(ChecksumIdentifier identifier) {
+        this.identifier = identifier;
+    }
+
+
+
+    public Algorithm getAlgorithm() {
+        return officialChecksum.getAlgorithm();
     }
 
     public String getOfficialHash() {
         return officialChecksum.getHash();
     }
 
-    public void setGeneratedChecksum(Checksum generatedChecksum) {
-        this.generatedChecksum = generatedChecksum;
-    }
-
     public String getGeneratedHash() {
         return generatedChecksum.getHash();
-    }
-
-    public void setIdentifier(ChecksumIdentifier identifier) {
-        this.identifier = identifier;
     }
 
     public String getIdentification() {

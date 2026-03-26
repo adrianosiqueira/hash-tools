@@ -2,7 +2,8 @@ package hashtools.module.generation;
 
 import hashtools.core.model.Checksum;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
-import hashtools.core.strategy.checksumidentifier.NullChecksumIdentifier;
+
+import java.util.Optional;
 
 public class ChecksumGenerationDTO {
 
@@ -12,18 +13,22 @@ public class ChecksumGenerationDTO {
 
 
     public ChecksumGenerationDTO() {
-        this.identifier = new NullChecksumIdentifier();
+        this.identifier = ChecksumIdentifier.nullImplementation();
         this.checksum = new Checksum();
     }
 
 
 
     public void setIdentifier(ChecksumIdentifier identifier) {
-        this.identifier = identifier;
+        this.identifier = Optional
+            .ofNullable(identifier)
+            .orElseGet(ChecksumIdentifier::nullImplementation);
     }
 
     public void setChecksum(Checksum checksum) {
-        this.checksum = checksum;
+        this.checksum = Optional
+            .ofNullable(checksum)
+            .orElseGet(Checksum::new);
     }
 
 

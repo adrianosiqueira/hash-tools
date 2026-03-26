@@ -4,12 +4,10 @@ import hashtools.core.engine.ChecksumGenerator;
 import hashtools.core.model.Algorithm;
 import hashtools.core.model.Checksum;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
-import hashtools.core.strategy.checksumidentifier.NullChecksumIdentifier;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
-import hashtools.core.strategy.messagedigest.NullMessageDigestUpdater;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ChecksumGenerationContext {
 
@@ -21,24 +19,30 @@ public class ChecksumGenerationContext {
 
 
     public ChecksumGenerationContext() {
-        this.algorithms = new ArrayList<>();
-        this.updater = new NullMessageDigestUpdater();
-        this.identifier = new NullChecksumIdentifier();
+        this.algorithms = List.of();
+        this.updater = MessageDigestUpdater.nullImplementation();
+        this.identifier = ChecksumIdentifier.nullImplementation();
         this.generator = new ChecksumGenerator();
     }
 
 
 
     public void setAlgorithms(List<Algorithm> algorithms) {
-        this.algorithms = algorithms;
+        this.algorithms = Optional
+            .ofNullable(algorithms)
+            .orElseGet(List::of);
     }
 
     public void setUpdater(MessageDigestUpdater updater) {
-        this.updater = updater;
+        this.updater = Optional
+            .ofNullable(updater)
+            .orElseGet(MessageDigestUpdater::nullImplementation);
     }
 
     public void setIdentifier(ChecksumIdentifier identifier) {
-        this.identifier = identifier;
+        this.identifier = Optional
+            .ofNullable(identifier)
+            .orElseGet(ChecksumIdentifier::nullImplementation);
     }
 
 

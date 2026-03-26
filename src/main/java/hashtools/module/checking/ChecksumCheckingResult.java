@@ -2,6 +2,7 @@ package hashtools.module.checking;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ChecksumCheckingResult {
 
@@ -22,9 +23,15 @@ public class ChecksumCheckingResult {
 
 
     public void addChecksum(ChecksumCheckingDTO checksum) {
-        checksums.add(checksum);
+        ChecksumCheckingDTO c = Optional
+            .ofNullable(checksum)
+            .orElseGet(ChecksumCheckingDTO::new);
+
+        checksums.add(c);
         reliability = INVALIDATED;
     }
+
+
 
     public List<ChecksumCheckingDTO> getChecksums() {
         return checksums;

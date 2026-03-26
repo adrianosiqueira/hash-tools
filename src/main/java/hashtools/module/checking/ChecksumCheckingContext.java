@@ -4,13 +4,9 @@ import hashtools.core.engine.ChecksumGenerator;
 import hashtools.core.model.Algorithm;
 import hashtools.core.model.Checksum;
 import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
-import hashtools.core.strategy.checksumextractor.NullChecksumExtractor;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
-import hashtools.core.strategy.checksumidentifier.NullChecksumIdentifier;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
-import hashtools.core.strategy.messagedigest.NullMessageDigestUpdater;
 
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +20,9 @@ public class ChecksumCheckingContext {
 
 
     public ChecksumCheckingContext() {
-        this.extractor = new NullChecksumExtractor();
-        this.updater = new NullMessageDigestUpdater();
-        this.identifier = new NullChecksumIdentifier();
+        this.extractor = ChecksumExtractor.nullImplementation();
+        this.updater = MessageDigestUpdater.nullImplementation();
+        this.identifier = ChecksumIdentifier.nullImplementation();
         this.generator = new ChecksumGenerator();
     }
 
@@ -35,29 +31,25 @@ public class ChecksumCheckingContext {
     public void setExtractor(ChecksumExtractor extractor) {
         this.extractor = Optional
             .ofNullable(extractor)
-            .orElse(new NullChecksumExtractor());
+            .orElseGet(ChecksumExtractor::nullImplementation);
     }
 
     public void setUpdater(MessageDigestUpdater updater) {
         this.updater = Optional
             .ofNullable(updater)
-            .orElse(new NullMessageDigestUpdater());
+            .orElseGet(MessageDigestUpdater::nullImplementation);
     }
 
     public void setIdentifier(ChecksumIdentifier identifier) {
         this.identifier = Optional
             .ofNullable(identifier)
-            .orElse(new NullChecksumIdentifier());
+            .orElseGet(ChecksumIdentifier::nullImplementation);
     }
 
 
 
     public List<Checksum> extractOfficialChecksums() {
         return extractor.extract();
-    }
-
-    public void updateMessageDigest(MessageDigest messageDigest) {
-        updater.update(messageDigest);
     }
 
     public String getIdentification() {
