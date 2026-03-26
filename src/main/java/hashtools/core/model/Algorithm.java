@@ -46,6 +46,10 @@ public enum Algorithm {
             .findFirst();
     }
 
+    public static Algorithm getDefault() {
+        return Algorithm.MD5;
+    }
+
 
 
     public int getLength() {
