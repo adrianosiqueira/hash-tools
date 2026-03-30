@@ -10,7 +10,7 @@ public class ChecksumGenerator {
 
     public Checksum generate(Algorithm algorithm, MessageDigestUpdater updater) {
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance(algorithm.getName());
+            MessageDigest messageDigest = algorithm.createMessageDigest();
             updater.update(messageDigest);
 
             byte[] bytes = messageDigest.digest();

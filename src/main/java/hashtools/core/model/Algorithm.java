@@ -1,5 +1,6 @@
 package hashtools.core.model;
 
+import java.security.MessageDigest;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -31,7 +32,7 @@ public enum Algorithm {
     public static Optional<Algorithm> getByLength(int length) {
         return Stream
             .of(Algorithm.values())
-            .filter(algorithm -> algorithm.getLength() == length)
+            .filter(algorithm -> algorithm.length == length)
             .findFirst();
     }
 
@@ -42,7 +43,7 @@ public enum Algorithm {
 
         return Stream
             .of(Algorithm.values())
-            .filter(algorithm -> algorithm.getName().equals(searchName))
+            .filter(algorithm -> algorithm.name.equals(searchName))
             .findFirst();
     }
 
@@ -52,15 +53,17 @@ public enum Algorithm {
 
 
 
-    public int getLength() {
-        return length;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public String getDisplayName() {
         return displayName;
+    }
+
+
+
+    public MessageDigest createMessageDigest() {
+        try {
+            return MessageDigest.getInstance(name);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
