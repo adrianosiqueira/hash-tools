@@ -37,9 +37,11 @@ public enum Algorithm {
     }
 
     public static Optional<Algorithm> getByName(String name) {
-        String searchName = name
-            .toLowerCase()
-            .replaceAll("[^a-z0-9]", "");
+        String searchName = Optional
+            .ofNullable(name)
+            .map(String::toLowerCase)
+            .map(n -> n.replaceAll("[^a-z0-9]", ""))
+            .orElse("");
 
         return Stream
             .of(Algorithm.values())
