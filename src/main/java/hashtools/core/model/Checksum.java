@@ -9,10 +9,6 @@ public class Checksum {
 
 
 
-    public Checksum() {
-        this("");
-    }
-
     public Checksum(String hash) {
         this.hash = Optional
             .ofNullable(hash)
@@ -21,6 +17,12 @@ public class Checksum {
         this.algorithm = Algorithm
             .getByLength(this.hash.length())
             .orElse(null);
+    }
+
+
+
+    public static Checksum empty() {
+        return new Checksum("");
     }
 
 

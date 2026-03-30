@@ -14,7 +14,7 @@ public class ChecksumGenerationDTO {
 
     public ChecksumGenerationDTO() {
         this.identifier = ChecksumIdentifier.nullImplementation();
-        this.checksum = new Checksum();
+        this.checksum = Checksum.empty();
     }
 
 
@@ -28,7 +28,7 @@ public class ChecksumGenerationDTO {
     public void setChecksum(Checksum checksum) {
         this.checksum = Optional
             .ofNullable(checksum)
-            .orElseGet(Checksum::new);
+            .orElseGet(Checksum::empty);
     }
 
 

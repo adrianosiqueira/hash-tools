@@ -13,7 +13,7 @@ public class ChecksumComparisonDTO {
 
 
     public ChecksumComparisonDTO() {
-        this.checksum = new Checksum();
+        this.checksum = Checksum.empty();
         this.identifier = ChecksumIdentifier.nullImplementation();
     }
 
@@ -32,7 +32,7 @@ public class ChecksumComparisonDTO {
     public void setChecksum(Checksum checksum) {
         this.checksum = Optional
             .ofNullable(checksum)
-            .orElseGet(Checksum::new);
+            .orElseGet(Checksum::empty);
     }
 
     public void setIdentifier(ChecksumIdentifier identifier) {

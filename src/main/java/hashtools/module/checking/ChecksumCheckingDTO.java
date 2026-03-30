@@ -15,8 +15,8 @@ public class ChecksumCheckingDTO {
 
 
     public ChecksumCheckingDTO() {
-        this.officialChecksum = new Checksum();
-        this.generatedChecksum = new Checksum();
+        this.officialChecksum = Checksum.empty();
+        this.generatedChecksum = Checksum.empty();
         this.identifier = ChecksumIdentifier.nullImplementation();
     }
 
@@ -32,13 +32,13 @@ public class ChecksumCheckingDTO {
     public void setOfficialChecksum(Checksum officialChecksum) {
         this.officialChecksum = Optional
             .ofNullable(officialChecksum)
-            .orElseGet(Checksum::new);
+            .orElseGet(Checksum::empty);
     }
 
     public void setGeneratedChecksum(Checksum generatedChecksum) {
         this.generatedChecksum = Optional
             .ofNullable(generatedChecksum)
-            .orElseGet(Checksum::new);
+            .orElseGet(Checksum::empty);
     }
 
     public void setIdentifier(ChecksumIdentifier identifier) {
