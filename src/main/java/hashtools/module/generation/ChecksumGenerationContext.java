@@ -1,6 +1,7 @@
 package hashtools.module.generation;
 
 import hashtools.core.engine.ChecksumGenerator;
+import hashtools.core.event.HashToolsEvent;
 import hashtools.core.model.Algorithm;
 import hashtools.core.model.Checksum;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
@@ -9,7 +10,7 @@ import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
 import java.util.List;
 import java.util.Optional;
 
-public class ChecksumGenerationContext {
+public class ChecksumGenerationContext implements HashToolsEvent {
 
     private List<Algorithm> algorithms;
     private MessageDigestUpdater updater;
