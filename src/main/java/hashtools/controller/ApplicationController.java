@@ -1,4 +1,243 @@
 package hashtools.controller;
 
-public class ApplicationController {
+import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
+import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
+import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
+import hashtools.module.checking.ChecksumCheckingContext;
+import hashtools.module.checking.ChecksumCheckingResult;
+import hashtools.module.comparison.ChecksumComparisonContext;
+import hashtools.module.comparison.ChecksumComparisonResult;
+import hashtools.module.generation.ChecksumGenerationContext;
+import hashtools.module.generation.ChecksumGenerationResult;
+import hashtools.service.EventService;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+
+import java.io.File;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Function;
+
+public class ApplicationController implements Initializable {
+
+    @FXML private Pane pnlRoot;
+    @FXML private Pane pnlContent;
+
+
+
+    @FXML private Pane pnlModuleChecker;
+    @FXML private Button btnModuleChecker;
+    @FXML private Label lblModuleCheckerInput;
+    @FXML private TextField txtModuleCheckerInput;
+    @FXML private CheckBox chkModuleCheckerInputFile;
+    @FXML private Button btnModuleCheckerOpenFile;
+    @FXML private Label lblModuleCheckerOfficial;
+    @FXML private TextField txtModuleCheckerOfficial;
+    @FXML private CheckBox chkModuleCheckerOfficialFile;
+    @FXML private Button btnModuleCheckerOpenOfficial;
+    @FXML private Pane pnlModuleCheckerButtons;
+    @FXML private Button btnModuleCheckerClear;
+    @FXML private Button btnModuleCheckerCheck;
+
+
+
+    @FXML private Pane pnlModuleGenerator;
+    @FXML private Button btnModuleGenerator;
+
+
+
+    @FXML private Pane pnlModuleComparator;
+    @FXML private Button btnModuleComparator;
+
+
+
+    @FXML private Pane pnlResult;
+    @FXML private TextArea txtResult;
+    @FXML private Pane pnlResultButtons;
+    @FXML private Button btnResultBack;
+    @FXML private Button btnResultSave;
+
+
+
+    private Runnable lastOpenedScreen;
+
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        EventService eventService = EventService.INSTANCE;
+        eventService.register(ChecksumCheckingResult.class, this::openResultScreen);
+        eventService.register(ChecksumComparisonResult.class, this::openResultScreen);
+        eventService.register(ChecksumGenerationResult.class, this::openResultScreen);
+
+        btnModuleCheckerOpenFile
+            .disableProperty()
+            .bind(chkModuleCheckerInputFile.selectedProperty().not());
+
+        btnModuleCheckerOpenOfficial
+            .disableProperty()
+            .bind(chkModuleCheckerOfficialFile.selectedProperty().not());
+
+        this.openCheckerScreen();
+    }
+
+
+
+    @FXML
+    private void openCheckerScreen() {
+        this.openScreen(pnlModuleChecker, this::openCheckerScreen);
+    }
+
+    @FXML
+    private void openComparatorScreen() {
+        this.openScreen(pnlModuleComparator, this::openComparatorScreen);
+    }
+
+    @FXML
+    private void openGeneratorScreen() {
+        this.openScreen(pnlModuleGenerator, this::openGeneratorScreen);
+    }
+
+    private void openScreen(Pane screen, Runnable lastOpenedScreen) {
+        pnlModuleChecker.setVisible(false);
+        pnlModuleComparator.setVisible(false);
+        pnlModuleGenerator.setVisible(false);
+        pnlResult.setVisible(false);
+
+        screen.setVisible(true);
+        this.lastOpenedScreen = lastOpenedScreen;
+
+        this.clearScreen();
+    }
+
+
+
+    private void openResultScreen(ChecksumCheckingResult result) {
+        // TODO Implement a class to get a string representation of the ChecksumCheckingResult
+        this.openResultScreen(
+            result,
+            Object::toString
+        );
+    }
+
+    private void openResultScreen(ChecksumComparisonResult result) {
+        // TODO Implement a class to get a string representation of the ChecksumComparisonResult
+        this.openResultScreen(
+            result,
+            Object::toString
+        );
+    }
+
+    private void openResultScreen(ChecksumGenerationResult result) {
+        // TODO Implement a class to get a string representation of the ChecksumGenerationResult
+        this.openResultScreen(
+            result,
+            Object::toString
+        );
+    }
+
+    private <T> void openResultScreen(T result, Function<T, String> toStringFunction) {
+        pnlModuleChecker.setVisible(false);
+        pnlModuleComparator.setVisible(false);
+        pnlModuleGenerator.setVisible(false);
+        pnlResult.setVisible(true);
+
+        String content = toStringFunction.apply(result);
+        txtResult.setText(content);
+    }
+
+
+
+    @FXML
+    private void openCheckerInputFile() {
+        // TODO Get the file from a dialog window
+        Optional
+            .<Path>ofNullable(null)
+            .map(Path::toAbsolutePath)
+            .map(Path::toString)
+            .ifPresent(txtModuleCheckerInput::setText);
+    }
+
+    @FXML
+    private void openCheckerOfficialFile() {
+        // TODO Get the file from a dialog window
+        Optional
+            .<Path>ofNullable(null)
+            .map(Path::toAbsolutePath)
+            .map(Path::toString)
+            .ifPresent(txtModuleCheckerOfficial::setText);
+    }
+
+    @FXML
+    private void performChecksumChecking() {
+        // TODO Fill the context
+        ChecksumCheckingContext context = new ChecksumCheckingContext();
+        EventService.INSTANCE.dispatch(context);
+    }
+
+
+
+    @FXML
+    private void performChecksumComparison() {
+        // TODO Fill the context
+        ChecksumComparisonContext context = new ChecksumComparisonContext();
+        EventService.INSTANCE.dispatch(context);
+    }
+
+
+
+    @FXML
+    private void performChecksumGeneration() {
+        // TODO Fill the context
+        ChecksumGenerationContext context = new ChecksumGenerationContext();
+        EventService.INSTANCE.dispatch(context);
+    }
+
+
+
+    @FXML
+    private void clearScreen() {
+        txtModuleCheckerInput.clear();
+        txtModuleCheckerOfficial.clear();
+
+        chkModuleCheckerInputFile.setSelected(true);
+        chkModuleCheckerOfficialFile.setSelected(true);
+
+        txtResult.clear();
+    }
+
+    @FXML
+    private void closeResultScreen() {
+        lastOpenedScreen.run();
+    }
+
+    @FXML
+    private void saveResult() {
+        // TODO Get a path from a dialog box
+        Path destination = null;
+        String content = txtResult.getText();
+
+        StandardOpenOption[] options = {
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING
+        };
+
+        try {
+            Files.writeString(destination, content, options);
+            // TODO Display a success message in a dialog box
+        } catch (Exception e) {
+            // TODO Display the exception in a dialog box
+            e.printStackTrace();
+        }
+    }
 }
