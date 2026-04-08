@@ -1,10 +1,12 @@
 package hashtools.module.generation;
 
+import hashtools.core.event.HashToolsEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ChecksumGenerationResult {
+public class ChecksumGenerationResult implements HashToolsEvent {
 
     private List<ChecksumGenerationDTO> checksums;
 

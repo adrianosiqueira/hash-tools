@@ -1,8 +1,10 @@
 package hashtools.module.comparison;
 
+import hashtools.core.event.HashToolsEvent;
+
 import java.util.Optional;
 
-public class ChecksumComparisonResult {
+public class ChecksumComparisonResult implements HashToolsEvent {
 
     private ChecksumComparisonDTO checksum1;
     private ChecksumComparisonDTO checksum2;

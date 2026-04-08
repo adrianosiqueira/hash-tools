@@ -1,10 +1,12 @@
 package hashtools.module.checking;
 
+import hashtools.core.event.HashToolsEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ChecksumCheckingResult {
+public class ChecksumCheckingResult implements HashToolsEvent {
 
     private static final double INVALIDATED = -1.0;
 
