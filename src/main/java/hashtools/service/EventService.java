@@ -2,6 +2,7 @@ package hashtools.service;
 
 import hashtools.core.event.HashToolsEvent;
 import hashtools.core.event.HashToolsEventListener;
+import hashtools.core.threadpool.ThreadPoolFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public enum EventService {
     INSTANCE;
@@ -23,7 +23,7 @@ public enum EventService {
 
     EventService() {
         this.listenersMap = new ConcurrentHashMap<>();
-        this.threadpool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        this.threadpool = ThreadPoolFactory.createDaemonPool();
     }
 
 
