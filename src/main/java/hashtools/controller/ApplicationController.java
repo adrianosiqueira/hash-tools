@@ -1,10 +1,9 @@
 package hashtools.controller;
 
-import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
-import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
-import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
-import hashtools.module.checking.ChecksumCheckingContext;
-import hashtools.module.checking.ChecksumCheckingResult;
+import hashtools.core.event.HashToolsEventBus;
+import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
+import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
+import hashtools.module.checking.service.ChecksumCheckingService;
 import hashtools.module.comparison.ChecksumComparisonContext;
 import hashtools.module.comparison.ChecksumComparisonResult;
 import hashtools.module.generation.ChecksumGenerationContext;
@@ -19,7 +18,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
-import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,12 +69,17 @@ public class ApplicationController implements Initializable {
 
     private Runnable lastOpenedScreen;
 
+    private ChecksumCheckingService checkingService;
+
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        EventService eventService = EventService.INSTANCE;
-        eventService.register(ChecksumCheckingResult.class, this::openResultScreen);
+        HashToolsEventBus eventService = EventService.INSTANCE;
+
+        checkingService = new ChecksumCheckingService(eventService);
+
+        eventService.register(ChecksumCheckingEndedEvent.class, this::openResultScreen);
         eventService.register(ChecksumComparisonResult.class, this::openResultScreen);
         eventService.register(ChecksumGenerationResult.class, this::openResultScreen);
 
@@ -122,10 +125,10 @@ public class ApplicationController implements Initializable {
 
 
 
-    private void openResultScreen(ChecksumCheckingResult result) {
+    private void openResultScreen(ChecksumCheckingEndedEvent event) {
         // TODO Implement a class to get a string representation of the ChecksumCheckingResult
         this.openResultScreen(
-            result,
+            event,
             Object::toString
         );
     }
@@ -180,9 +183,11 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
-        // TODO Fill the context
-        ChecksumCheckingContext context = new ChecksumCheckingContext();
-        EventService.INSTANCE.dispatch(context);
+        // TODO Fill request event
+        ChecksumCheckingRequestedEvent event = new ChecksumCheckingRequestedEvent();
+
+        HashToolsEventBus eventBus = EventService.INSTANCE;
+        eventBus.publish(event);
     }
 
 
