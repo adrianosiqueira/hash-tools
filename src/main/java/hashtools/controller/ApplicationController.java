@@ -69,19 +69,19 @@ public class ApplicationController implements Initializable {
 
     private Runnable lastOpenedScreen;
 
+    private HashToolsEventBus eventBus;
     private ChecksumCheckingService checkingService;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        HashToolsEventBus eventService = EventService.INSTANCE;
+        eventBus = EventService.INSTANCE;
+        eventBus.register(ChecksumCheckingEndedEvent.class, this::openResultScreen);
+        eventBus.register(ChecksumComparisonResult.class, this::openResultScreen);
+        eventBus.register(ChecksumGenerationResult.class, this::openResultScreen);
 
-        checkingService = new ChecksumCheckingService(eventService);
-
-        eventService.register(ChecksumCheckingEndedEvent.class, this::openResultScreen);
-        eventService.register(ChecksumComparisonResult.class, this::openResultScreen);
-        eventService.register(ChecksumGenerationResult.class, this::openResultScreen);
+        checkingService = new ChecksumCheckingService(eventBus);
 
         btnModuleCheckerOpenFile
             .disableProperty()
@@ -185,8 +185,6 @@ public class ApplicationController implements Initializable {
     private void performChecksumChecking() {
         // TODO Fill request event
         ChecksumCheckingRequestedEvent event = new ChecksumCheckingRequestedEvent();
-
-        HashToolsEventBus eventBus = EventService.INSTANCE;
         eventBus.publish(event);
     }
 
