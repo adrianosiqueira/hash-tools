@@ -1,7 +1,5 @@
 package hashtools;
 
-import hashtools.module.checking.ChecksumChecking;
-import hashtools.module.checking.ChecksumCheckingContext;
 import hashtools.module.comparison.ChecksumComparison;
 import hashtools.module.comparison.ChecksumComparisonContext;
 import hashtools.module.generation.ChecksumGeneration;
@@ -20,12 +18,10 @@ public class Main {
 
 
 
-        ChecksumChecking checksumChecking = new ChecksumChecking();
         ChecksumComparison checksumComparison = new ChecksumComparison();
         ChecksumGeneration checksumGeneration = new ChecksumGeneration();
 
         EventService eventService = EventService.INSTANCE;
-        eventService.register(ChecksumCheckingContext.class, checksumChecking::perform);
         eventService.register(ChecksumComparisonContext.class, checksumComparison::perform);
         eventService.register(ChecksumGenerationContext.class, checksumGeneration::perform);
     }
