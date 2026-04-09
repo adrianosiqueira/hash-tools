@@ -1,7 +1,7 @@
 package hashtools.module.checking.event;
 
 import hashtools.core.event.HashToolsEvent;
-import hashtools.module.checking.ChecksumCheckingDTO;
+import hashtools.module.checking.model.CheckingChecksum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class ChecksumCheckingEndedEvent implements HashToolsEvent {
 
 
 
-    private List<ChecksumCheckingDTO> checksums;
+    private List<CheckingChecksum> checksums;
     private double reliability;
 
 
@@ -25,10 +25,10 @@ public class ChecksumCheckingEndedEvent implements HashToolsEvent {
 
 
 
-    public void addChecksum(ChecksumCheckingDTO checksum) {
-        ChecksumCheckingDTO c = Optional
+    public void addChecksum(CheckingChecksum checksum) {
+        CheckingChecksum c = Optional
             .ofNullable(checksum)
-            .orElseGet(ChecksumCheckingDTO::new);
+            .orElseGet(CheckingChecksum::new);
 
         checksums.add(c);
         reliability = INVALIDATED;
@@ -36,7 +36,7 @@ public class ChecksumCheckingEndedEvent implements HashToolsEvent {
 
 
 
-    public List<ChecksumCheckingDTO> getChecksums() {
+    public List<CheckingChecksum> getChecksums() {
         return checksums;
     }
 
@@ -57,7 +57,7 @@ public class ChecksumCheckingEndedEvent implements HashToolsEvent {
 
         return (double) checksums
             .stream()
-            .filter(ChecksumCheckingDTO::matches)
+            .filter(CheckingChecksum::matches)
             .count()
             / checksums.size();
     }
