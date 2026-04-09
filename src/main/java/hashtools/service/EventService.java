@@ -1,6 +1,7 @@
 package hashtools.service;
 
 import hashtools.core.event.HashToolsEvent;
+import hashtools.core.event.HashToolsEventBus;
 import hashtools.core.event.HashToolsEventListener;
 import hashtools.core.threadpool.ThreadPoolFactory;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
-public enum EventService {
+public enum EventService implements HashToolsEventBus {
     INSTANCE;
 
 
@@ -24,17 +25,23 @@ public enum EventService {
     EventService() {
         this.listenersMap = new ConcurrentHashMap<>();
         this.threadpool = ThreadPoolFactory.createDaemonPool();
+
+        Runtime
+            .getRuntime()
+            .addShutdownHook(new Thread(threadpool::close));
     }
 
 
 
+    @Override
     public <T extends HashToolsEvent> void register(Class<T> clazz, HashToolsEventListener<T> listener) {
         listenersMap
             .computeIfAbsent(clazz, _ -> Collections.synchronizedList(new ArrayList<>()))
             .add(listener);
     }
 
-    public void dispatch(HashToolsEvent event) {
+    @Override
+    public void publish(HashToolsEvent event) {
         List<HashToolsEventListener<?>> listeners = listenersMap.get(event.getClass());
 
         if (listeners == null || listeners.isEmpty()) {
@@ -51,9 +58,8 @@ public enum EventService {
         }
     }
 
-
-
-    public void shutdown() {
-        threadpool.close();
+    @Deprecated
+    public void dispatch(HashToolsEvent event) {
+        this.publish(event);
     }
 }
