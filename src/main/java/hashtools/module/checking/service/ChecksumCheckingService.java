@@ -4,6 +4,7 @@ import hashtools.core.event.HashToolsEventBus;
 import hashtools.core.model.Checksum;
 import hashtools.core.threadpool.ThreadPoolFactory;
 import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
+import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
 import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
 import hashtools.module.checking.model.CheckingChecksum;
 
@@ -21,6 +22,7 @@ public class ChecksumCheckingService {
     public ChecksumCheckingService(HashToolsEventBus eventBus) {
         this.eventBus = eventBus;
         eventBus.register(ChecksumCheckingRequestedEvent.class, this::performChecksumChecking);
+        eventBus.register(ChecksumCheckingEndedEvent.class, this::performResultFormatting);
     }
 
 
@@ -49,6 +51,15 @@ public class ChecksumCheckingService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void performResultFormatting(ChecksumCheckingEndedEvent event) {
+        // TODO Finish implementing the formatting logic
+
+        ChecksumCheckingFormattedEvent formattedEvent = new ChecksumCheckingFormattedEvent();
+        formattedEvent.setFormattedContent(null);
+
+        eventBus.publish(formattedEvent);
     }
 
 
