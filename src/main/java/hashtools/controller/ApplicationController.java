@@ -2,6 +2,7 @@ package hashtools.controller;
 
 import hashtools.core.event.HashToolsEventBus;
 import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
+import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
 import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
 import hashtools.module.checking.service.ChecksumCheckingService;
 import hashtools.module.comparison.ChecksumComparisonContext;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ApplicationController implements Initializable {
@@ -77,7 +79,7 @@ public class ApplicationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         eventBus = EventService.INSTANCE;
-        eventBus.register(ChecksumCheckingEndedEvent.class, this::openResultScreen);
+        eventBus.register(ChecksumCheckingFormattedEvent.class, this::openResultScreen);
         eventBus.register(ChecksumComparisonResult.class, this::openResultScreen);
         eventBus.register(ChecksumGenerationResult.class, this::openResultScreen);
 
@@ -125,12 +127,8 @@ public class ApplicationController implements Initializable {
 
 
 
-    private void openResultScreen(ChecksumCheckingEndedEvent event) {
-        // TODO Implement a class to get a string representation of the ChecksumCheckingResult
-        this.openResultScreen(
-            event,
-            Object::toString
-        );
+    private void openResultScreen(ChecksumCheckingFormattedEvent event) {
+        event.consumeContent(this::openResultScreen);
     }
 
     private void openResultScreen(ChecksumComparisonResult result) {
@@ -149,14 +147,19 @@ public class ApplicationController implements Initializable {
         );
     }
 
+    @Deprecated
     private <T> void openResultScreen(T result, Function<T, String> toStringFunction) {
+        String content = toStringFunction.apply(result);
+        this.openResultScreen(content);
+    }
+
+    private void openResultScreen(String formattedResult) {
         pnlModuleChecker.setVisible(false);
         pnlModuleComparator.setVisible(false);
         pnlModuleGenerator.setVisible(false);
         pnlResult.setVisible(true);
 
-        String content = toStringFunction.apply(result);
-        txtResult.setText(content);
+        txtResult.setText(formattedResult);
     }
 
 
