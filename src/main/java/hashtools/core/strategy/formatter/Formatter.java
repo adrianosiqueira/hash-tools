@@ -4,10 +4,6 @@ import java.util.stream.Stream;
 
 public interface Formatter<T> {
 
-    String format(T t);
-
-
-
     default int getGreatestLength(String... strings) {
         return Stream
             .of(strings)
