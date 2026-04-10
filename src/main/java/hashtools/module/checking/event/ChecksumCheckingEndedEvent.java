@@ -1,6 +1,7 @@
 package hashtools.module.checking.event;
 
 import hashtools.core.event.HashToolsEvent;
+import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
 import hashtools.module.checking.model.CheckingChecksum;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class ChecksumCheckingEndedEvent implements HashToolsEvent {
 
 
 
+    private ChecksumIdentifier identifier;
     private List<CheckingChecksum> checksums;
     private double reliability;
 
@@ -25,6 +27,16 @@ public class ChecksumCheckingEndedEvent implements HashToolsEvent {
 
 
 
+    public void setIdentifier(ChecksumIdentifier identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getIdentification() {
+        return identifier.getIdentification();
+    }
+
+
+
     public void addChecksum(CheckingChecksum checksum) {
         CheckingChecksum c = Optional
             .ofNullable(checksum)
@@ -33,8 +45,6 @@ public class ChecksumCheckingEndedEvent implements HashToolsEvent {
         checksums.add(c);
         reliability = INVALIDATED;
     }
-
-
 
     public List<CheckingChecksum> getChecksums() {
         return checksums;
