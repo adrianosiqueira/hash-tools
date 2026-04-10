@@ -55,6 +55,10 @@ public enum Algorithm {
 
 
 
+    public int getLength() {
+        return length;
+    }
+
     public String getDisplayName() {
         return displayName;
     }
