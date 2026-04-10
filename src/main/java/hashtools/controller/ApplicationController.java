@@ -1,7 +1,6 @@
 package hashtools.controller;
 
 import hashtools.core.event.HashToolsEventBus;
-import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
 import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
 import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
 import hashtools.module.checking.service.ChecksumCheckingService;
@@ -25,7 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ApplicationController implements Initializable {
