@@ -13,6 +13,7 @@ public class ChecksumCheckingEndedEventFormatter implements Formatter {
 
     public ChecksumCheckingFormattedEvent format(ChecksumCheckingEndedEvent event) {
         String[] headers = this.alignToRight(
+            ' ',
             "Algorithm",
             "Official",
             "Generated",
