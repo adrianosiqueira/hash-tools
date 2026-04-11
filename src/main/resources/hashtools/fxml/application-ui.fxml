@@ -70,7 +70,7 @@
 
 
         <VBox alignment="CENTER" fx:id="pnlResult" spacing="50" visible="false">
-            <TextArea VBox.vgrow="ALWAYS" editable="false" fx:id="txtResult" maxHeight="1E6"/>
+            <TextArea VBox.vgrow="ALWAYS" editable="false" fx:id="txtResult" maxHeight="1E6" style="-fx-font-family: 'roboto mono'"/>
             <HBox VBox.vgrow="NEVER" fx:id="pnlResultButtons">
                 <Button HBox.hgrow="NEVER" fx:id="btnResultBack" onAction="#closeResultScreen" text="Back"/>
                 <Label HBox.hgrow="ALWAYS" maxWidth="1E6"/>
