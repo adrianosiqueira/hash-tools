@@ -12,6 +12,26 @@ public interface Formatter {
             .orElse(0);
     }
 
+    default String[] alignToLeft(char character, String... strings) {
+        int desiredLength = this.getGreatestLength(strings);
+
+        String[] resultStrings = new String[strings.length];
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < strings.length; i++) {
+            result.setLength(0);
+            result.append(strings[i]);
+
+            while (result.length() < desiredLength) {
+                result.append(character);
+            }
+
+            resultStrings[i] = result.toString();
+        }
+
+        return resultStrings;
+    }
+
     default String[] alignToRight(char character, String... strings) {
         int desiredLength = this.getGreatestLength(strings);
 
