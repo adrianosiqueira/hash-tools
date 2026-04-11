@@ -2,7 +2,7 @@ package hashtools.core.strategy.formatter;
 
 import java.util.stream.Stream;
 
-public interface Formatter<T> {
+public interface Formatter {
 
     default int getGreatestLength(String... strings) {
         return Stream
