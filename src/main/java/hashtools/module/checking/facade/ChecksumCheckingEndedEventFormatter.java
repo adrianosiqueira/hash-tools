@@ -79,7 +79,7 @@ public class ChecksumCheckingEndedEventFormatter implements Formatter {
         return checksumJoiner.toString();
     }
 
-    public String formatReliability(double reliability) {
+    private String formatReliability(double reliability) {
         return String.format(
             "%s: %.2f%%",
             "Reliability",
@@ -87,7 +87,7 @@ public class ChecksumCheckingEndedEventFormatter implements Formatter {
         );
     }
 
-    public String joinFormattedContent(String identification, String formattedChecksums, String formattedReliability) {
+    private String joinFormattedContent(String identification, String formattedChecksums, String formattedReliability) {
         String lineSeparator = System.lineSeparator();
 
         return identification
