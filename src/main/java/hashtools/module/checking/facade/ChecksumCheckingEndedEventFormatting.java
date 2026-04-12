@@ -1,7 +1,8 @@
 package hashtools.module.checking.facade;
 
 import hashtools.core.model.Algorithm;
-import hashtools.core.strategy.formatter.Formatter;
+import hashtools.core.strategy.formatter.HeaderFormatter;
+import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
 import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
 import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
 import hashtools.module.checking.model.CheckingChecksum;
@@ -9,16 +10,16 @@ import hashtools.module.checking.model.CheckingChecksum;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class ChecksumCheckingEndedEventFormatter implements Formatter {
+public class ChecksumCheckingEndedEventFormatting {
 
     public ChecksumCheckingFormattedEvent format(ChecksumCheckingEndedEvent event) {
-        String[] headers = this.alignToRight(
-            ' ',
+        HeaderFormatter formatter = new LeftAlignmentHeaderFormatter('.');
+        String[] headers = formatter.format(new String[]{
             "Algorithm",
             "Official",
             "Generated",
             "Status"
-        );
+        });
 
 
 

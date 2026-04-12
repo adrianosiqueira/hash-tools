@@ -5,7 +5,7 @@ import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
 import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
 import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
 import hashtools.module.checking.facade.ChecksumChecking;
-import hashtools.module.checking.facade.ChecksumCheckingEndedEventFormatter;
+import hashtools.module.checking.facade.ChecksumCheckingEndedEventFormatting;
 
 public class ChecksumCheckingService {
 
@@ -29,8 +29,8 @@ public class ChecksumCheckingService {
     }
 
     public void performResultFormatting(ChecksumCheckingEndedEvent event) {
-        ChecksumCheckingEndedEventFormatter formatter = new ChecksumCheckingEndedEventFormatter();
-        ChecksumCheckingFormattedEvent formattedEvent = formatter.format(event);
+        ChecksumCheckingEndedEventFormatting eventFormatting = new ChecksumCheckingEndedEventFormatting();
+        ChecksumCheckingFormattedEvent formattedEvent = eventFormatting.format(event);
 
         eventBus.publish(formattedEvent);
     }
