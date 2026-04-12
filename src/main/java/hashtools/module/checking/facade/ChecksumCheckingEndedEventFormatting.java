@@ -60,7 +60,7 @@ public class ChecksumCheckingEndedEventFormatting {
             """;
 
         StringJoiner checksumJoiner = new StringJoiner(
-            checksumSeparator,
+            lineSeparator + checksumSeparator + lineSeparator,
             checksumSeparator + lineSeparator,
             lineSeparator + checksumSeparator
         );
