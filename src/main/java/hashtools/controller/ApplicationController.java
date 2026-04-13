@@ -5,7 +5,7 @@ import hashtools.core.model.Checksum;
 import hashtools.module.checking.event.CheckingRequestedEvent;
 import hashtools.module.checking.event.CheckingResultFormattedEvent;
 import hashtools.module.checking.model.CheckingContext;
-import hashtools.module.checking.service.ChecksumCheckingService;
+import hashtools.module.checking.service.CheckingService;
 import hashtools.module.comparison.ChecksumComparisonContext;
 import hashtools.module.comparison.ChecksumComparisonResult;
 import hashtools.module.generation.ChecksumGenerationContext;
@@ -82,7 +82,7 @@ public class ApplicationController implements Initializable {
         eventBus.register(ChecksumComparisonResult.class, this::openResultScreen);
         eventBus.register(ChecksumGenerationResult.class, this::openResultScreen);
 
-        new ChecksumCheckingService(eventBus);
+        new CheckingService(eventBus);
 
         btnModuleCheckerOpenFile
             .disableProperty()

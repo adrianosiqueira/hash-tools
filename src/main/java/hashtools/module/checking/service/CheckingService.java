@@ -9,13 +9,13 @@ import hashtools.module.checking.facade.ChecksumChecking;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
 
-public class ChecksumCheckingService {
+public class CheckingService {
 
     private final HashToolsEventBus eventBus;
 
 
 
-    public ChecksumCheckingService(HashToolsEventBus eventBus) {
+    public CheckingService(HashToolsEventBus eventBus) {
         this.eventBus = eventBus;
         eventBus.register(CheckingRequestedEvent.class, this::performChecksumChecking);
         eventBus.register(CheckingEndedEvent.class, this::performResultFormatting);
