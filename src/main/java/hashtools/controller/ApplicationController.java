@@ -71,9 +71,7 @@ public class ApplicationController implements Initializable {
 
 
     private Runnable lastOpenedScreen;
-
     private HashToolsEventBus eventBus;
-    private ChecksumCheckingService checkingService;
 
 
 
@@ -84,7 +82,7 @@ public class ApplicationController implements Initializable {
         eventBus.register(ChecksumComparisonResult.class, this::openResultScreen);
         eventBus.register(ChecksumGenerationResult.class, this::openResultScreen);
 
-        checkingService = new ChecksumCheckingService(eventBus);
+        new ChecksumCheckingService(eventBus);
 
         btnModuleCheckerOpenFile
             .disableProperty()
