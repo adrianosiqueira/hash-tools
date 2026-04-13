@@ -57,9 +57,4 @@ public enum EventService implements HashToolsEventBus {
             });
         }
     }
-
-    @Deprecated
-    public void dispatch(HashToolsEvent event) {
-        this.publish(event);
-    }
 }

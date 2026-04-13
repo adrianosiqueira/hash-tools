@@ -186,7 +186,7 @@ public class ApplicationController implements Initializable {
     private void performChecksumComparison() {
         // TODO Fill the context
         ChecksumComparisonContext context = new ChecksumComparisonContext();
-        EventService.INSTANCE.dispatch(context);
+        eventBus.publish(context);
     }
 
 
@@ -195,7 +195,7 @@ public class ApplicationController implements Initializable {
     private void performChecksumGeneration() {
         // TODO Fill the context
         ChecksumGenerationContext context = new ChecksumGenerationContext();
-        EventService.INSTANCE.dispatch(context);
+        eventBus.publish(context);
     }
 
 
