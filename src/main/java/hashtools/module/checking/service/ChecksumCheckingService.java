@@ -1,11 +1,13 @@
 package hashtools.module.checking.service;
 
 import hashtools.core.event.HashToolsEventBus;
-import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
-import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
-import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
+import hashtools.module.checking.event.CheckingEndedEvent;
+import hashtools.module.checking.event.CheckingRequestedEvent;
+import hashtools.module.checking.event.CheckingResultFormattedEvent;
 import hashtools.module.checking.facade.ChecksumChecking;
 import hashtools.module.checking.facade.ChecksumCheckingEndedEventFormatting;
+import hashtools.module.checking.model.CheckingContext;
+import hashtools.module.checking.model.CheckingResult;
 
 public class ChecksumCheckingService {
 
@@ -15,23 +17,27 @@ public class ChecksumCheckingService {
 
     public ChecksumCheckingService(HashToolsEventBus eventBus) {
         this.eventBus = eventBus;
-        eventBus.register(ChecksumCheckingRequestedEvent.class, this::performChecksumChecking);
-        eventBus.register(ChecksumCheckingEndedEvent.class, this::performResultFormatting);
+        eventBus.register(CheckingRequestedEvent.class, this::performChecksumChecking);
+        eventBus.register(CheckingEndedEvent.class, this::performResultFormatting);
     }
 
 
 
-    public void performChecksumChecking(ChecksumCheckingRequestedEvent event) {
+    private void performChecksumChecking(CheckingRequestedEvent event) {
+        CheckingContext context = event.getContext();
+
         ChecksumChecking checksumChecking = new ChecksumChecking();
-        ChecksumCheckingEndedEvent endedEvent = checksumChecking.perform(event);
+        CheckingResult result = checksumChecking.perform(context);
 
-        eventBus.publish(endedEvent);
+        eventBus.publish(new CheckingEndedEvent(result));
     }
 
-    public void performResultFormatting(ChecksumCheckingEndedEvent event) {
-        ChecksumCheckingEndedEventFormatting eventFormatting = new ChecksumCheckingEndedEventFormatting();
-        ChecksumCheckingFormattedEvent formattedEvent = eventFormatting.format(event);
+    private void performResultFormatting(CheckingEndedEvent event) {
+        CheckingResult result = event.getResult();
 
-        eventBus.publish(formattedEvent);
+        ChecksumCheckingEndedEventFormatting resultFormatting = new ChecksumCheckingEndedEventFormatting();
+        String formatted = resultFormatting.format(result);
+
+        eventBus.publish(new CheckingResultFormattedEvent(formatted));
     }
 }

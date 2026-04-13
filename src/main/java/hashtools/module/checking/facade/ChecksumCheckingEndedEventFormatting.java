@@ -3,17 +3,17 @@ package hashtools.module.checking.facade;
 import hashtools.core.model.Algorithm;
 import hashtools.core.strategy.formatter.HeaderFormatter;
 import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
-import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
-import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
 import hashtools.module.checking.model.CheckingChecksum;
+import hashtools.module.checking.model.CheckingResult;
 
 import java.util.List;
 import java.util.StringJoiner;
 
 public class ChecksumCheckingEndedEventFormatting {
 
-    public ChecksumCheckingFormattedEvent format(ChecksumCheckingEndedEvent event) {
+    public String format(CheckingResult result) {
         HeaderFormatter formatter = new LeftAlignmentHeaderFormatter('.');
+
         String[] headers = formatter.format(new String[]{
             "Algorithm",
             "Official",
@@ -25,25 +25,20 @@ public class ChecksumCheckingEndedEventFormatting {
 
         String formattedChecksums = this.formatChecksums(
             headers,
-            event.getChecksums()
+            result.getChecksums()
         );
 
         String formattedReliability = this.formatReliability(
-            event.getReliability()
+            result.getReliability()
         );
 
-        String content = this.joinFormattedContent(
-            event.getIdentification(),
+
+
+        return this.joinFormattedContent(
+            result.getIdentification(),
             formattedChecksums,
             formattedReliability
         );
-
-
-
-        ChecksumCheckingFormattedEvent formattedEvent = new ChecksumCheckingFormattedEvent();
-        formattedEvent.setFormattedContent(content);
-
-        return formattedEvent;
     }
 
 

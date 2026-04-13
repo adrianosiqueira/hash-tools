@@ -2,9 +2,9 @@ package hashtools.module.checking.facade;
 
 import hashtools.core.model.Checksum;
 import hashtools.core.threadpool.ThreadPoolFactory;
-import hashtools.module.checking.event.ChecksumCheckingEndedEvent;
-import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
 import hashtools.module.checking.model.CheckingChecksum;
+import hashtools.module.checking.model.CheckingContext;
+import hashtools.module.checking.model.CheckingResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,28 +13,28 @@ import java.util.concurrent.Future;
 
 public class ChecksumChecking {
 
-    public ChecksumCheckingEndedEvent perform(ChecksumCheckingRequestedEvent event) {
+    public CheckingResult perform(CheckingContext context) {
         List<Future<CheckingChecksum>> futureChecksums = new ArrayList<>();
-        List<Checksum> officialChecksums = event.extractOfficialChecksums();
+        List<Checksum> officialChecksums = context.extractOfficialChecksums();
 
         try (ExecutorService executor = ThreadPoolFactory.createDaemonPool()) {
             for (Checksum official : officialChecksums) {
                 futureChecksums.add(executor.submit(
-                    () -> this.generateChecksumMappingToDTO(official, event)
+                    () -> this.generateChecksum(official, context)
                 ));
             }
         }
 
         try {
-            ChecksumCheckingEndedEvent endedEvent = new ChecksumCheckingEndedEvent();
-            endedEvent.setIdentifier(event::getIdentification);
+            CheckingResult result = new CheckingResult();
+            result.setIdentifier(context::getIdentification);
 
             for (Future<CheckingChecksum> future : futureChecksums) {
                 CheckingChecksum checksum = future.get();
-                endedEvent.addChecksum(checksum);
+                result.addChecksum(checksum);
             }
 
-            return endedEvent;
+            return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -42,13 +42,12 @@ public class ChecksumChecking {
 
 
 
-    private CheckingChecksum generateChecksumMappingToDTO(Checksum official, ChecksumCheckingRequestedEvent event) {
-        Checksum generated = event.generateChecksum(official.getAlgorithm());
+    private CheckingChecksum generateChecksum(Checksum official, CheckingContext context) {
+        Checksum generated = context.generateChecksum(official.getAlgorithm());
 
         CheckingChecksum checksum = new CheckingChecksum();
         checksum.setOfficialChecksum(official);
         checksum.setGeneratedChecksum(generated);
-        checksum.setIdentifier(event::getIdentification);
 
         return checksum;
     }
