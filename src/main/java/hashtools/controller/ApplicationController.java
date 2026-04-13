@@ -1,7 +1,15 @@
 package hashtools.controller;
 
 import hashtools.core.event.HashToolsEventBus;
-import hashtools.core.model.Checksum;
+import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
+import hashtools.core.strategy.checksumextractor.FileChecksumExtractor;
+import hashtools.core.strategy.checksumextractor.StringChecksumExtractor;
+import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
+import hashtools.core.strategy.checksumidentifier.FileChecksumIdentifier;
+import hashtools.core.strategy.checksumidentifier.StringChecksumIdentifier;
+import hashtools.core.strategy.messagedigest.FileMessageDigestUpdater;
+import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
+import hashtools.core.strategy.messagedigest.StringMessageDigestUpdater;
 import hashtools.module.checking.event.CheckingRequestedEvent;
 import hashtools.module.checking.event.CheckingResultFormattedEvent;
 import hashtools.module.checking.model.CheckingContext;
@@ -24,8 +32,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
@@ -181,9 +187,24 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
-        // TODO Fill request event
-        ChecksumCheckingRequestedEvent event = new ChecksumCheckingRequestedEvent();
-        eventBus.publish(event);
+        MessageDigestUpdater updater = chkModuleCheckerInputFile.isSelected()
+            ? new FileMessageDigestUpdater(txtModuleCheckerInput.getText())
+            : new StringMessageDigestUpdater(txtModuleCheckerInput.getText());
+
+        ChecksumIdentifier identifier = chkModuleCheckerInputFile.isSelected()
+            ? new FileChecksumIdentifier(txtModuleCheckerInput.getText())
+            : new StringChecksumIdentifier(txtModuleCheckerInput.getText());
+
+        ChecksumExtractor extractor = chkModuleCheckerOfficialFile.isSelected()
+            ? new FileChecksumExtractor(txtModuleCheckerOfficial.getText())
+            : new StringChecksumExtractor(txtModuleCheckerOfficial.getText());
+
+        CheckingContext context = new CheckingContext();
+        context.setUpdater(updater);
+        context.setIdentifier(identifier);
+        context.setExtractor(extractor);
+
+        eventBus.publish(new CheckingRequestedEvent(context));
     }
 
 
