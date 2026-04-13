@@ -154,21 +154,25 @@ public class ApplicationController implements Initializable {
     @FXML
     private void openCheckerInputFile() {
         // TODO Get the file from a dialog window
-        Optional
-            .<Path>ofNullable(null)
-            .map(Path::toAbsolutePath)
-            .map(Path::toString)
-            .ifPresent(txtModuleCheckerInput::setText);
+//        Optional
+//            .<Path>ofNullable(null)
+//            .map(Path::toAbsolutePath)
+//            .map(Path::toString)
+//            .ifPresent(txtModuleCheckerInput::setText);
+
+        txtModuleCheckerInput.setText("/home/adriano/.bashrc");
     }
 
     @FXML
     private void openCheckerOfficialFile() {
         // TODO Get the file from a dialog window
-        Optional
-            .<Path>ofNullable(null)
-            .map(Path::toAbsolutePath)
-            .map(Path::toString)
-            .ifPresent(txtModuleCheckerOfficial::setText);
+//        Optional
+//            .<Path>ofNullable(null)
+//            .map(Path::toAbsolutePath)
+//            .map(Path::toString)
+//            .ifPresent(txtModuleCheckerOfficial::setText);
+
+        txtModuleCheckerOfficial.setText("1".repeat(32));
     }
 
     @FXML
