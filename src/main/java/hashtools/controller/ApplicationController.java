@@ -70,7 +70,7 @@ public class ApplicationController implements Initializable {
 
 
 
-    private Runnable lastOpenedScreen;
+    private Runnable lastScreenOpeningCommand;
     private HashToolsEventBus eventBus;
 
 
@@ -112,14 +112,14 @@ public class ApplicationController implements Initializable {
         this.openScreen(pnlModuleGenerator, this::openGeneratorScreen);
     }
 
-    private void openScreen(Pane screen, Runnable lastOpenedScreen) {
+    private void openScreen(Pane screen, Runnable lastScreenOpeningCommand) {
         pnlModuleChecker.setVisible(false);
         pnlModuleComparator.setVisible(false);
         pnlModuleGenerator.setVisible(false);
         pnlResult.setVisible(false);
 
         screen.setVisible(true);
-        this.lastOpenedScreen = lastOpenedScreen;
+        this.lastScreenOpeningCommand = lastScreenOpeningCommand;
 
         this.clearScreen();
     }
@@ -211,7 +211,7 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void closeResultScreen() {
-        lastOpenedScreen.run();
+        lastScreenOpeningCommand.run();
     }
 
     @FXML
