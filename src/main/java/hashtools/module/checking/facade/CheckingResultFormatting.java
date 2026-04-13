@@ -9,7 +9,7 @@ import hashtools.module.checking.model.CheckingResult;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class ChecksumCheckingEndedEventFormatting {
+public class CheckingResultFormatting {
 
     public String format(CheckingResult result) {
         HeaderFormatter formatter = new LeftAlignmentHeaderFormatter('.');

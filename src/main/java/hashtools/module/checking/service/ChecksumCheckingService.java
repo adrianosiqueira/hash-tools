@@ -4,8 +4,8 @@ import hashtools.core.event.HashToolsEventBus;
 import hashtools.module.checking.event.CheckingEndedEvent;
 import hashtools.module.checking.event.CheckingRequestedEvent;
 import hashtools.module.checking.event.CheckingResultFormattedEvent;
+import hashtools.module.checking.facade.CheckingResultFormatting;
 import hashtools.module.checking.facade.ChecksumChecking;
-import hashtools.module.checking.facade.ChecksumCheckingEndedEventFormatting;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
 
@@ -35,7 +35,7 @@ public class ChecksumCheckingService {
     private void performResultFormatting(CheckingEndedEvent event) {
         CheckingResult result = event.getResult();
 
-        ChecksumCheckingEndedEventFormatting resultFormatting = new ChecksumCheckingEndedEventFormatting();
+        CheckingResultFormatting resultFormatting = new CheckingResultFormatting();
         String formatted = resultFormatting.format(result);
 
         eventBus.publish(new CheckingResultFormattedEvent(formatted));
