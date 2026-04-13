@@ -1,8 +1,10 @@
 package hashtools.controller;
 
 import hashtools.core.event.HashToolsEventBus;
-import hashtools.module.checking.event.ChecksumCheckingFormattedEvent;
-import hashtools.module.checking.event.ChecksumCheckingRequestedEvent;
+import hashtools.core.model.Checksum;
+import hashtools.module.checking.event.CheckingRequestedEvent;
+import hashtools.module.checking.event.CheckingResultFormattedEvent;
+import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.service.ChecksumCheckingService;
 import hashtools.module.comparison.ChecksumComparisonContext;
 import hashtools.module.comparison.ChecksumComparisonResult;
@@ -22,9 +24,10 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ApplicationController implements Initializable {
 
@@ -77,7 +80,7 @@ public class ApplicationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         eventBus = EventService.INSTANCE;
-        eventBus.register(ChecksumCheckingFormattedEvent.class, this::openResultScreen);
+        eventBus.register(CheckingResultFormattedEvent.class, this::openResultScreen);
         eventBus.register(ChecksumComparisonResult.class, this::openResultScreen);
         eventBus.register(ChecksumGenerationResult.class, this::openResultScreen);
 
@@ -125,39 +128,27 @@ public class ApplicationController implements Initializable {
 
 
 
-    private void openResultScreen(ChecksumCheckingFormattedEvent event) {
-        event.consumeContent(this::openResultScreen);
+    private void openResultScreen(CheckingResultFormattedEvent event) {
+        this.openResultScreen(event::getContent);
     }
 
     private void openResultScreen(ChecksumComparisonResult result) {
         // TODO Implement a class to get a string representation of the ChecksumComparisonResult
-        this.openResultScreen(
-            result,
-            Object::toString
-        );
+        this.openResultScreen(result::toString);
     }
 
     private void openResultScreen(ChecksumGenerationResult result) {
         // TODO Implement a class to get a string representation of the ChecksumGenerationResult
-        this.openResultScreen(
-            result,
-            Object::toString
-        );
+        this.openResultScreen(result::toString);
     }
 
-    @Deprecated
-    private <T> void openResultScreen(T result, Function<T, String> toStringFunction) {
-        String content = toStringFunction.apply(result);
-        this.openResultScreen(content);
-    }
-
-    private void openResultScreen(String formattedResult) {
+    private void openResultScreen(Supplier<String> resultSupplier) {
         pnlModuleChecker.setVisible(false);
         pnlModuleComparator.setVisible(false);
         pnlModuleGenerator.setVisible(false);
         pnlResult.setVisible(true);
 
-        txtResult.setText(formattedResult);
+        txtResult.setText(resultSupplier.get());
     }
 
 
