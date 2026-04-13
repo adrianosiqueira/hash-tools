@@ -82,7 +82,7 @@ public class ApplicationController implements Initializable {
         eventBus.register(ChecksumComparisonResult.class, this::openResultScreen);
         eventBus.register(ChecksumGenerationResult.class, this::openResultScreen);
 
-        new CheckingService(eventBus);
+        CheckingService.registerListeners(eventBus);
 
         btnModuleCheckerOpenFile
             .disableProperty()

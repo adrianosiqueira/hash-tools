@@ -9,16 +9,27 @@ import hashtools.module.checking.facade.ChecksumChecking;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
 
+import java.util.Objects;
+
 public class CheckingService {
 
     private final HashToolsEventBus eventBus;
 
 
 
-    public CheckingService(HashToolsEventBus eventBus) {
+    private CheckingService(HashToolsEventBus eventBus) {
         this.eventBus = eventBus;
-        eventBus.register(CheckingRequestedEvent.class, this::performChecksumChecking);
-        eventBus.register(CheckingEndedEvent.class, this::performResultFormatting);
+    }
+
+
+
+    public static void registerListeners(HashToolsEventBus eventBus) {
+        Objects.requireNonNull(eventBus, "The event bus cannot be null");
+
+        CheckingService service = new CheckingService(eventBus);
+
+        eventBus.register(CheckingRequestedEvent.class, service::performChecksumChecking);
+        eventBus.register(CheckingEndedEvent.class, service::performResultFormatting);
     }
 
 
