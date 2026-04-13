@@ -84,13 +84,13 @@ public class ApplicationController implements Initializable {
 
         CheckingService.registerListeners(eventBus);
 
-        btnModuleCheckerOpenFile
-            .disableProperty()
-            .bind(chkModuleCheckerInputFile.selectedProperty().not());
-
-        btnModuleCheckerOpenOfficial
-            .disableProperty()
-            .bind(chkModuleCheckerOfficialFile.selectedProperty().not());
+//        btnModuleCheckerOpenFile
+//            .disableProperty()
+//            .bind(chkModuleCheckerInputFile.selectedProperty().not());
+//
+//        btnModuleCheckerOpenOfficial
+//            .disableProperty()
+//            .bind(chkModuleCheckerOfficialFile.selectedProperty().not());
 
         this.openCheckerScreen();
     }
@@ -172,7 +172,11 @@ public class ApplicationController implements Initializable {
 //            .map(Path::toString)
 //            .ifPresent(txtModuleCheckerOfficial::setText);
 
-        txtModuleCheckerOfficial.setText("1".repeat(32));
+        String content = chkModuleCheckerOfficialFile.isSelected()
+            ? "/home/adriano/bashrc.sha512"
+            : "1".repeat(32);
+
+        txtModuleCheckerOfficial.setText(content);
     }
 
     @FXML
