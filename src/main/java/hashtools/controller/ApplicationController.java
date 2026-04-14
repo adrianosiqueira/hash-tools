@@ -19,6 +19,7 @@ import hashtools.module.comparison.ChecksumComparisonResult;
 import hashtools.module.generation.ChecksumGenerationContext;
 import hashtools.module.generation.ChecksumGenerationResult;
 import hashtools.service.EventService;
+import hashtools.view.dialog.FileDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -90,10 +91,10 @@ public class ApplicationController implements Initializable {
 
         CheckingService.registerListeners(eventBus);
 
-//        btnModuleCheckerOpenFile
-//            .disableProperty()
-//            .bind(chkModuleCheckerInputFile.selectedProperty().not());
-//
+        btnModuleCheckerOpenFile
+            .disableProperty()
+            .bind(chkModuleCheckerInputFile.selectedProperty().not());
+
 //        btnModuleCheckerOpenOfficial
 //            .disableProperty()
 //            .bind(chkModuleCheckerOfficialFile.selectedProperty().not());
@@ -159,14 +160,11 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void openCheckerInputFile() {
-        // TODO Get the file from a dialog window
-//        Optional
-//            .<Path>ofNullable(null)
-//            .map(Path::toAbsolutePath)
-//            .map(Path::toString)
-//            .ifPresent(txtModuleCheckerInput::setText);
-
-        txtModuleCheckerInput.setText("/home/adriano/.bashrc");
+        new FileDialog()
+            .setTitle("Select the input file")
+            .showOpenDialog(null)
+            .map(Path::toString)
+            .ifPresent(txtModuleCheckerInput::setText);
     }
 
     @FXML
