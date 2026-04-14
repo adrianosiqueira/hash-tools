@@ -18,6 +18,7 @@ module hash.tools {
     exports hashtools.module.generation;
     exports hashtools.service;
     exports hashtools.view;
+    exports hashtools.view.dialog;
 
     opens hashtools;
     opens hashtools.controller;
@@ -35,4 +36,5 @@ module hash.tools {
     opens hashtools.module.generation;
     opens hashtools.service;
     opens hashtools.view;
+    opens hashtools.view.dialog;
 }
