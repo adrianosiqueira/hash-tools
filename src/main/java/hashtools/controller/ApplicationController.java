@@ -20,6 +20,7 @@ import hashtools.module.generation.ChecksumGenerationContext;
 import hashtools.module.generation.ChecksumGenerationResult;
 import hashtools.service.EventService;
 import hashtools.view.dialog.FileDialog;
+import hashtools.view.dialog.FileExtension;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -169,18 +170,12 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void openCheckerOfficialFile() {
-        // TODO Get the file from a dialog window
-//        Optional
-//            .<Path>ofNullable(null)
-//            .map(Path::toAbsolutePath)
-//            .map(Path::toString)
-//            .ifPresent(txtModuleCheckerOfficial::setText);
-
-        String content = chkModuleCheckerOfficialFile.isSelected()
-            ? "/home/adriano/bashrc.sha512"
-            : "1".repeat(32);
-
-        txtModuleCheckerOfficial.setText(content);
+        new FileDialog()
+            .setTitle("Select the checksums file")
+            .setSelectedExtension(FileExtension.HASH)
+            .showOpenDialog(null)
+            .map(Path::toString)
+            .ifPresent(txtModuleCheckerOfficial::setText);
     }
 
     @FXML
