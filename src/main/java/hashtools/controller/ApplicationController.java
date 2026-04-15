@@ -21,6 +21,7 @@ import hashtools.module.generation.ChecksumGenerationResult;
 import hashtools.service.EventService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
+import hashtools.view.dialog.MessageDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -96,9 +97,9 @@ public class ApplicationController implements Initializable {
             .disableProperty()
             .bind(chkModuleCheckerInputFile.selectedProperty().not());
 
-//        btnModuleCheckerOpenOfficial
-//            .disableProperty()
-//            .bind(chkModuleCheckerOfficialFile.selectedProperty().not());
+        btnModuleCheckerOpenOfficial
+            .disableProperty()
+            .bind(chkModuleCheckerOfficialFile.selectedProperty().not());
 
         this.openCheckerScreen();
     }
@@ -135,6 +136,11 @@ public class ApplicationController implements Initializable {
 
 
     private void openResultScreen(CheckingResultFormattedEvent event) {
+        new MessageDialog()
+            .setTitle("Checksum Checking")
+            .setMessage("The checking has been finalized.")
+            .show();
+
         this.openResultScreen(event::getContent);
     }
 
