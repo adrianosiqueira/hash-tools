@@ -1,5 +1,6 @@
 package hashtools.module.checking.service;
 
+import hashtools.core.event.ExceptionThrownEvent;
 import hashtools.core.event.HashToolsEventBus;
 import hashtools.module.checking.event.CheckingEndedEvent;
 import hashtools.module.checking.event.CheckingRequestedEvent;
@@ -35,12 +36,16 @@ public class CheckingService {
 
 
     private void performChecksumChecking(CheckingRequestedEvent event) {
-        CheckingContext context = event.getContext();
+        try {
+            CheckingContext context = event.getContext();
 
-        ChecksumChecking checksumChecking = new ChecksumChecking();
-        CheckingResult result = checksumChecking.perform(context);
+            ChecksumChecking checksumChecking = new ChecksumChecking();
+            CheckingResult result = checksumChecking.perform(context);
 
-        eventBus.publish(new CheckingEndedEvent(result));
+            eventBus.publish(new CheckingEndedEvent(result));
+        } catch (Exception e) {
+            eventBus.publish(new ExceptionThrownEvent(e));
+        }
     }
 
     private void performResultFormatting(CheckingEndedEvent event) {
