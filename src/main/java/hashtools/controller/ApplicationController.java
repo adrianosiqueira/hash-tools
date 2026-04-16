@@ -1,5 +1,6 @@
 package hashtools.controller;
 
+import hashtools.core.event.ExceptionThrownEvent;
 import hashtools.core.event.HashToolsEventBus;
 import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.FileChecksumExtractor;
@@ -22,6 +23,7 @@ import hashtools.service.EventService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
+import hashtools.view.dialog.StackTraceDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -88,6 +90,7 @@ public class ApplicationController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         eventBus = EventService.INSTANCE;
         eventBus.register(CheckingResultFormattedEvent.class, this::openResultScreen);
+        eventBus.register(ExceptionThrownEvent.class, this::handleException);
         eventBus.register(ChecksumComparisonResult.class, this::openResultScreen);
         eventBus.register(ChecksumGenerationResult.class, this::openResultScreen);
 
@@ -260,5 +263,14 @@ public class ApplicationController implements Initializable {
             // TODO Display the exception in a dialog box
             e.printStackTrace();
         }
+    }
+
+
+
+    private void handleException(ExceptionThrownEvent event) {
+        new StackTraceDialog()
+            .setTitle("Application Controller")
+            .setThrowable(event.getThrowable())
+            .show();
     }
 }
