@@ -37,6 +37,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
@@ -247,8 +248,17 @@ public class ApplicationController implements Initializable {
 
     @FXML
     private void saveResult() {
-        // TODO Get a path from a dialog box
-        Path destination = null;
+        Optional<Path> selectedFile = new FileDialog()
+            .setTitle("Select where to save")
+            .showSaveDialog(null);
+
+        if (selectedFile.isEmpty()) {
+            return;
+        }
+
+
+
+        Path destination = selectedFile.get();
         String content = txtResult.getText();
 
         StandardOpenOption[] options = {
@@ -257,11 +267,18 @@ public class ApplicationController implements Initializable {
         };
 
         try {
-            Files.writeString(destination, content, options);
-            // TODO Display a success message in a dialog box
+            Files.writeString(
+                destination,
+                content,
+                options
+            );
+
+            new MessageDialog()
+                .setTitle("Checksum Checking")
+                .setMessage("Results saved in: " + destination)
+                .show();
         } catch (Exception e) {
-            // TODO Display the exception in a dialog box
-            e.printStackTrace();
+            eventBus.publish(new ExceptionThrownEvent(e));
         }
     }
 
