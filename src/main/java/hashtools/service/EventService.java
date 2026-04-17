@@ -41,6 +41,18 @@ public enum EventService implements HashToolsEventBus {
     }
 
     @Override
+    public <T extends HashToolsEvent> void unregister(Class<T> clazz, HashToolsEventListener<T> listener) {
+        List<HashToolsEventListener<?>> listeners = listenersMap.get(clazz);
+
+        if (listeners == null || listeners.isEmpty()) {
+            // There is no listener to this event
+            return;
+        }
+
+        listeners.remove(listener);
+    }
+
+    @Override
     public void publish(HashToolsEvent event) {
         List<HashToolsEventListener<?>> listeners = listenersMap.get(event.getClass());
 
