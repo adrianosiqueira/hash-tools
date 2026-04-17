@@ -1,17 +1,17 @@
 package hashtools.view.dialog;
 
+import hashtools.core.model.ThrowableWrapper;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextArea;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class StackTraceDialog {
@@ -23,7 +23,7 @@ public class StackTraceDialog {
 
 
     private String title;
-    private Throwable throwable;
+    private ThrowableWrapper throwable;
     private ButtonType[] buttons;
 
     private int autoCloseTime;
@@ -50,7 +50,7 @@ public class StackTraceDialog {
     }
 
     public StackTraceDialog setThrowable(Throwable throwable) {
-        this.throwable = throwable;
+        this.throwable = new ThrowableWrapper(throwable);
         return this;
     }
 
@@ -88,8 +88,8 @@ public class StackTraceDialog {
     }
 
     private void createAndShowDialog(Consumer<Dialog<Void>> consumer) {
-        String headerContent = this.sanitizeHeaderContent(this.throwable);
-        String stackTraceContent = this.getStackTraceContent(this.throwable);
+        String headerContent = this.sanitizeHeaderContent(throwable);
+        String stackTraceContent = this.getStackTraceContent(throwable);
 
         TextArea stackTraceArea = new TextArea();
         stackTraceArea.setText(stackTraceContent);
@@ -134,42 +134,26 @@ public class StackTraceDialog {
             : DEFAULT_BUTTONS_SELECTION;
     }
 
-    private String sanitizeHeaderContent(Throwable throwable) {
-        if (throwable == null) {
-            return "";
-        }
-
-
-
-        String className = throwable
-            .getClass()
-            .getSimpleName();
-
-        String message = Optional
-            .ofNullable(throwable.getMessage())
-            .orElse("");
-
-
-
-        return String.format(
+    private String sanitizeHeaderContent(ThrowableWrapper throwable) {
+        Function<ThrowableWrapper, String> formattingFunction = wrapper -> String.format(
             "%s: %s",
-            className,
-            message
+            wrapper.getSimpleClassName(),
+            wrapper.getMessage()
         );
+
+
+
+        return Optional
+            .ofNullable(throwable)
+            .map(formattingFunction)
+            .orElse("");
     }
 
-    private String getStackTraceContent(Throwable throwable) {
-        if (throwable == null) {
-            return "";
-        }
-
-
-        StringWriter stackTraceContent = new StringWriter();
-
-        PrintWriter printWriter = new PrintWriter(stackTraceContent);
-        throwable.printStackTrace(printWriter);
-
-        return stackTraceContent.toString();
+    private String getStackTraceContent(ThrowableWrapper throwable) {
+        return Optional
+            .ofNullable(throwable)
+            .map(ThrowableWrapper::getStackTrace)
+            .orElse("");
     }
 
     private void closeDialogAfterTime(Dialog<?> dialog) {
