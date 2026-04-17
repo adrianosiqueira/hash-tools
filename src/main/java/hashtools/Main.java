@@ -1,5 +1,6 @@
 package hashtools;
 
+import hashtools.core.event.HashToolsEventBus;
 import hashtools.module.comparison.ChecksumComparison;
 import hashtools.module.comparison.ChecksumComparisonContext;
 import hashtools.module.generation.ChecksumGeneration;
@@ -9,6 +10,10 @@ import hashtools.view.ApplicationWindow;
 import javafx.application.Application;
 
 public class Main {
+
+    private static final HashToolsEventBus EVENT_BUS = EventService.INSTANCE;
+
+
 
     static void main() {
         new Thread(() -> {
@@ -24,5 +29,11 @@ public class Main {
         EventService eventService = EventService.INSTANCE;
         eventService.register(ChecksumComparisonContext.class, checksumComparison::perform);
         eventService.register(ChecksumGenerationContext.class, checksumGeneration::perform);
+    }
+
+
+
+    public static HashToolsEventBus getEventBus() {
+        return EVENT_BUS;
     }
 }
