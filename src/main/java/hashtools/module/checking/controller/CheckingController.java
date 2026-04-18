@@ -91,6 +91,8 @@ public class CheckingController implements Closeable, Initializable {
     private HashToolsEventListener<CheckingResultFormattedEvent> formattedResultListener;
     private HashToolsEventListener<ExceptionThrownEvent> exceptionListener;
 
+    private CheckingService checkingService;
+
 
 
     @Override
@@ -102,10 +104,7 @@ public class CheckingController implements Closeable, Initializable {
         eventBus.register(CheckingResultFormattedEvent.class, formattedResultListener);
         eventBus.register(ExceptionThrownEvent.class, exceptionListener);
 
-
-
-        // TODO Design this approach with composition
-        CheckingService.registerListeners(eventBus);
+        checkingService = new CheckingService(eventBus);
 
 
 
@@ -122,6 +121,8 @@ public class CheckingController implements Closeable, Initializable {
     public void close() {
         eventBus.unregister(CheckingResultFormattedEvent.class, formattedResultListener);
         eventBus.unregister(ExceptionThrownEvent.class, exceptionListener);
+
+        checkingService.close();
     }
 
 
