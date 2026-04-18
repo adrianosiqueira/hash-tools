@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<StackPane fx:controller="hashtools.module.checking.controller.CheckingController" fx:id="pnlRoot" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <GridPane alignment="CENTER" fx:id="pnlForm" hgap="20" vgap="50">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
+            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER"/>
+            <ColumnConstraints halignment="CENTER" hgrow="NEVER"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints valignment="CENTER" vgrow="NEVER"/>
+            <RowConstraints valignment="CENTER" vgrow="NEVER"/>
+            <RowConstraints valignment="CENTER" vgrow="NEVER"/>
+        </rowConstraints>
+
+        <!-- pnlModuleChecker first row -->
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="0" fx:id="lblInput" text="Input"/>
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="txtInput" maxWidth="1E6"/>
+        <CheckBox GridPane.columnIndex="2" GridPane.rowIndex="0" fx:id="chkInput" selected="true" text="File"/>
+        <Button GridPane.columnIndex="3" GridPane.rowIndex="0" fx:id="btnInput" onAction="#openInputFile" text="Open"/>
+
+        <!-- pnlModuleChecker second row -->
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="1" fx:id="lblChecksum" text="Official"/>
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="txtChecksum" maxWidth="1E6"/>
+        <CheckBox GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="chkChecksum" selected="true" text="File"/>
+        <Button GridPane.columnIndex="3" GridPane.rowIndex="1" fx:id="btnChecksum" onAction="#openChecksumFile" text="Open"/>
+
+        <!-- pnlModuleChecker third row -->
+        <HBox GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="pnlFormButtons" spacing="20">
+            <Button fx:id="btnClear" onAction="#clearScreen" text="Clear Screen"/>
+            <Label HBox.hgrow="ALWAYS" maxWidth="1E6"/>
+            <Button fx:id="btnCheck" onAction="#performChecksumChecking" text="Perform Checking"/>
+        </HBox>
+    </GridPane>
+
+
+
+    <VBox alignment="CENTER" fx:id="pnlResult" spacing="50" visible="false">
+        <TextArea VBox.vgrow="ALWAYS" editable="false" fx:id="txtResult" maxHeight="1E6" style="-fx-font-family: 'roboto mono'"/>
+        <HBox VBox.vgrow="NEVER" fx:id="pnlResultButtons">
+            <Button HBox.hgrow="NEVER" fx:id="btnBack" onAction="#closeResultScreen" text="Back"/>
+            <Label HBox.hgrow="ALWAYS" maxWidth="1E6"/>
+            <Button HBox.hgrow="NEVER" fx:id="btnSave" onAction="#saveResult" text="Save"/>
+        </HBox>
+    </VBox>
+</StackPane>
