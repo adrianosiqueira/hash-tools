@@ -3,7 +3,6 @@ module hash.tools {
     requires javafx.controls;
 
     exports hashtools;
-    exports hashtools.controller;
     exports hashtools.core.engine;
     exports hashtools.core.event;
     exports hashtools.core.model;
@@ -25,7 +24,6 @@ module hash.tools {
     exports hashtools.view.dialog;
 
     opens hashtools;
-    opens hashtools.controller;
     opens hashtools.core.engine;
     opens hashtools.core.event;
     opens hashtools.core.model;
