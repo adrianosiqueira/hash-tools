@@ -15,20 +15,15 @@ public class ApplicationWindow extends Application {
     public void start(Stage stage) throws Exception {
         URL location = this
             .getClass()
-            .getResource("/hashtools/fxml/application-ui.fxml");
+            .getResource("/hashtools/fxml/main-screen.fxml");
 
         ResourceBundle resources = null;
-//        ResourceBundle resources = ResourceBundle.getBundle(
-//            "/hashtools/i18n/i18n.properties",
-//            Locale.getDefault()
-//        );
-
-
 
         Scene scene = this.createScene(
             location,
             resources
         );
+
 
 
         stage.setScene(scene);
@@ -44,6 +39,6 @@ public class ApplicationWindow extends Application {
             resources
         );
 
-        return new Scene(pane);
+        return new Scene(pane, 853.0, 480.0);
     }
 }
