@@ -1,6 +1,8 @@
 module hash.tools {
+    requires ch.qos.logback.classic;
     requires javafx.fxml;
     requires javafx.controls;
+    requires org.slf4j;
 
     exports hashtools;
     exports hashtools.core.engine;
