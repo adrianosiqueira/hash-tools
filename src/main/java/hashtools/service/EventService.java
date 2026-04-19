@@ -4,6 +4,8 @@ import hashtools.core.event.HashToolsEvent;
 import hashtools.core.event.HashToolsEventBus;
 import hashtools.core.event.HashToolsEventListener;
 import hashtools.core.threadpool.ThreadPoolFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,9 @@ import java.util.concurrent.ExecutorService;
 public enum EventService implements HashToolsEventBus {
     INSTANCE;
 
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventService.class);
 
 
     private final Map<Class<?>, List<HashToolsEventListener<?>>> listenersMap;
@@ -38,6 +43,8 @@ public enum EventService implements HashToolsEventBus {
         listenersMap
             .computeIfAbsent(clazz, _ -> Collections.synchronizedList(new ArrayList<>()))
             .add(listener);
+
+        LOGGER.debug("Registered the listener '{}' for the '{}'.", listener, clazz.getName());
     }
 
     @Override
@@ -45,11 +52,13 @@ public enum EventService implements HashToolsEventBus {
         List<HashToolsEventListener<?>> listeners = listenersMap.get(clazz);
 
         if (listeners == null || listeners.isEmpty()) {
-            // There is no listener to this event
+            LOGGER.debug("There is no listener for '{}'.", clazz.getName());
             return;
         }
 
         listeners.remove(listener);
+
+        LOGGER.debug("Unregistered the listener '{}' for the '{}'.", listener, clazz.getName());
     }
 
     @Override
@@ -57,7 +66,7 @@ public enum EventService implements HashToolsEventBus {
         List<HashToolsEventListener<?>> listeners = listenersMap.get(event.getClass());
 
         if (listeners == null || listeners.isEmpty()) {
-            // There is no listener to this event
+            LOGGER.debug("There is no listener for '{}'.", event.getClass().getName());
             return;
         }
 

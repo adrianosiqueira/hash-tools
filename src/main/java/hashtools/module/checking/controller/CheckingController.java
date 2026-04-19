@@ -28,6 +28,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.net.URL;
@@ -38,6 +40,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CheckingController implements Closeable, Initializable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingController.class);
+
+
 
     @FXML
     private Pane pnlRoot;
@@ -133,7 +139,10 @@ public class CheckingController implements Closeable, Initializable {
             .setTitle("Select the input file")
             .showOpenDialog(null)
             .map(Path::toString)
-            .ifPresent(txtInput::setText);
+            .ifPresent(path -> {
+                txtInput.setText(path);
+                LOGGER.debug("Selected '{}' as the input file.", path);
+            });
     }
 
     @FXML
@@ -143,7 +152,10 @@ public class CheckingController implements Closeable, Initializable {
             .setSelectedExtension(FileExtension.HASH)
             .showOpenDialog(null)
             .map(Path::toString)
-            .ifPresent(txtChecksum::setText);
+            .ifPresent(path -> {
+                txtChecksum.setText(path);
+                LOGGER.debug("Selected '{}' as the checksum file.", path);
+            });
     }
 
     @FXML
@@ -170,6 +182,10 @@ public class CheckingController implements Closeable, Initializable {
         ChecksumExtractor extractor = chkChecksum.isSelected()
             ? new FileChecksumExtractor(txtChecksum.getText())
             : new StringChecksumExtractor(txtChecksum.getText());
+
+        LOGGER.debug("Using the '{}' as the MessageDigestUpdater.", updater);
+        LOGGER.debug("Using the '{}' as the ChecksumIdentifier.", identifier);
+        LOGGER.debug("Using the '{}' as the ChecksumExtractor.", extractor);
 
         CheckingContext context = new CheckingContext();
         context.setUpdater(updater);
@@ -224,6 +240,8 @@ public class CheckingController implements Closeable, Initializable {
             StandardOpenOption.TRUNCATE_EXISTING
         };
 
+
+
         try {
             Files.writeString(
                 destination,
@@ -235,7 +253,10 @@ public class CheckingController implements Closeable, Initializable {
                 .setTitle("Checksum Checking")
                 .setMessage("Results saved in: " + destination)
                 .show();
+
+            LOGGER.info("Results saved to '{}'.", destination);
         } catch (Exception e) {
+            LOGGER.error("Failed to save the results to '{}'.", destination, e);
             eventBus.publish(new ExceptionThrownEvent(e));
         }
     }

@@ -1,5 +1,8 @@
 package hashtools.core.strategy.messagedigest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,9 +12,13 @@ import java.util.Optional;
 
 public class FileMessageDigestUpdater implements MessageDigestUpdater {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileMessageDigestUpdater.class);
+
     private static final int ONE_MEBIBYTE = 1_048_576;
     private static final int END_OF_FILE = -1;
     private static final int BUFFER_OFFSET = 0;
+
+
 
     private final String filePath;
 
@@ -41,7 +48,10 @@ public class FileMessageDigestUpdater implements MessageDigestUpdater {
                     read
                 );
             }
+
+            LOGGER.info("MessageDigest updated from '{}'.", file.toAbsolutePath());
         } catch (Exception e) {
+            LOGGER.error("Failed to update MessageDigest from '{}'.", file.toAbsolutePath(), e);
             throw new RuntimeException(e);
         }
     }

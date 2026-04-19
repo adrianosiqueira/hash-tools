@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -13,6 +15,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainController implements Closeable, Initializable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
+
+
 
     @FXML
     private Pane pnlRoot;
@@ -42,6 +48,8 @@ public class MainController implements Closeable, Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.currentOpenController = this::doNothing;
+        LOGGER.debug("Current open controller set to 'nothing'.");
+
         this.openCheckingScreen();
     }
 
@@ -49,6 +57,7 @@ public class MainController implements Closeable, Initializable {
     public void close() throws IOException {
         // FIXME Maybe it is not necessary
         currentOpenController.close();
+        LOGGER.debug("Closed the controller '{}'.", currentOpenController);
     }
 
 
@@ -80,6 +89,7 @@ public class MainController implements Closeable, Initializable {
             .getResource(path);
 
         if (location == null) {
+            LOGGER.error("Location not found: '{}'.", path);
             return;
         }
 
@@ -90,9 +100,13 @@ public class MainController implements Closeable, Initializable {
             loader.setLocation(location);
 
             Pane screen = loader.load();
+            LOGGER.debug("Loaded screen '{}'.", location);
 
             currentOpenController.close();
+            LOGGER.debug("Closed the controller '{}'.", currentOpenController);
+
             currentOpenController = loader.getController();
+            LOGGER.debug("Current open controller set to '{}'.", currentOpenController);
 
             pnlContent
                 .getChildren()

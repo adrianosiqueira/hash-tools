@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -13,6 +15,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ApplicationWindow extends Application {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationWindow.class);
+
+
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -48,6 +54,7 @@ public class ApplicationWindow extends Application {
         loader.setResources(resources);
 
         Pane pane = loader.load();
+        LOGGER.debug("Loaded screen '{}'.", location);
 
         Scene scene = new Scene(pane, 853.0, 480.0);
         MainController controller = loader.getController();
@@ -58,6 +65,7 @@ public class ApplicationWindow extends Application {
     private void closeController(Closeable controller) {
         try {
             controller.close();
+            LOGGER.debug("Closed the controller: '{}'.", controller);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

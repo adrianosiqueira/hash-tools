@@ -5,13 +5,21 @@ import hashtools.core.strategy.formatter.HeaderFormatter;
 import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
 import hashtools.module.checking.model.CheckingChecksum;
 import hashtools.module.checking.model.CheckingResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.StringJoiner;
 
 public class CheckingResultFormatting {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingResultFormatting.class);
+
+
+
     public String format(CheckingResult result) {
+        LOGGER.info("Starting to perform the result formatting.");
+
         HeaderFormatter formatter = new LeftAlignmentHeaderFormatter('.');
 
         String[] headers = formatter.format(new String[]{
@@ -32,13 +40,16 @@ public class CheckingResultFormatting {
             result.getReliability()
         );
 
-
-
-        return this.joinFormattedContent(
+        String formattedResult = this.joinFormattedContent(
             result.getIdentification(),
             formattedChecksums,
             formattedReliability
         );
+
+
+
+        LOGGER.info("The result formatting is finished.");
+        return formattedResult;
     }
 
 

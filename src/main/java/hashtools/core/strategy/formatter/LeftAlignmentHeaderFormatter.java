@@ -1,6 +1,13 @@
 package hashtools.core.strategy.formatter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class LeftAlignmentHeaderFormatter implements HeaderFormatter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LeftAlignmentHeaderFormatter.class);
+
+
 
     private final char spacer;
 
@@ -15,6 +22,7 @@ public class LeftAlignmentHeaderFormatter implements HeaderFormatter {
     @Override
     public String[] format(String[] strings) {
         int desiredLength = this.getGreatestLength(strings);
+        LOGGER.debug("Aligning headers to '{}' characters.", desiredLength);
 
         String[] resultStrings = new String[strings.length];
         StringBuilder result = new StringBuilder();
