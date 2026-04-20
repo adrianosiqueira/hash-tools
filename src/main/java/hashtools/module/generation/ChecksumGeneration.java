@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
 
 public class ChecksumGeneration {
 
-    public ChecksumGenerationResult perform(ChecksumGenerationContext context) {
+    public ChecksumGenerationResult perform(ChecksumGenerationContext context) throws Exception {
         List<Future<ChecksumGenerationDTO>> futureChecksums = new ArrayList<>();
 
         try (ExecutorService executor = ThreadPoolFactory.createDaemonPool()) {
@@ -22,23 +22,21 @@ public class ChecksumGeneration {
             }
         }
 
-        try {
-            ChecksumGenerationResult result = new ChecksumGenerationResult();
 
-            for (Future<ChecksumGenerationDTO> future : futureChecksums) {
-                ChecksumGenerationDTO checksum = future.get();
-                result.addChecksum(checksum);
-            }
 
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        ChecksumGenerationResult result = new ChecksumGenerationResult();
+
+        for (Future<ChecksumGenerationDTO> future : futureChecksums) {
+            ChecksumGenerationDTO checksum = future.get();
+            result.addChecksum(checksum);
         }
+
+        return result;
     }
 
 
 
-    private ChecksumGenerationDTO generateChecksumMappingToDTO(Algorithm algorithm, ChecksumGenerationContext context) {
+    private ChecksumGenerationDTO generateChecksumMappingToDTO(Algorithm algorithm, ChecksumGenerationContext context) throws Exception {
         Checksum generated = context.generateChecksum(algorithm);
 
         ChecksumGenerationDTO checksum = new ChecksumGenerationDTO();

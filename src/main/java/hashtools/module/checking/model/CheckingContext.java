@@ -36,7 +36,7 @@ public class CheckingContext {
         return extractor.extract();
     }
 
-    public Checksum generateChecksum(Algorithm algorithm) {
+    public Checksum generateChecksum(Algorithm algorithm) throws Exception {
         return generator.generate(algorithm, updater);
     }
 

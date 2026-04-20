@@ -14,20 +14,15 @@ public class ChecksumGenerator {
 
 
 
-    public Checksum generate(Algorithm algorithm, MessageDigestUpdater updater) {
-        try {
-            MessageDigest messageDigest = algorithm.createMessageDigest();
-            updater.update(messageDigest);
+    public Checksum generate(Algorithm algorithm, MessageDigestUpdater updater) throws Exception {
+        MessageDigest messageDigest = algorithm.createMessageDigest();
+        updater.update(messageDigest);
 
-            byte[] bytes = messageDigest.digest();
-            String hash = this.decodeBytesToHexadecimal(bytes);
+        byte[] bytes = messageDigest.digest();
+        String hash = this.decodeBytesToHexadecimal(bytes);
 
-            LOGGER.info("Generated '{}' checksum for '{}'.", algorithm.getDisplayName(), updater);
-            return new Checksum(hash);
-        } catch (Exception e) {
-            LOGGER.error("Failed to generate '{}'.", algorithm.getDisplayName(), e);
-            throw new RuntimeException(e);
-        }
+        LOGGER.info("Generated '{}' checksum for '{}'.", algorithm.getDisplayName(), updater);
+        return new Checksum(hash);
     }
 
 

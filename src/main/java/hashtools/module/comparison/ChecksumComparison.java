@@ -4,13 +4,13 @@ import hashtools.core.model.Checksum;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
 import hashtools.core.threadpool.ThreadPoolFactory;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.function.Supplier;
 
 public class ChecksumComparison {
 
-    public ChecksumComparisonResult perform(ChecksumComparisonContext context) {
+    public ChecksumComparisonResult perform(ChecksumComparisonContext context) throws Exception {
         Future<ChecksumComparisonDTO> futureChecksum1;
         Future<ChecksumComparisonDTO> futureChecksum2;
 
@@ -26,22 +26,20 @@ public class ChecksumComparison {
             ));
         }
 
-        try {
-            ChecksumComparisonResult result = new ChecksumComparisonResult();
-            result.setChecksum1(futureChecksum1.get());
-            result.setChecksum2(futureChecksum2.get());
 
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        ChecksumComparisonResult result = new ChecksumComparisonResult();
+        result.setChecksum1(futureChecksum1.get());
+        result.setChecksum2(futureChecksum2.get());
+
+        return result;
     }
 
 
 
-    private ChecksumComparisonDTO generateChecksumMappingToDTO(Supplier<Checksum> generator, ChecksumIdentifier identifier) {
+    private ChecksumComparisonDTO generateChecksumMappingToDTO(Callable<Checksum> generator, ChecksumIdentifier identifier) throws Exception {
         ChecksumComparisonDTO checksum = new ChecksumComparisonDTO();
-        checksum.setChecksum(generator.get());
+        checksum.setChecksum(generator.call());
         checksum.setIdentifier(identifier);
 
         return checksum;

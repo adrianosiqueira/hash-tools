@@ -73,11 +73,11 @@ public class ChecksumComparisonContext {
         return identifier2.getIdentification();
     }
 
-    public Checksum generateChecksum1() {
+    public Checksum generateChecksum1() throws Exception {
         return generator.generate(algorithm, updater1);
     }
 
-    public Checksum generateChecksum2() {
+    public Checksum generateChecksum2() throws Exception {
         return generator.generate(algorithm, updater2);
     }
 }

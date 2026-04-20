@@ -5,8 +5,6 @@ import hashtools.core.threadpool.ThreadPoolFactory;
 import hashtools.module.checking.model.CheckingChecksum;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +13,7 @@ import java.util.concurrent.Future;
 
 public class ChecksumChecking {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChecksumChecking.class);
-
-
-
-    public CheckingResult perform(CheckingContext context) {
-        LOGGER.info("Starting to perform the checksum checking.");
-
+    public CheckingResult perform(CheckingContext context) throws Exception {
         List<Future<CheckingChecksum>> futureChecksums = new ArrayList<>();
         List<Checksum> officialChecksums = context.extractOfficialChecksums();
 
@@ -33,26 +25,22 @@ public class ChecksumChecking {
             }
         }
 
-        try {
-            CheckingResult result = new CheckingResult();
-            result.setIdentifier(context::getIdentification);
 
-            for (Future<CheckingChecksum> future : futureChecksums) {
-                CheckingChecksum checksum = future.get();
-                result.addChecksum(checksum);
-            }
 
-            LOGGER.info("The checksum checking is finished.");
-            return result;
-        } catch (Exception e) {
-            LOGGER.error("Failed to perform the checksum checking.", e);
-            throw new RuntimeException(e);
+        CheckingResult result = new CheckingResult();
+        result.setIdentifier(context::getIdentification);
+
+        for (Future<CheckingChecksum> future : futureChecksums) {
+            CheckingChecksum checksum = future.get();
+            result.addChecksum(checksum);
         }
+
+        return result;
     }
 
 
 
-    private CheckingChecksum generateChecksum(Checksum official, CheckingContext context) {
+    private CheckingChecksum generateChecksum(Checksum official, CheckingContext context) throws Exception {
         Checksum generated = context.generateChecksum(official.getAlgorithm());
 
         CheckingChecksum checksum = new CheckingChecksum();

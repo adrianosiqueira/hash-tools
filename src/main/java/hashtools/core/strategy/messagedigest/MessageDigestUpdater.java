@@ -10,5 +10,5 @@ public interface MessageDigestUpdater {
 
 
 
-    void update(MessageDigest messageDigest);
+    void update(MessageDigest messageDigest) throws Exception;
 }

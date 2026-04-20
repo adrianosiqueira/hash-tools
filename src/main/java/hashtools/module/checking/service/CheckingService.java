@@ -5,18 +5,9 @@ import hashtools.module.checking.facade.ChecksumChecking;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
 
-import java.io.Closeable;
-
-public class CheckingService implements Closeable {
+public class CheckingService {
 
     public CheckingService() {
-    }
-
-
-
-    @Override
-    @Deprecated(forRemoval = true)
-    public void close() {
     }
 
 

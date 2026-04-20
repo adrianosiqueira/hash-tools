@@ -55,7 +55,7 @@ public class ChecksumGenerationContext {
         return identifier.getIdentification();
     }
 
-    public Checksum generateChecksum(Algorithm algorithm) {
+    public Checksum generateChecksum(Algorithm algorithm) throws Exception {
         return generator.generate(algorithm, updater);
     }
 }
