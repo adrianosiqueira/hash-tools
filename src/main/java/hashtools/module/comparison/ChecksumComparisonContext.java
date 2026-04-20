@@ -1,7 +1,6 @@
 package hashtools.module.comparison;
 
 import hashtools.core.engine.ChecksumGenerator;
-import hashtools.core.event.HashToolsEvent;
 import hashtools.core.model.Algorithm;
 import hashtools.core.model.Checksum;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
@@ -9,7 +8,7 @@ import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
 
 import java.util.Optional;
 
-public class ChecksumComparisonContext implements HashToolsEvent {
+public class ChecksumComparisonContext {
 
     private Algorithm algorithm;
 

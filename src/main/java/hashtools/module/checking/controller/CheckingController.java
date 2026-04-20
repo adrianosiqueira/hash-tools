@@ -1,9 +1,6 @@
 package hashtools.module.checking.controller;
 
-import hashtools.Main;
-import hashtools.core.event.ExceptionThrownEvent;
-import hashtools.core.event.HashToolsEventBus;
-import hashtools.core.event.HashToolsEventListener;
+import hashtools.core.model.ThrowableWrapper;
 import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.FileChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.StringChecksumExtractor;
@@ -13,13 +10,13 @@ import hashtools.core.strategy.checksumidentifier.StringChecksumIdentifier;
 import hashtools.core.strategy.messagedigest.FileMessageDigestUpdater;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
 import hashtools.core.strategy.messagedigest.StringMessageDigestUpdater;
-import hashtools.module.checking.event.CheckingRequestedEvent;
-import hashtools.module.checking.event.CheckingResultFormattedEvent;
+import hashtools.module.checking.api.CheckingAPI;
 import hashtools.module.checking.model.CheckingContext;
-import hashtools.module.checking.service.CheckingService;
+import hashtools.module.checking.model.CheckingResult;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
+import hashtools.view.dialog.StackTraceDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -31,7 +28,6 @@ import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Closeable;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +35,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class CheckingController implements Closeable, Initializable {
+public class CheckingController implements Initializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckingController.class);
 
@@ -93,26 +89,13 @@ public class CheckingController implements Closeable, Initializable {
 
 
 
-    private HashToolsEventBus eventBus;
-    private HashToolsEventListener<CheckingResultFormattedEvent> formattedResultListener;
-    private HashToolsEventListener<ExceptionThrownEvent> exceptionListener;
-
-    private CheckingService checkingService;
+    private CheckingAPI checkingAPI;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        formattedResultListener = this::showResultScreen;
-        exceptionListener = this::showResultScreen;
-
-        eventBus = Main.getEventBus();
-        eventBus.register(CheckingResultFormattedEvent.class, formattedResultListener);
-        eventBus.register(ExceptionThrownEvent.class, exceptionListener);
-
-        checkingService = new CheckingService(eventBus);
-
-
+        this.checkingAPI = new CheckingAPI();
 
         btnInput
             .disableProperty()
@@ -121,14 +104,6 @@ public class CheckingController implements Closeable, Initializable {
         btnChecksum
             .disableProperty()
             .bind(chkChecksum.selectedProperty().not());
-    }
-
-    @Override
-    public void close() {
-        eventBus.unregister(CheckingResultFormattedEvent.class, formattedResultListener);
-        eventBus.unregister(ExceptionThrownEvent.class, exceptionListener);
-
-        checkingService.close();
     }
 
 
@@ -187,12 +162,29 @@ public class CheckingController implements Closeable, Initializable {
         LOGGER.debug("Using the '{}' as the ChecksumIdentifier.", identifier);
         LOGGER.debug("Using the '{}' as the ChecksumExtractor.", extractor);
 
+
+
         CheckingContext context = new CheckingContext();
         context.setUpdater(updater);
         context.setIdentifier(identifier);
         context.setExtractor(extractor);
 
-        eventBus.publish(new CheckingRequestedEvent(context));
+
+
+        try {
+            LOGGER.info("Performing checksum checking.");
+            CheckingResult result = checkingAPI.requestChecksumChecking(context);
+            String formattedResult = checkingAPI.requestResultFormatting(result);
+
+            this.showResultScreen(formattedResult);
+            LOGGER.info("Checksum checking finished.");
+        } catch (Exception e) {
+            ThrowableWrapper wrapper = new ThrowableWrapper(e);
+            String stackTrace = wrapper.getStackTrace();
+
+            this.showResultScreen(stackTrace);
+            LOGGER.error("Failed to perform checksum checking.", e);
+        }
     }
 
     @FXML
@@ -201,16 +193,6 @@ public class CheckingController implements Closeable, Initializable {
         pnlResult.setVisible(false);
 
         this.clearScreen();
-    }
-
-    private void showResultScreen(CheckingResultFormattedEvent event) {
-        String content = event.getContent();
-        this.showResultScreen(content);
-    }
-
-    private void showResultScreen(ExceptionThrownEvent event) {
-        String content = event.getStackTrace();
-        this.showResultScreen(content);
     }
 
     private void showResultScreen(String content) {
@@ -256,8 +238,12 @@ public class CheckingController implements Closeable, Initializable {
 
             LOGGER.info("Results saved to '{}'.", destination);
         } catch (Exception e) {
+            new StackTraceDialog()
+                .setTitle("Checking Result Saving")
+                .setThrowable(e)
+                .show();
+
             LOGGER.error("Failed to save the results to '{}'.", destination, e);
-            eventBus.publish(new ExceptionThrownEvent(e));
         }
     }
 }

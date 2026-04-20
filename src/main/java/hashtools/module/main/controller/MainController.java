@@ -1,6 +1,7 @@
 package hashtools.module.main.controller;
 
 import hashtools.view.dialog.MessageDialog;
+import hashtools.view.dialog.StackTraceDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,12 +10,10 @@ import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Closeable, Initializable {
+public class MainController implements Initializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
@@ -41,23 +40,9 @@ public class MainController implements Closeable, Initializable {
 
 
 
-    private Closeable currentOpenController;
-
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.currentOpenController = this::doNothing;
-        LOGGER.debug("Current open controller set to 'nothing'.");
-
         this.openCheckingScreen();
-    }
-
-    @Override
-    public void close() throws IOException {
-        // FIXME Maybe it is not necessary
-        currentOpenController.close();
-        LOGGER.debug("Closed the controller '{}'.", currentOpenController);
     }
 
 
@@ -98,26 +83,20 @@ public class MainController implements Closeable, Initializable {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
-
-            Pane screen = loader.load();
-            LOGGER.debug("Loaded screen '{}'.", location);
-
-            currentOpenController.close();
-            LOGGER.debug("Closed the controller '{}'.", currentOpenController);
-
-            currentOpenController = loader.getController();
-            LOGGER.debug("Current open controller set to '{}'.", currentOpenController);
+            loader.load();
 
             pnlContent
                 .getChildren()
-                .setAll(screen);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                .setAll(loader.<Pane>getRoot());
+
+            LOGGER.debug("Loaded screen '{}'.", location);
+        } catch (Exception e) {
+            new StackTraceDialog()
+                .setTitle("Screen Opening")
+                .setThrowable(e)
+                .show();
+
+            LOGGER.error("Failed to open screen '{}'.", path, e);
         }
-    }
-
-
-
-    private void doNothing() {
     }
 }
