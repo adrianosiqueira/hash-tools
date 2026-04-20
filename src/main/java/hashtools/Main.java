@@ -1,7 +1,7 @@
 package hashtools;
 
+import hashtools.core.event.EventService;
 import hashtools.core.event.HashToolsEventBus;
-import hashtools.service.EventService;
 import hashtools.view.ApplicationWindow;
 import javafx.application.Application;
 
