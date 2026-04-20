@@ -32,7 +32,7 @@ public class CheckingContext {
         return identifier.getIdentification();
     }
 
-    public List<Checksum> extractOfficialChecksums() {
+    public List<Checksum> extractOfficialChecksums() throws Exception {
         return extractor.extract();
     }
 

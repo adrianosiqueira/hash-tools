@@ -12,5 +12,5 @@ public interface ChecksumExtractor {
 
 
 
-    List<Checksum> extract();
+    List<Checksum> extract() throws Exception;
 }
