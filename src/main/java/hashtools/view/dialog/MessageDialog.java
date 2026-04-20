@@ -89,6 +89,7 @@ public class MessageDialog {
     private void createAndShowDialog(Consumer<Dialog<Void>> consumer) {
         Platform.runLater(() -> {
             Dialog<Void> dialog = new Dialog<>();
+            dialog.setResizable(true);
             dialog.setTitle(title);
             dialog.setContentText(message);
 
