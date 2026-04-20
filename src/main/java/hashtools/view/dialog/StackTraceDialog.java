@@ -23,6 +23,7 @@ public class StackTraceDialog {
 
 
     private String title;
+    private String message;
     private ThrowableWrapper throwable;
     private ButtonType[] buttons;
 
@@ -44,6 +45,14 @@ public class StackTraceDialog {
     public StackTraceDialog setTitle(String title) {
         this.title = Optional
             .ofNullable(title)
+            .orElse("");
+
+        return this;
+    }
+
+    public StackTraceDialog setMessage(String message) {
+        this.message = Optional
+            .ofNullable(message)
             .orElse("");
 
         return this;
@@ -97,8 +106,10 @@ public class StackTraceDialog {
 
         Platform.runLater(() -> {
             Dialog<Void> dialog = new Dialog<>();
+            dialog.setResizable(true);
             dialog.setTitle(title);
             dialog.setHeaderText(headerContent);
+            dialog.setContentText(message);
 
 
 

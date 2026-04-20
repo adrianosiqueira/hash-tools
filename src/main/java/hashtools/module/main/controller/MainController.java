@@ -78,6 +78,7 @@ public class MainController implements Initializable {
         } catch (Exception e) {
             new StackTraceDialog()
                 .setTitle("Screen Opening")
+                .setMessage("Failed to open the screen: " + location)
                 .setThrowable(e)
                 .show();
 

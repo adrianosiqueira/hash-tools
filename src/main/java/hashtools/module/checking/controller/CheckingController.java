@@ -240,6 +240,7 @@ public class CheckingController implements Initializable {
         } catch (Exception e) {
             new StackTraceDialog()
                 .setTitle("Checking Result Saving")
+                .setMessage("Failed to save the results into: " + destination)
                 .setThrowable(e)
                 .show();
 

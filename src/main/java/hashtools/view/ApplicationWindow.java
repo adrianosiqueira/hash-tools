@@ -29,6 +29,7 @@ public class ApplicationWindow extends Application {
         } catch (Exception e) {
             new StackTraceDialog()
                 .setTitle("HashTools")
+                .setMessage("Failed to load the main screen.")
                 .setThrowable(e)
                 .show();
 
