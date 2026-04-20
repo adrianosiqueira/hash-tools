@@ -2,8 +2,8 @@ package hashtools.module.main.controller;
 
 import hashtools.view.dialog.MessageDialog;
 import hashtools.view.dialog.StackTraceDialog;
+import hashtools.view.javafx.JavaFXLoader;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -68,27 +68,12 @@ public class MainController implements Initializable {
             .show();
     }
 
-    private void openScreen(String path) {
-        URL location = this
-            .getClass()
-            .getResource(path);
-
-        if (location == null) {
-            LOGGER.error("Location not found: '{}'.", path);
-            return;
-        }
-
-
-
+    private void openScreen(String location) {
         try {
-            FXMLLoader loader = new FXMLLoader();
+            JavaFXLoader loader = new JavaFXLoader();
             loader.setLocation(location);
             loader.load();
-
-            pnlContent
-                .getChildren()
-                .setAll(loader.<Pane>getRoot());
-
+            loader.consumeScreen(pnlContent.getChildren()::setAll);
             LOGGER.debug("Loaded screen '{}'.", location);
         } catch (Exception e) {
             new StackTraceDialog()
@@ -96,7 +81,7 @@ public class MainController implements Initializable {
                 .setThrowable(e)
                 .show();
 
-            LOGGER.error("Failed to open screen '{}'.", path, e);
+            LOGGER.error("Failed to open screen '{}'.", location, e);
         }
     }
 }

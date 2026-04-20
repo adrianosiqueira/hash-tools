@@ -1,16 +1,12 @@
 package hashtools.view;
 
 import hashtools.view.dialog.StackTraceDialog;
+import hashtools.view.javafx.JavaFXLoader;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 public class ApplicationWindow extends Application {
 
@@ -47,27 +43,13 @@ public class ApplicationWindow extends Application {
 
 
 
-    private Scene createScene(String screenPath, String resourcesBasename) throws Exception {
-        URL location = this
-            .getClass()
-            .getResource(screenPath);
-
-        ResourceBundle resources = Optional
-            .ofNullable(resourcesBasename)
-            .map(ResourceBundle::getBundle)
-            .orElse(null);
-
-
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(location);
-        loader.setResources(resources);
+    private Scene createScene(String screenLocation, String resourcesBaseName) throws Exception {
+        JavaFXLoader loader = new JavaFXLoader();
+        loader.setLocation(screenLocation);
+        loader.setResources(resourcesBaseName);
         loader.load();
 
-
-
-        return new Scene(
-            loader.getRoot(),
+        return loader.createScene(
             WIDTH,
             HEIGHT
         );
