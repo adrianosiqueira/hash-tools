@@ -5,21 +5,7 @@ import java.io.StringWriter;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class ThrowableWrapper {
-
-    private final Throwable throwable;
-
-
-
-    public ThrowableWrapper(Throwable throwable) {
-        this.throwable = throwable;
-    }
-
-
-
-    public Throwable getThrowable() {
-        return throwable;
-    }
+public record ThrowableWrapper(Throwable throwable) {
 
     public String getStackTrace() {
         Function<Throwable, String> stackTraceRetrieveFunction = throwable -> {

@@ -51,7 +51,7 @@ public class ChecksumGenerationContext {
         return algorithms;
     }
 
-    public String getIdentification() {
+    public String getIdentification() throws Exception {
         return identifier.getIdentification();
     }
 

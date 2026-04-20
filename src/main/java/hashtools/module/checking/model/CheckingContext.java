@@ -28,7 +28,7 @@ public class CheckingContext {
 
 
 
-    public String getIdentification() {
+    public String getIdentification() throws Exception {
         return identifier.getIdentification();
     }
 

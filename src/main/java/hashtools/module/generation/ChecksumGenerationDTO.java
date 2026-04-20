@@ -33,7 +33,7 @@ public class ChecksumGenerationDTO {
 
 
 
-    public String getIdentification() {
+    public String getIdentification() throws Exception {
         return identifier.getIdentification();
     }
 

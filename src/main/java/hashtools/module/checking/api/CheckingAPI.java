@@ -20,7 +20,7 @@ public class CheckingAPI {
         return checkingService.performChecksumChecking(context);
     }
 
-    public String requestResultFormatting(CheckingResult result) {
+    public String requestResultFormatting(CheckingResult result) throws Exception {
         return checkingService.performResultFormatting(result);
     }
 }

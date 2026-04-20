@@ -47,7 +47,7 @@ public class ChecksumComparisonDTO {
         return checksum.getHash();
     }
 
-    public String getIdentification() {
+    public String getIdentification() throws Exception {
         return identifier.getIdentification();
     }
 }

@@ -8,5 +8,5 @@ public interface ChecksumIdentifier {
 
 
 
-    String getIdentification();
+    String getIdentification() throws Exception;
 }

@@ -17,7 +17,7 @@ public class CheckingResultFormatting {
 
 
 
-    public String format(CheckingResult result) {
+    public String format(CheckingResult result) throws Exception {
         LOGGER.info("Starting to perform the result formatting.");
 
         HeaderFormatter formatter = new LeftAlignmentHeaderFormatter('.');

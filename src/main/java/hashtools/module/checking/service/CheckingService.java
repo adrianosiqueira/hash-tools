@@ -17,7 +17,7 @@ public class CheckingService {
         return checksumChecking.perform(context);
     }
 
-    public String performResultFormatting(CheckingResult result) {
+    public String performResultFormatting(CheckingResult result) throws Exception {
         CheckingResultFormatting resultFormatting = new CheckingResultFormatting();
         return resultFormatting.format(result);
     }

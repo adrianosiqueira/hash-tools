@@ -31,7 +31,7 @@ public class CheckingResult {
         this.invalidateReliability();
     }
 
-    public String getIdentification() {
+    public String getIdentification() throws Exception {
         return identifier.getIdentification();
     }
 

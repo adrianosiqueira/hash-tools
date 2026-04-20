@@ -65,11 +65,11 @@ public class ChecksumComparisonContext {
 
 
 
-    public String getIdentification1() {
+    public String getIdentification1() throws Exception {
         return identifier1.getIdentification();
     }
 
-    public String getIdentification2() {
+    public String getIdentification2() throws Exception {
         return identifier2.getIdentification();
     }
 
