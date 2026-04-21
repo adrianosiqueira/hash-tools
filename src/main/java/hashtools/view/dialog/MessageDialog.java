@@ -1,38 +1,39 @@
 package hashtools.view.dialog;
 
+import hashtools.core.model.ThrowableWrapper;
 import javafx.application.Platform;
+import javafx.geometry.Dimension2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.TextArea;
+import javafx.stage.Screen;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 public class MessageDialog {
 
-    private static final ButtonType[] DEFAULT_BUTTONS_SELECTION = new ButtonType[]{
-        ButtonType.OK
-    };
-
-
-
     private String title;
+    private String header;
     private String message;
-    private ButtonType[] buttons;
+
+    private ThrowableWrapper throwable;
+    private boolean shouldShowStackTrace;
 
     private int autoCloseTime;
-    private TimeUnit autoCloseUnit;
+    private TimeUnit autoCloseTimeUnit;
     private boolean shouldAutoClose;
 
 
 
     public MessageDialog() {
         this.setTitle(null);
+        this.setHeader(null);
         this.setMessage(null);
-        this.setButtons(null);
-        this.setAutoclose(0, null);
+        this.setThrowable((ThrowableWrapper) null);
+        this.setAutoClose(0, null);
     }
 
 
@@ -45,32 +46,43 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog setMessage(String message) {
-        this.message = Optional
-            .ofNullable(message)
+    public MessageDialog setHeader(String header) {
+        this.header = Optional
+            .ofNullable(header)
             .orElse("");
 
         return this;
     }
 
-    public MessageDialog setButtons(ButtonType[] buttons) {
-        this.buttons = Optional
-            .ofNullable(buttons)
-            .map(this::sanitizeButtons)
-            .orElse(DEFAULT_BUTTONS_SELECTION);
+    public MessageDialog setMessage(String message) {
+        this.message = Optional
+            .ofNullable(message)
+            .orElse("");
+        this.shouldShowStackTrace = false;
 
         return this;
     }
 
-    public MessageDialog setAutoclose(int autoCloseTime, TimeUnit autoCloseUnit) {
-        if (autoCloseUnit == null) {
-            this.shouldAutoClose = false;
-            return this;
-        }
+    public MessageDialog setThrowable(ThrowableWrapper throwable) {
+        this.throwable = throwable;
+        this.shouldShowStackTrace = throwable != null;
 
-        this.autoCloseTime = Math.abs(autoCloseTime);
-        this.autoCloseUnit = autoCloseUnit;
-        this.shouldAutoClose = true;
+        return this;
+    }
+
+    public MessageDialog setThrowable(Throwable throwable) {
+        ThrowableWrapper wrapper = Optional
+            .ofNullable(throwable)
+            .map(ThrowableWrapper::new)
+            .orElse(null);
+
+        return this.setThrowable(wrapper);
+    }
+
+    public MessageDialog setAutoClose(int autoCloseTime, TimeUnit autoCloseTimeUnit) {
+        this.autoCloseTime = autoCloseTime;
+        this.autoCloseTimeUnit = autoCloseTimeUnit;
+        this.shouldAutoClose = autoCloseTimeUnit != null;
 
         return this;
     }
@@ -81,59 +93,87 @@ public class MessageDialog {
         this.createAndShowDialog(Dialog::show);
     }
 
-    public void showAndWait() {
-        // FIXME It does not wait because the show command is being called in a different thread than the other task.
-        this.createAndShowDialog(Dialog::showAndWait);
+
+
+    private void createAndShowDialog(Consumer<Dialog<?>> showCommand) {
+        Dialog<?> dialog = new Dialog<>();
+        dialog.setResizable(true);
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+
+
+
+        String content = shouldShowStackTrace
+            ? throwable.getStackTrace()
+            : message;
+
+        String style = """
+            -fx-background-color: white;
+            -fx-border-color: transparent;
+            -fx-border-width: 0;
+            """;
+
+        TextArea txtContent = new TextArea();
+        txtContent.setEditable(false);
+        txtContent.setText(content);
+        txtContent.setStyle(style);
+
+        dialog
+            .getDialogPane()
+            .setContent(txtContent);
+
+
+
+        dialog
+            .getDialogPane()
+            .getButtonTypes()
+            .setAll(ButtonType.OK);
+
+
+
+        Dimension2D dimension = this.calculateDimension();
+        dialog.setWidth(dimension.getWidth());
+        dialog.setHeight(dimension.getHeight());
+
+
+
+        showCommand.accept(dialog);
+
+
+
+        if (shouldAutoClose) {
+            Runnable closeDialog = () -> {
+                try {
+                    autoCloseTimeUnit.sleep(autoCloseTime);
+                    Platform.runLater(dialog::close);
+                } catch (Exception ignored) {}
+            };
+
+            Thread
+                .ofPlatform()
+                .daemon()
+                .start(closeDialog);
+        }
     }
 
-    private void createAndShowDialog(Consumer<Dialog<Void>> consumer) {
-        Platform.runLater(() -> {
-            Dialog<Void> dialog = new Dialog<>();
-            dialog.setResizable(true);
-            dialog.setTitle(title);
-            dialog.setContentText(message);
+    private Dimension2D calculateDimension() {
+        Rectangle2D screen = Screen
+            .getPrimary()
+            .getBounds();
 
-            dialog
-                .getDialogPane()
-                .getButtonTypes()
-                .setAll(buttons);
+        double width = screen
+            .getWidth()
+            * 0.25;
 
-            consumer.accept(dialog);
-
-
-
-            if (shouldAutoClose) {
-                this.closeDialogAfterTime(dialog);
-            }
-        });
-    }
+        double height = screen
+            .getHeight()
+            * 0.25;
 
 
 
-    private ButtonType[] sanitizeButtons(ButtonType[] buttons) {
-        ButtonType[] sanitizedButtons = Stream
-            .of(buttons)
-            .filter(Objects::nonNull)
-            .toArray(ButtonType[]::new);
-
-
-        return sanitizedButtons.length != 0
-            ? sanitizedButtons
-            : DEFAULT_BUTTONS_SELECTION;
-    }
-
-    private void closeDialogAfterTime(Dialog<?> dialog) {
-        Runnable autoCloseTask = () -> {
-            try {
-                autoCloseUnit.sleep(autoCloseTime);
-                Platform.runLater(dialog::close);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        };
-
-        Thread autoCloseThread = new Thread(autoCloseTask);
-        autoCloseThread.setDaemon(true);
-        autoCloseThread.start();
+        return new Dimension2D(
+            width,
+            height
+        );
     }
 }
