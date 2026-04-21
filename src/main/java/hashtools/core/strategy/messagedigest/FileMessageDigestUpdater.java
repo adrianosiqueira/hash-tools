@@ -29,6 +29,13 @@ public class FileMessageDigestUpdater implements MessageDigestUpdater {
     @Override
     public void update(MessageDigest messageDigest) throws Exception {
         Path file = Path.of(filePath);
+
+        if (Files.isDirectory(file)) {
+            throw new IllegalArgumentException("The path is a directory: " + file.toAbsolutePath());
+        }
+
+
+
         byte[] buffer = new byte[ONE_MEBIBYTE];
         int read;
 
