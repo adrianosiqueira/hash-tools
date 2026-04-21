@@ -16,7 +16,6 @@ import hashtools.module.checking.model.CheckingResult;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
-import hashtools.view.dialog.StackTraceDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -238,9 +237,9 @@ public class CheckingController implements Initializable {
 
             LOGGER.info("Results saved to '{}'.", destination);
         } catch (Exception e) {
-            new StackTraceDialog()
+            new MessageDialog()
                 .setTitle("Checking Result Saving")
-                .setMessage("Failed to save the results into: " + destination)
+                .setHeader("Failed to save the results into: " + destination)
                 .setThrowable(e)
                 .show();
 

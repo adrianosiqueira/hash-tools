@@ -1,7 +1,6 @@
 package hashtools.module.main.controller;
 
 import hashtools.view.dialog.MessageDialog;
-import hashtools.view.dialog.StackTraceDialog;
 import hashtools.view.javafx.JavaFXLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -76,9 +75,9 @@ public class MainController implements Initializable {
             loader.consumeScreen(pnlContent.getChildren()::setAll);
             LOGGER.debug("Loaded screen '{}'.", location);
         } catch (Exception e) {
-            new StackTraceDialog()
+            new MessageDialog()
                 .setTitle("Screen Opening")
-                .setMessage("Failed to open the screen: " + location)
+                .setHeader("Failed to open the screen: " + location)
                 .setThrowable(e)
                 .show();
 

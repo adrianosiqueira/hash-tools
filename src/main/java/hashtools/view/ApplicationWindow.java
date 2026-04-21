@@ -1,6 +1,6 @@
 package hashtools.view;
 
-import hashtools.view.dialog.StackTraceDialog;
+import hashtools.view.dialog.MessageDialog;
 import hashtools.view.javafx.JavaFXLoader;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -27,9 +27,9 @@ public class ApplicationWindow extends Application {
 
             stage.setScene(scene);
         } catch (Exception e) {
-            new StackTraceDialog()
+            new MessageDialog()
                 .setTitle("HashTools")
-                .setMessage("Failed to load the main screen.")
+                .setHeader("Failed to load the main screen.")
                 .setThrowable(e)
                 .show();
 
