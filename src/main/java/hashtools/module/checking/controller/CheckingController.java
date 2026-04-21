@@ -1,6 +1,5 @@
 package hashtools.module.checking.controller;
 
-import hashtools.core.model.ThrowableWrapper;
 import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.FileChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.StringChecksumExtractor;
@@ -145,6 +144,8 @@ public class CheckingController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
+        // TODO Perform input validation before proceeding
+
         MessageDigestUpdater updater = chkInput.isSelected()
             ? new FileMessageDigestUpdater(txtInput.getText())
             : new StringMessageDigestUpdater(txtInput.getText());
@@ -178,10 +179,11 @@ public class CheckingController implements Initializable {
             this.showResultScreen(formattedResult);
             LOGGER.info("Checksum checking finished.");
         } catch (Exception e) {
-            ThrowableWrapper wrapper = new ThrowableWrapper(e);
-            String stackTrace = wrapper.getStackTrace();
-
-            this.showResultScreen(stackTrace);
+            new MessageDialog()
+                .setTitle("Checksum Checking")
+                .setHeader("Failed to perform the checksum checking.")
+                .setThrowable(e)
+                .show();
             LOGGER.error("Failed to perform checksum checking.", e);
         }
     }
