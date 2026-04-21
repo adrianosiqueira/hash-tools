@@ -22,6 +22,7 @@ module hash.tools {
     exports hashtools.module.main.controller;
     exports hashtools.view;
     exports hashtools.view.dialog;
+    exports hashtools.view.javafx;
 
     opens hashtools;
     opens hashtools.core.engine;
@@ -41,4 +42,5 @@ module hash.tools {
     opens hashtools.module.main.controller;
     opens hashtools.view;
     opens hashtools.view.dialog;
+    opens hashtools.view.javafx;
 }
