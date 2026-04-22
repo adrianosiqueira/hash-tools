@@ -142,17 +142,7 @@ public class MessageDialog {
 
 
         if (shouldAutoClose) {
-            Runnable closeDialog = () -> {
-                try {
-                    autoCloseTimeUnit.sleep(autoCloseTime);
-                    Platform.runLater(dialog::close);
-                } catch (Exception ignored) {}
-            };
-
-            Thread
-                .ofPlatform()
-                .daemon()
-                .start(closeDialog);
+            this.scheduleDialogClosing(dialog);
         }
     }
 
@@ -175,5 +165,19 @@ public class MessageDialog {
             width,
             height
         );
+    }
+
+    private void scheduleDialogClosing(Dialog<?> dialog) {
+        Runnable closeDialog = () -> {
+            try {
+                autoCloseTimeUnit.sleep(autoCloseTime);
+                Platform.runLater(dialog::close);
+            } catch (Exception ignored) {}
+        };
+
+        Thread
+            .ofPlatform()
+            .daemon()
+            .start(closeDialog);
     }
 }
