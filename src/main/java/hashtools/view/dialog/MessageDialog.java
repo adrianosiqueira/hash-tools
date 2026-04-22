@@ -21,7 +21,6 @@ public class MessageDialog {
 
     private int autoCloseTime;
     private TimeUnit autoCloseTimeUnit;
-    private boolean shouldAutoClose;
 
 
 
@@ -29,7 +28,7 @@ public class MessageDialog {
         this.withTitle(null);
         this.withHeader(null);
         this.setContent(null);
-        this.withAutoClose(0, null);
+        this.setAutoClose(0, null);
     }
 
 
@@ -79,17 +78,32 @@ public class MessageDialog {
     }
 
     public MessageDialog withAutoClose(int autoCloseTime, TimeUnit autoCloseTimeUnit) {
-        this.autoCloseTime = autoCloseTime;
-        this.autoCloseTimeUnit = autoCloseTimeUnit;
-        this.shouldAutoClose = autoCloseTimeUnit != null;
+        if (autoCloseTimeUnit == null) {
+            return this;
+        }
 
+
+
+        this.setAutoClose(autoCloseTime, autoCloseTimeUnit);
         return this;
     }
+
+
 
     private void setContent(String content) {
         this.content = Optional
             .ofNullable(content)
             .orElse("");
+    }
+
+    private void setAutoClose(int autoCloseTime, TimeUnit autoCloseTimeUnit) {
+        this.autoCloseTime = autoCloseTime > 0
+            ? autoCloseTime
+            : Integer.MAX_VALUE;
+
+        this.autoCloseTimeUnit = Optional
+            .ofNullable(autoCloseTimeUnit)
+            .orElse(TimeUnit.DAYS);
     }
 
 
@@ -139,12 +153,7 @@ public class MessageDialog {
 
 
         showCommand.accept(dialog);
-
-
-
-        if (shouldAutoClose) {
-            this.scheduleDialogClosing(dialog);
-        }
+        this.scheduleDialogClosing(dialog);
     }
 
     private Dimension2D calculateDimension() {
