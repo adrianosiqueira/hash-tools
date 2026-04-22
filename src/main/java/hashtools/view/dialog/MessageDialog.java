@@ -17,10 +17,7 @@ public class MessageDialog {
 
     private String title;
     private String header;
-    private String message;
-
-    private ThrowableWrapper throwable;
-    private boolean shouldShowStackTrace;
+    private String content;
 
     private int autoCloseTime;
     private TimeUnit autoCloseTimeUnit;
@@ -31,8 +28,7 @@ public class MessageDialog {
     public MessageDialog() {
         this.setTitle(null);
         this.setHeader(null);
-        this.setMessage(null);
-        this.setThrowable((ThrowableWrapper) null);
+        this.setContent(null);
         this.setAutoClose(0, null);
     }
 
@@ -55,28 +51,30 @@ public class MessageDialog {
     }
 
     public MessageDialog setMessage(String message) {
-        this.message = Optional
+        Optional
             .ofNullable(message)
-            .orElse("");
-        this.shouldShowStackTrace = false;
+            .filter(m -> !m.isBlank())
+            .ifPresent(this::setContent);
 
         return this;
     }
 
     public MessageDialog setThrowable(ThrowableWrapper throwable) {
-        this.throwable = throwable;
-        this.shouldShowStackTrace = throwable != null;
+        Optional
+            .ofNullable(throwable)
+            .map(ThrowableWrapper::getStackTrace)
+            .ifPresent(this::setContent);
 
         return this;
     }
 
     public MessageDialog setThrowable(Throwable throwable) {
-        ThrowableWrapper wrapper = Optional
+        Optional
             .ofNullable(throwable)
             .map(ThrowableWrapper::new)
-            .orElse(null);
+            .ifPresent(this::setThrowable);
 
-        return this.setThrowable(wrapper);
+        return this;
     }
 
     public MessageDialog setAutoClose(int autoCloseTime, TimeUnit autoCloseTimeUnit) {
@@ -87,10 +85,16 @@ public class MessageDialog {
         return this;
     }
 
+    private void setContent(String content) {
+        this.content = Optional
+            .ofNullable(content)
+            .orElse("");
+    }
+
 
 
     public void show() {
-        this.createAndShowDialog(Dialog::show);
+        Platform.runLater(() -> this.createAndShowDialog(Dialog::show));
     }
 
 
@@ -102,10 +106,6 @@ public class MessageDialog {
         dialog.setHeaderText(header);
 
 
-
-        String content = shouldShowStackTrace
-            ? throwable.getStackTrace()
-            : message;
 
         String style = """
             -fx-background-color: white;
