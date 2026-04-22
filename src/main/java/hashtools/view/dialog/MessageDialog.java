@@ -26,15 +26,15 @@ public class MessageDialog {
 
 
     public MessageDialog() {
-        this.setTitle(null);
-        this.setHeader(null);
+        this.withTitle(null);
+        this.withHeader(null);
         this.setContent(null);
-        this.setAutoClose(0, null);
+        this.withAutoClose(0, null);
     }
 
 
 
-    public MessageDialog setTitle(String title) {
+    public MessageDialog withTitle(String title) {
         this.title = Optional
             .ofNullable(title)
             .orElse("");
@@ -42,7 +42,7 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog setHeader(String header) {
+    public MessageDialog withHeader(String header) {
         this.header = Optional
             .ofNullable(header)
             .orElse("");
@@ -50,7 +50,7 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog setMessage(String message) {
+    public MessageDialog withMessage(String message) {
         Optional
             .ofNullable(message)
             .filter(m -> !m.isBlank())
@@ -59,7 +59,7 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog setThrowable(ThrowableWrapper throwable) {
+    public MessageDialog withThrowable(ThrowableWrapper throwable) {
         Optional
             .ofNullable(throwable)
             .map(ThrowableWrapper::getStackTrace)
@@ -68,16 +68,16 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog setThrowable(Throwable throwable) {
+    public MessageDialog withThrowable(Throwable throwable) {
         Optional
             .ofNullable(throwable)
             .map(ThrowableWrapper::new)
-            .ifPresent(this::setThrowable);
+            .ifPresent(this::withThrowable);
 
         return this;
     }
 
-    public MessageDialog setAutoClose(int autoCloseTime, TimeUnit autoCloseTimeUnit) {
+    public MessageDialog withAutoClose(int autoCloseTime, TimeUnit autoCloseTimeUnit) {
         this.autoCloseTime = autoCloseTime;
         this.autoCloseTimeUnit = autoCloseTimeUnit;
         this.shouldAutoClose = autoCloseTimeUnit != null;

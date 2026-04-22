@@ -180,9 +180,9 @@ public class CheckingController implements Initializable {
             LOGGER.info("Checksum checking finished.");
         } catch (Exception e) {
             new MessageDialog()
-                .setTitle("Checksum Checking")
-                .setHeader("Failed to perform the checksum checking.")
-                .setThrowable(e)
+                .withTitle("Checksum Checking")
+                .withHeader("Failed to perform the checksum checking.")
+                .withThrowable(e)
                 .show();
             LOGGER.error("Failed to perform checksum checking.", e);
         }
@@ -233,16 +233,16 @@ public class CheckingController implements Initializable {
             );
 
             new MessageDialog()
-                .setTitle("Checksum Checking")
-                .setMessage("Results saved in: " + destination)
+                .withTitle("Checksum Checking")
+                .withMessage("Results saved in: " + destination)
                 .show();
 
             LOGGER.info("Results saved to '{}'.", destination);
         } catch (Exception e) {
             new MessageDialog()
-                .setTitle("Checking Result Saving")
-                .setHeader("Failed to save the results into: " + destination)
-                .setThrowable(e)
+                .withTitle("Checking Result Saving")
+                .withHeader("Failed to save the results into: " + destination)
+                .withThrowable(e)
                 .show();
 
             LOGGER.error("Failed to save the results to '{}'.", destination, e);

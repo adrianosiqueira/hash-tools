@@ -28,9 +28,9 @@ public class ApplicationWindow extends Application {
             stage.setScene(scene);
         } catch (Exception e) {
             new MessageDialog()
-                .setTitle("HashTools")
-                .setHeader("Failed to load the main screen.")
-                .setThrowable(e)
+                .withTitle("HashTools")
+                .withHeader("Failed to load the main screen.")
+                .withThrowable(e)
                 .show();
 
             LOGGER.error("Failed to load the main screen.", e);

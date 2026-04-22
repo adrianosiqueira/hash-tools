@@ -54,16 +54,16 @@ public class MainController implements Initializable {
     @FXML
     private void openGenerationScreen() {
         new MessageDialog()
-            .setTitle("Main Screen")
-            .setMessage("It is not implemented yet.")
+            .withTitle("Main Screen")
+            .withMessage("It is not implemented yet.")
             .show();
     }
 
     @FXML
     private void openComparisonScreen() {
         new MessageDialog()
-            .setTitle("Main Screen")
-            .setMessage("It is not implemented yet.")
+            .withTitle("Main Screen")
+            .withMessage("It is not implemented yet.")
             .show();
     }
 
@@ -76,9 +76,9 @@ public class MainController implements Initializable {
             LOGGER.debug("Loaded screen '{}'.", location);
         } catch (Exception e) {
             new MessageDialog()
-                .setTitle("Screen Opening")
-                .setHeader("Failed to open the screen: " + location)
-                .setThrowable(e)
+                .withTitle("Screen Opening")
+                .withHeader("Failed to open the screen: " + location)
+                .withThrowable(e)
                 .show();
 
             LOGGER.error("Failed to open screen '{}'.", location, e);
