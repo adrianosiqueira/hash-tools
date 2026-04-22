@@ -50,7 +50,7 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog withMessage(String message) {
+    public MessageDialog withContent(String message) {
         Optional
             .ofNullable(message)
             .filter(m -> !m.isBlank())
@@ -59,7 +59,7 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog withThrowable(ThrowableWrapper throwable) {
+    public MessageDialog withContent(ThrowableWrapper throwable) {
         Optional
             .ofNullable(throwable)
             .map(ThrowableWrapper::getStackTrace)
@@ -68,11 +68,12 @@ public class MessageDialog {
         return this;
     }
 
-    public MessageDialog withThrowable(Throwable throwable) {
+    public MessageDialog withContent(Throwable throwable) {
         Optional
             .ofNullable(throwable)
             .map(ThrowableWrapper::new)
-            .ifPresent(this::withThrowable);
+            .map(ThrowableWrapper::getStackTrace)
+            .ifPresent(this::setContent);
 
         return this;
     }

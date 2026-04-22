@@ -55,7 +55,7 @@ public class MainController implements Initializable {
     private void openGenerationScreen() {
         new MessageDialog()
             .withTitle("Main Screen")
-            .withMessage("It is not implemented yet.")
+            .withContent("It is not implemented yet.")
             .show();
     }
 
@@ -63,7 +63,7 @@ public class MainController implements Initializable {
     private void openComparisonScreen() {
         new MessageDialog()
             .withTitle("Main Screen")
-            .withMessage("It is not implemented yet.")
+            .withContent("It is not implemented yet.")
             .show();
     }
 
@@ -78,7 +78,7 @@ public class MainController implements Initializable {
             new MessageDialog()
                 .withTitle("Screen Opening")
                 .withHeader("Failed to open the screen: " + location)
-                .withThrowable(e)
+                .withContent(e)
                 .show();
 
             LOGGER.error("Failed to open screen '{}'.", location, e);

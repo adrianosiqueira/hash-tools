@@ -30,7 +30,7 @@ public class ApplicationWindow extends Application {
             new MessageDialog()
                 .withTitle("HashTools")
                 .withHeader("Failed to load the main screen.")
-                .withThrowable(e)
+                .withContent(e)
                 .show();
 
             LOGGER.error("Failed to load the main screen.", e);
