@@ -4,6 +4,7 @@ import javafx.stage.FileChooser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public enum FileExtension {
 
@@ -49,7 +50,23 @@ public enum FileExtension {
 
 
 
+    public boolean containsExtension(String extension) {
+        if (extension == null) {
+            return false;
+        }
+
+        return Stream
+            .of(extensions)
+            .map(s -> s.substring(2))
+            .anyMatch(extension::equalsIgnoreCase);
+    }
+
+
+
     private FileChooser.ExtensionFilter getFilter() {
-        return new FileChooser.ExtensionFilter(displayName, extensions);
+        return new FileChooser.ExtensionFilter(
+            displayName,
+            extensions
+        );
     }
 }
