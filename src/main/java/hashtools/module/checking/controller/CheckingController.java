@@ -162,33 +162,9 @@ public class CheckingController implements Initializable {
 
 
 
-        MessageDigestUpdater updater = chkInput.isSelected()
-            ? new FileMessageDigestUpdater(txtInput.getText())
-            : new StringMessageDigestUpdater(txtInput.getText());
-
-        ChecksumIdentifier identifier = chkInput.isSelected()
-            ? new FileChecksumIdentifier(txtInput.getText())
-            : new StringChecksumIdentifier(txtInput.getText());
-
-        ChecksumExtractor extractor = chkChecksum.isSelected()
-            ? new FileChecksumExtractor(txtChecksum.getText())
-            : new StringChecksumExtractor(txtChecksum.getText());
-
-        LOGGER.debug("Using the '{}' as the MessageDigestUpdater.", updater);
-        LOGGER.debug("Using the '{}' as the ChecksumIdentifier.", identifier);
-        LOGGER.debug("Using the '{}' as the ChecksumExtractor.", extractor);
-
-
-
-        CheckingContext context = new CheckingContext();
-        context.setUpdater(updater);
-        context.setIdentifier(identifier);
-        context.setExtractor(extractor);
-
-
-
         try {
             LOGGER.info("Performing checksum checking.");
+            CheckingContext context = this.createCheckingContext();
             CheckingResult result = checkingAPI.requestChecksumChecking(context);
             String formattedResult = checkingAPI.requestResultFormatting(result);
 
@@ -275,5 +251,32 @@ public class CheckingController implements Initializable {
         screenInput.setUsingChecksumFile(chkChecksum.isSelected());
 
         return screenInput;
+    }
+
+    private CheckingContext createCheckingContext() {
+        MessageDigestUpdater updater = chkInput.isSelected()
+            ? new FileMessageDigestUpdater(txtInput.getText())
+            : new StringMessageDigestUpdater(txtInput.getText());
+
+        ChecksumIdentifier identifier = chkInput.isSelected()
+            ? new FileChecksumIdentifier(txtInput.getText())
+            : new StringChecksumIdentifier(txtInput.getText());
+
+        ChecksumExtractor extractor = chkChecksum.isSelected()
+            ? new FileChecksumExtractor(txtChecksum.getText())
+            : new StringChecksumExtractor(txtChecksum.getText());
+
+        LOGGER.debug("Using the '{}' as the MessageDigestUpdater.", updater);
+        LOGGER.debug("Using the '{}' as the ChecksumIdentifier.", identifier);
+        LOGGER.debug("Using the '{}' as the ChecksumExtractor.", extractor);
+
+
+
+        CheckingContext context = new CheckingContext();
+        context.setUpdater(updater);
+        context.setIdentifier(identifier);
+        context.setExtractor(extractor);
+
+        return context;
     }
 }
