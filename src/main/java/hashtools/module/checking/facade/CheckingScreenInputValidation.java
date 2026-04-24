@@ -1,16 +1,16 @@
 package hashtools.module.checking.facade;
 
+import hashtools.core.model.InputValidationException;
 import hashtools.module.checking.model.CheckingScreenInput;
-import hashtools.module.checking.model.CheckingScreenInputValidationResult;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class CheckingScreenInputValidation {
 
-    public CheckingScreenInputValidationResult validate(CheckingScreenInput input) {
+    public void validate(CheckingScreenInput input) throws InputValidationException {
         if (input == null) {
-            return CheckingScreenInputValidationResult.issue("The screen input is null.");
+            throw new InputValidationException("The screen input is null.");
         }
 
 
@@ -19,7 +19,7 @@ public class CheckingScreenInputValidation {
             Path file = input.getInputFile();
 
             if (!Files.isRegularFile(file)) {
-                return CheckingScreenInputValidationResult.issue("The input is not a file.");
+                throw new InputValidationException("The input is not a file.");
             }
         }
 
@@ -29,7 +29,7 @@ public class CheckingScreenInputValidation {
             boolean isChecksumFile = input.checksumFileHasValidExtension();
 
             if (!isChecksumFile) {
-                return CheckingScreenInputValidationResult.issue("The file is not a checksum file.");
+                throw new InputValidationException("The file is not a checksum file.");
             }
 
 
@@ -37,12 +37,8 @@ public class CheckingScreenInputValidation {
             Path file = input.getChecksumFile();
 
             if (Files.notExists(file)) {
-                return CheckingScreenInputValidationResult.issue("The checksum file does not exist.");
+                throw new InputValidationException("The checksum file does not exist.");
             }
         }
-
-
-
-        return CheckingScreenInputValidationResult.valid();
     }
 }

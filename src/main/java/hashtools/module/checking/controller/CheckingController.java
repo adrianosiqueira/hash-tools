@@ -1,5 +1,6 @@
 package hashtools.module.checking.controller;
 
+import hashtools.core.model.InputValidationException;
 import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.FileChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.StringChecksumExtractor;
@@ -13,7 +14,6 @@ import hashtools.module.checking.api.CheckingAPI;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
 import hashtools.module.checking.model.CheckingScreenInput;
-import hashtools.module.checking.model.CheckingScreenInputValidationResult;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
@@ -146,23 +146,14 @@ public class CheckingController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
-        CheckingScreenInput screenInput = this.collectScreenInput();
-        CheckingScreenInputValidationResult validationResult = checkingAPI.requestInputValidation(screenInput);
-
-        if (!validationResult.isValid()) {
-            new MessageDialog()
-                .withTitle("User Input Validation")
-                .withContent(validationResult.getMessage())
-                .show();
-            LOGGER.warn("Validation failure: {}", validationResult.getMessage());
-            return;
-        }
-
-        LOGGER.debug("User input is valid.");
-
-
-
         try {
+            LOGGER.info("Validating the input data.");
+            CheckingScreenInput screenInput = this.collectScreenInput();
+            checkingAPI.requestInputValidation(screenInput);
+            LOGGER.info("The input data is valid.");
+
+
+
             LOGGER.info("Performing checksum checking.");
             CheckingContext context = this.createCheckingContext();
             CheckingResult result = checkingAPI.requestChecksumChecking(context);
@@ -170,6 +161,13 @@ public class CheckingController implements Initializable {
 
             this.showResultScreen(formattedResult);
             LOGGER.info("Checksum checking finished.");
+        } catch (InputValidationException e) {
+            new MessageDialog()
+                .withTitle("Checksum Checking")
+                .withHeader("Data validation")
+                .withContent(e.getMessage())
+                .show();
+            LOGGER.error("Validation failed: {}", e.getMessage());
         } catch (Exception e) {
             new MessageDialog()
                 .withTitle("Checksum Checking")
