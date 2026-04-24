@@ -2,6 +2,8 @@ package hashtools.module.checking.api;
 
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
+import hashtools.module.checking.model.CheckingScreenInput;
+import hashtools.module.checking.model.CheckingScreenInputValidationResult;
 import hashtools.module.checking.service.CheckingService;
 
 public class CheckingAPI {
@@ -15,6 +17,10 @@ public class CheckingAPI {
     }
 
 
+
+    public CheckingScreenInputValidationResult requestInputValidation(CheckingScreenInput input) {
+        return checkingService.performInputValidation(input);
+    }
 
     public CheckingResult requestChecksumChecking(CheckingContext context) throws Exception {
         return checkingService.performChecksumChecking(context);

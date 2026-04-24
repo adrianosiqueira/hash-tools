@@ -12,6 +12,8 @@ import hashtools.core.strategy.messagedigest.StringMessageDigestUpdater;
 import hashtools.module.checking.api.CheckingAPI;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
+import hashtools.module.checking.model.CheckingScreenInput;
+import hashtools.module.checking.model.CheckingScreenInputValidationResult;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
@@ -144,7 +146,21 @@ public class CheckingController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
-        // TODO Perform input validation before proceeding
+        CheckingScreenInput screenInput = this.collectScreenInput();
+        CheckingScreenInputValidationResult validationResult = checkingAPI.requestInputValidation(screenInput);
+
+        if (!validationResult.isValid()) {
+            new MessageDialog()
+                .withTitle("User Input Validation")
+                .withContent(validationResult.getMessage())
+                .show();
+            LOGGER.warn("Validation failure: {}", validationResult.getMessage());
+            return;
+        }
+
+        LOGGER.debug("User input is valid.");
+
+
 
         MessageDigestUpdater updater = chkInput.isSelected()
             ? new FileMessageDigestUpdater(txtInput.getText())
@@ -196,13 +212,6 @@ public class CheckingController implements Initializable {
         this.clearScreen();
     }
 
-    private void showResultScreen(String content) {
-        pnlForm.setVisible(false);
-        pnlResult.setVisible(true);
-
-        txtResult.setText(content);
-    }
-
     @FXML
     private void saveResult() {
         Optional<Path> selectedFile = new FileDialog()
@@ -247,5 +256,24 @@ public class CheckingController implements Initializable {
 
             LOGGER.error("Failed to save the results to '{}'.", destination, e);
         }
+    }
+
+
+
+    private void showResultScreen(String content) {
+        pnlForm.setVisible(false);
+        pnlResult.setVisible(true);
+
+        txtResult.setText(content);
+    }
+
+    private CheckingScreenInput collectScreenInput() {
+        CheckingScreenInput screenInput = new CheckingScreenInput();
+        screenInput.setInput(txtInput.getText());
+        screenInput.setUsingInputFile(chkInput.isSelected());
+        screenInput.setChecksum(txtChecksum.getText());
+        screenInput.setUsingChecksumFile(chkChecksum.isSelected());
+
+        return screenInput;
     }
 }
