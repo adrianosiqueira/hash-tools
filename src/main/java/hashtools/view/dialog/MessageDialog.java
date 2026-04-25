@@ -10,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Screen;
 
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -109,7 +110,34 @@ public class MessageDialog {
 
 
     public void show() {
+        if (Platform.isFxApplicationThread()) {
+            this.createAndShowDialog(Dialog::show);
+            return;
+        }
+
+
+
         Platform.runLater(() -> this.createAndShowDialog(Dialog::show));
+    }
+
+    public void showAndWait() {
+        if (Platform.isFxApplicationThread()) {
+            this.createAndShowDialog(Dialog::showAndWait);
+            return;
+        }
+
+
+
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        Platform.runLater(() -> {
+            this.createAndShowDialog(Dialog::showAndWait);
+            countDownLatch.countDown();
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException ignored) {}
     }
 
 
