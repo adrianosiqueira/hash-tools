@@ -1,12 +1,12 @@
 package hashtools.module.checking.service;
 
-import hashtools.core.model.InputValidationException;
 import hashtools.module.checking.facade.CheckingResultFormatting;
 import hashtools.module.checking.facade.CheckingScreenInputValidation;
 import hashtools.module.checking.facade.ChecksumChecking;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
 import hashtools.module.checking.model.CheckingScreenInput;
+import hashtools.module.checking.model.InputValidationResult;
 
 public class CheckingService {
 
@@ -15,9 +15,9 @@ public class CheckingService {
 
 
 
-    public void performInputValidation(CheckingScreenInput input) throws InputValidationException {
+    public InputValidationResult performInputValidation(CheckingScreenInput input) {
         CheckingScreenInputValidation inputValidation = new CheckingScreenInputValidation();
-        inputValidation.validate(input);
+        return inputValidation.perform(input);
     }
 
     public CheckingResult performChecksumChecking(CheckingContext context) throws Exception {

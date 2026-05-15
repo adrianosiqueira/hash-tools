@@ -1,6 +1,5 @@
 package hashtools.module.checking.controller;
 
-import hashtools.core.model.InputValidationException;
 import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.FileChecksumExtractor;
 import hashtools.core.strategy.checksumextractor.StringChecksumExtractor;
@@ -14,6 +13,7 @@ import hashtools.module.checking.api.CheckingAPI;
 import hashtools.module.checking.model.CheckingContext;
 import hashtools.module.checking.model.CheckingResult;
 import hashtools.module.checking.model.CheckingScreenInput;
+import hashtools.module.checking.model.InputValidationResult;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
@@ -146,14 +146,26 @@ public class CheckingController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
+        LOGGER.info("Validating the input data.");
+        CheckingScreenInput screenInput = this.collectScreenInput();
+        InputValidationResult validationResult = checkingAPI.requestInputValidation(screenInput);
+
+        if (validationResult.hasProblems()) {
+            String problems = validationResult.getBulletListFormattedProblems();
+
+            new MessageDialog()
+                .withTitle("Checksum Checking")
+                .withHeader("The following problems were found")
+                .withContent(problems)
+                .show();
+
+            LOGGER.error("The following problems were found:\n{}", problems);
+            return;
+        }
+
+
+
         try {
-            LOGGER.info("Validating the input data.");
-            CheckingScreenInput screenInput = this.collectScreenInput();
-            checkingAPI.requestInputValidation(screenInput);
-            LOGGER.info("The input data is valid.");
-
-
-
             LOGGER.info("Performing checksum checking.");
             CheckingContext context = this.createCheckingContext();
             CheckingResult result = checkingAPI.requestChecksumChecking(context);
@@ -161,13 +173,6 @@ public class CheckingController implements Initializable {
 
             this.showResultScreen(formattedResult);
             LOGGER.info("Checksum checking finished.");
-        } catch (InputValidationException e) {
-            new MessageDialog()
-                .withTitle("Checksum Checking")
-                .withHeader("Data validation")
-                .withContent(e.getMessage())
-                .show();
-            LOGGER.error("Validation failed: {}", e.getMessage());
         } catch (Exception e) {
             new MessageDialog()
                 .withTitle("Checksum Checking")
