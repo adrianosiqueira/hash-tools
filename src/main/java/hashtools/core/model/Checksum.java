@@ -1,5 +1,8 @@
 package hashtools.core.model;
 
+import hashtools.core.source.input.InputSource;
+
+import java.io.IOException;
 import java.util.Optional;
 
 public class Checksum {
@@ -37,6 +40,10 @@ public class Checksum {
 
     public boolean isValid() {
         return algorithm != null;
+    }
+
+    public Checksum generateChecksum(InputSource inputSource) throws IOException {
+        return algorithm.generateChecksum(inputSource);
     }
 
 
