@@ -1,11 +1,15 @@
 package hashtools.core.model;
 
+import hashtools.core.source.input.InputSource;
+
+import java.io.IOException;
 import java.security.MessageDigest;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 public enum Algorithm {
 
+    NULL_ALGORITHM(0, "", ""),
     MD5(32, "md5", "MD5"),
     SHA1(40, "sha1", "SHA-1"),
     SHA224(56, "sha224", "SHA-224"),
@@ -29,26 +33,36 @@ public enum Algorithm {
 
 
 
-    public static Optional<Algorithm> getByLength(int length) {
-        return Stream
-            .of(Algorithm.values())
-            .filter(algorithm -> algorithm.length == length)
-            .findFirst();
+    public static Algorithm getByLength(String hash) {
+        int searchLength = Objects
+            .requireNonNullElse(hash, "")
+            .length();
+
+        for (Algorithm algorithm : Algorithm.values()) {
+            if (algorithm.length == searchLength) {
+                return algorithm;
+            }
+        }
+
+        return NULL_ALGORITHM;
     }
 
-    public static Optional<Algorithm> getByName(String name) {
-        String searchName = Optional
-            .ofNullable(name)
-            .map(String::toLowerCase)
-            .map(n -> n.replaceAll("[^a-z0-9]", ""))
-            .orElse("");
+    public static Algorithm getByName(String name) {
+        String searchName = Objects
+            .requireNonNullElse(name, "")
+            .toLowerCase()
+            .replaceAll("[^a-z0-9]", "");
 
-        return Stream
-            .of(Algorithm.values())
-            .filter(algorithm -> algorithm.name.equals(searchName))
-            .findFirst();
+        for (Algorithm algorithm : Algorithm.values()) {
+            if (algorithm.name.equals(searchName)) {
+                return algorithm;
+            }
+        }
+
+        return NULL_ALGORITHM;
     }
 
+    @Deprecated(forRemoval = true)
     public static Algorithm getDefault() {
         return Algorithm.MD5;
     }
@@ -65,11 +79,38 @@ public enum Algorithm {
 
 
 
+    @Deprecated(forRemoval = true)
     public MessageDigest createMessageDigest() {
         try {
             return MessageDigest.getInstance(name);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+
+
+    public String generateChecksum(InputSource inputSource) throws IOException {
+        if (this == NULL_ALGORITHM) {
+            return "";
+        }
+
+
+
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(this.name);
+            inputSource.updateMessageDigest(messageDigest);
+
+            byte[] digest = messageDigest.digest();
+            StringBuilder hash = new StringBuilder();
+
+            for (byte b : digest) {
+                hash.append(String.format("%02x", b));
+            }
+
+            return hash.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Internal error with the algorithm name.", e);
         }
     }
 }

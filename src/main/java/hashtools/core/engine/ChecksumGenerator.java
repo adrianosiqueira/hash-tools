@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 
+@Deprecated(forRemoval = true)
 public class ChecksumGenerator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChecksumGenerator.class);

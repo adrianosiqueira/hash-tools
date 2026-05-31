@@ -14,9 +14,7 @@ public class Checksum {
             .ofNullable(hash)
             .orElse("");
 
-        this.algorithm = Algorithm
-            .getByLength(this.hash.length())
-            .orElse(null);
+        this.algorithm = Algorithm.getByLength(this.hash);
     }
 
 
