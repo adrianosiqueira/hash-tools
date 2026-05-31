@@ -52,6 +52,10 @@ public class Checksum {
         return algorithm;
     }
 
+    public String getAlgorithmDisplayName() {
+        return algorithm.getDisplayName();
+    }
+
     public String getHash() {
         return hash;
     }
