@@ -90,9 +90,9 @@ public enum Algorithm {
 
 
 
-    public String generateChecksum(InputSource inputSource) throws IOException {
+    public Checksum generateChecksum(InputSource inputSource) throws IOException {
         if (this == NULL_ALGORITHM) {
-            return "";
+            return new Checksum("");
         }
 
 
@@ -108,7 +108,7 @@ public enum Algorithm {
                 hash.append(String.format("%02x", b));
             }
 
-            return hash.toString();
+            return new Checksum(hash.toString());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Internal error with the algorithm name.", e);
         }
