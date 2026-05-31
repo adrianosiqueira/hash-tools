@@ -14,9 +14,7 @@ module hash.tools {
     exports hashtools.core.strategy.formatter;
     exports hashtools.core.strategy.messagedigest;
     exports hashtools.core.threadpool;
-    exports hashtools.module.checking.api;
     exports hashtools.module.checking.controller;
-    exports hashtools.module.checking.facade;
     exports hashtools.module.checking.model;
     exports hashtools.module.checking.service;
     exports hashtools.module.comparison;
@@ -36,9 +34,7 @@ module hash.tools {
     opens hashtools.core.strategy.formatter;
     opens hashtools.core.strategy.messagedigest;
     opens hashtools.core.threadpool;
-    opens hashtools.module.checking.api;
     opens hashtools.module.checking.controller;
-    opens hashtools.module.checking.facade;
     opens hashtools.module.checking.model;
     opens hashtools.module.checking.service;
     opens hashtools.module.comparison;

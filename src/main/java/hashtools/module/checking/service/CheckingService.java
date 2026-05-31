@@ -95,6 +95,7 @@ public class CheckingService {
 
 
         CheckingResult result = new CheckingResult();
+        result.setIdentification(inputSource.identify());
 
         try {
             for (Future<CheckingChecksum> checksum : futureChecksums) {

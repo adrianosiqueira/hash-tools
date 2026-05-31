@@ -1,7 +1,6 @@
 package hashtools.module.checking.model;
 
 import hashtools.core.model.Algorithm;
-import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
 import hashtools.core.strategy.formatter.HeaderFormatter;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.StringJoiner;
 public class CheckingResult {
 
     private List<CheckingChecksum> checksums;
-    private ChecksumIdentifier identifier;
+    private String identification;
 
     private double reliability;
     private boolean reliabilityNeedsCalculation;
@@ -21,7 +20,7 @@ public class CheckingResult {
 
     public CheckingResult() {
         this.setChecksums(null);
-        this.setIdentifier(null);
+        this.setIdentification("");
 
         this.setReliability(0.0);
         this.invalidateReliability();
@@ -34,8 +33,8 @@ public class CheckingResult {
         this.invalidateReliability();
     }
 
-    public String getIdentification() throws Exception {
-        return identifier.getIdentification();
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
 
@@ -50,16 +49,6 @@ public class CheckingResult {
             .orElseGet(ArrayList::new);
 
         this.invalidateReliability();
-    }
-
-    public ChecksumIdentifier getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(ChecksumIdentifier identifier) {
-        this.identifier = Optional
-            .ofNullable(identifier)
-            .orElseGet(ChecksumIdentifier::nullImplementation);
     }
 
     public double getReliability() {
@@ -109,7 +98,7 @@ public class CheckingResult {
             "Algorithm",
             "Official",
             "Generated",
-            "Status do Resultado da verificação"
+            "Status"
         });
 
 
@@ -135,6 +124,17 @@ public class CheckingResult {
 
 
 
-        return result.toString();
+        String formattedReliability = String.format(
+            "Reliability: %.2f%%",
+            this.getReliability() * 100
+        );
+
+
+
+        return identification
+            + lineSeparator
+            + result
+            + lineSeparator
+            + formattedReliability;
     }
 }
