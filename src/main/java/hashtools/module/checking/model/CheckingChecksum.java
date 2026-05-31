@@ -28,6 +28,10 @@ public class CheckingChecksum {
         return officialChecksum.getAlgorithm();
     }
 
+    public String getAlgorithmDisplayName() {
+        return officialChecksum.getAlgorithmDisplayName();
+    }
+
     public String getOfficialHash() {
         return officialChecksum.getHash();
     }
