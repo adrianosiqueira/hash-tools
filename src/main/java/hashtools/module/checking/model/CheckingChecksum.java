@@ -1,6 +1,5 @@
 package hashtools.module.checking.model;
 
-import hashtools.core.model.Algorithm;
 import hashtools.core.model.Checksum;
 
 import java.util.Optional;
@@ -24,10 +23,6 @@ public class CheckingChecksum {
             && officialChecksum.matches(generatedChecksum);
     }
 
-    public Algorithm getAlgorithm() {
-        return officialChecksum.getAlgorithm();
-    }
-
     public String getAlgorithmDisplayName() {
         return officialChecksum.getAlgorithmDisplayName();
     }
@@ -45,12 +40,12 @@ public class CheckingChecksum {
     public void setOfficialChecksum(Checksum officialChecksum) {
         this.officialChecksum = Optional
             .ofNullable(officialChecksum)
-            .orElseGet(Checksum::empty);
+            .orElseGet(Checksum::new);
     }
 
     public void setGeneratedChecksum(Checksum generatedChecksum) {
         this.generatedChecksum = Optional
             .ofNullable(generatedChecksum)
-            .orElseGet(Checksum::empty);
+            .orElseGet(Checksum::new);
     }
 }

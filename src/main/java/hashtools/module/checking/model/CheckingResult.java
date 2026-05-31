@@ -5,7 +5,6 @@ import hashtools.core.strategy.formatter.HeaderFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 public class CheckingResult {
@@ -19,11 +18,11 @@ public class CheckingResult {
 
 
     public CheckingResult() {
-        this.setChecksums(null);
-        this.setIdentification("");
+        this.checksums = new ArrayList<>();
+        this.identification = "";
 
-        this.setReliability(0.0);
-        this.invalidateReliability();
+        this.reliability = 0.0;
+        this.reliabilityNeedsCalculation = true;
     }
 
 
@@ -37,20 +36,6 @@ public class CheckingResult {
         this.identification = identification;
     }
 
-
-
-    public List<CheckingChecksum> getChecksums() {
-        return checksums;
-    }
-
-    public void setChecksums(List<CheckingChecksum> checksums) {
-        this.checksums = Optional
-            .ofNullable(checksums)
-            .orElseGet(ArrayList::new);
-
-        this.invalidateReliability();
-    }
-
     public double getReliability() {
         if (reliabilityNeedsCalculation) {
             this.calculateReliability();
@@ -59,39 +44,6 @@ public class CheckingResult {
 
         return reliability;
     }
-
-    private void setReliability(double reliability) {
-        this.reliability = reliability < 0.5
-            ? Math.max(reliability, 0.0)
-            : Math.min(reliability, 1.0);
-    }
-
-
-
-    private void validateReliability() {
-        this.reliabilityNeedsCalculation = false;
-    }
-
-    private void invalidateReliability() {
-        this.reliabilityNeedsCalculation = true;
-    }
-
-    private void calculateReliability() {
-        if (checksums.isEmpty()) {
-            this.setReliability(0.0);
-            return;
-        }
-
-        double reliability = (double) checksums
-            .stream()
-            .filter(CheckingChecksum::matches)
-            .count()
-            / checksums.size();
-
-        this.setReliability(reliability);
-    }
-
-
 
     public String formatForConsolePrinting(HeaderFormatter formatter) {
         String[] alignedHeaders = formatter.format(new String[]{
@@ -136,5 +88,36 @@ public class CheckingResult {
             + result
             + lineSeparator
             + formattedReliability;
+    }
+
+
+
+    private void setReliability(double reliability) {
+        this.reliability = reliability < 0.5
+            ? Math.max(reliability, 0.0)
+            : Math.min(reliability, 1.0);
+    }
+
+    private void validateReliability() {
+        this.reliabilityNeedsCalculation = false;
+    }
+
+    private void invalidateReliability() {
+        this.reliabilityNeedsCalculation = true;
+    }
+
+    private void calculateReliability() {
+        if (checksums.isEmpty()) {
+            this.setReliability(0.0);
+            return;
+        }
+
+        double reliability = (double) checksums
+            .stream()
+            .filter(CheckingChecksum::matches)
+            .count()
+            / checksums.size();
+
+        this.setReliability(reliability);
     }
 }
