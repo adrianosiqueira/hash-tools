@@ -1,19 +1,15 @@
 package hashtools.module.checking.controller;
 
-import hashtools.core.strategy.checksumextractor.ChecksumExtractor;
-import hashtools.core.strategy.checksumextractor.FileChecksumExtractor;
-import hashtools.core.strategy.checksumextractor.StringChecksumExtractor;
-import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
-import hashtools.core.strategy.checksumidentifier.FileChecksumIdentifier;
-import hashtools.core.strategy.checksumidentifier.StringChecksumIdentifier;
-import hashtools.core.strategy.messagedigest.FileMessageDigestUpdater;
-import hashtools.core.strategy.messagedigest.MessageDigestUpdater;
-import hashtools.core.strategy.messagedigest.StringMessageDigestUpdater;
-import hashtools.module.checking.api.CheckingAPI;
-import hashtools.module.checking.model.CheckingContext;
-import hashtools.module.checking.model.CheckingResult;
+import hashtools.core.source.checksum.ChecksumSource;
+import hashtools.core.source.checksum.FileChecksumSource;
+import hashtools.core.source.checksum.StringChecksumSource;
+import hashtools.core.source.input.FileInputSource;
+import hashtools.core.source.input.InputSource;
+import hashtools.core.source.input.StringInputSource;
+import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
 import hashtools.module.checking.model.CheckingScreenInput;
 import hashtools.module.checking.model.InputValidationResult;
+import hashtools.module.checking.service.CheckingService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
@@ -89,13 +85,13 @@ public class CheckingController implements Initializable {
 
 
 
-    private CheckingAPI checkingAPI;
+    private CheckingService checkingService;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.checkingAPI = new CheckingAPI();
+        this.checkingService = new CheckingService();
 
         btnInput
             .disableProperty()
@@ -148,7 +144,7 @@ public class CheckingController implements Initializable {
     private void performChecksumChecking() {
         LOGGER.info("Validating the input data.");
         CheckingScreenInput screenInput = this.collectScreenInput();
-        InputValidationResult validationResult = checkingAPI.requestInputValidation(screenInput);
+        InputValidationResult validationResult = checkingService.performInputValidation(screenInput);
 
         if (validationResult.hasProblems()) {
             String problems = validationResult.getBulletListFormattedProblems();
@@ -167,9 +163,9 @@ public class CheckingController implements Initializable {
 
         try {
             LOGGER.info("Performing checksum checking.");
-            CheckingContext context = this.createCheckingContext();
-            CheckingResult result = checkingAPI.requestChecksumChecking(context);
-            String formattedResult = checkingAPI.requestResultFormatting(result);
+            String formattedResult = checkingService
+                .performChecksumChecking(this.createInputSource(), this.createChecksumSource())
+                .formatForConsolePrinting(new LeftAlignmentHeaderFormatter('.'));
 
             this.showResultScreen(formattedResult);
             LOGGER.info("Checksum checking finished.");
@@ -256,30 +252,15 @@ public class CheckingController implements Initializable {
         return screenInput;
     }
 
-    private CheckingContext createCheckingContext() {
-        MessageDigestUpdater updater = chkInput.isSelected()
-            ? new FileMessageDigestUpdater(txtInput.getText())
-            : new StringMessageDigestUpdater(txtInput.getText());
+    private InputSource createInputSource() {
+        return chkInput.isSelected()
+            ? new FileInputSource(txtInput.getText())
+            : new StringInputSource(txtInput.getText());
+    }
 
-        ChecksumIdentifier identifier = chkInput.isSelected()
-            ? new FileChecksumIdentifier(txtInput.getText())
-            : new StringChecksumIdentifier(txtInput.getText());
-
-        ChecksumExtractor extractor = chkChecksum.isSelected()
-            ? new FileChecksumExtractor(txtChecksum.getText())
-            : new StringChecksumExtractor(txtChecksum.getText());
-
-        LOGGER.debug("Using the '{}' as the MessageDigestUpdater.", updater);
-        LOGGER.debug("Using the '{}' as the ChecksumIdentifier.", identifier);
-        LOGGER.debug("Using the '{}' as the ChecksumExtractor.", extractor);
-
-
-
-        CheckingContext context = new CheckingContext();
-        context.setUpdater(updater);
-        context.setIdentifier(identifier);
-        context.setExtractor(extractor);
-
-        return context;
+    private ChecksumSource createChecksumSource() {
+        return chkChecksum.isSelected()
+            ? new FileChecksumSource(txtChecksum.getText())
+            : new StringChecksumSource(txtChecksum.getText());
     }
 }
