@@ -1,10 +1,13 @@
 package hashtools.module.checking.model;
 
+import hashtools.core.model.Algorithm;
 import hashtools.core.strategy.checksumidentifier.ChecksumIdentifier;
+import hashtools.core.strategy.formatter.HeaderFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class CheckingResult {
 
@@ -97,5 +100,41 @@ public class CheckingResult {
             / checksums.size();
 
         this.setReliability(reliability);
+    }
+
+
+
+    public String formatForConsolePrinting(HeaderFormatter formatter) {
+        String[] alignedHeaders = formatter.format(new String[]{
+            "Algorithm",
+            "Official",
+            "Generated",
+            "Status do Resultado da verificação"
+        });
+
+
+
+        String lineSeparator = System.lineSeparator();
+        String separator = "-".repeat(alignedHeaders[0].length() + Algorithm.SHA512.getLength() + 2);
+
+        StringJoiner result = new StringJoiner(
+            lineSeparator + separator + lineSeparator,
+            separator + lineSeparator,
+            lineSeparator + separator
+        );
+
+        for (CheckingChecksum checksum : checksums) {
+            result.add(String.format(
+                "%s: %s\n%s: %s\n%s: %s\n%s: %s",
+                alignedHeaders[0], checksum.getAlgorithmDisplayName(),
+                alignedHeaders[1], checksum.getOfficialHash(),
+                alignedHeaders[2], checksum.getGeneratedHash(),
+                alignedHeaders[3], checksum.matches()
+            ));
+        }
+
+
+
+        return result.toString();
     }
 }
