@@ -11,7 +11,6 @@ module hash.tools {
     exports hashtools.core.strategy.checksumextractor;
     exports hashtools.core.strategy.checksumidentifier;
     exports hashtools.core.strategy.formatter;
-    exports hashtools.core.strategy.messagedigest;
     exports hashtools.core.threadpool;
     exports hashtools.module.checking.controller;
     exports hashtools.module.checking.model;
@@ -28,7 +27,6 @@ module hash.tools {
     opens hashtools.core.strategy.checksumextractor;
     opens hashtools.core.strategy.checksumidentifier;
     opens hashtools.core.strategy.formatter;
-    opens hashtools.core.strategy.messagedigest;
     opens hashtools.core.threadpool;
     opens hashtools.module.checking.controller;
     opens hashtools.module.checking.model;
