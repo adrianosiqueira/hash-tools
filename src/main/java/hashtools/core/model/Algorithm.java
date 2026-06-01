@@ -62,11 +62,6 @@ public enum Algorithm {
         return NULL_ALGORITHM;
     }
 
-    @Deprecated(forRemoval = true)
-    public static Algorithm getDefault() {
-        return Algorithm.MD5;
-    }
-
 
 
     public int getLength() {
@@ -75,17 +70,6 @@ public enum Algorithm {
 
     public String getDisplayName() {
         return displayName;
-    }
-
-
-
-    @Deprecated(forRemoval = true)
-    public MessageDigest createMessageDigest() {
-        try {
-            return MessageDigest.getInstance(name);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

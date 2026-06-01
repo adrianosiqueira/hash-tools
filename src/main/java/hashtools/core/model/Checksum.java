@@ -23,13 +23,6 @@ public class Checksum {
 
 
 
-    @Deprecated(forRemoval = true)
-    public static Checksum empty() {
-        return new Checksum("");
-    }
-
-
-
     public boolean matches(Checksum other) {
         return other != null
             && this.algorithm == other.algorithm
