@@ -8,7 +8,6 @@ module hash.tools {
     exports hashtools.core.model;
     exports hashtools.core.source.checksum;
     exports hashtools.core.source.input;
-    exports hashtools.core.strategy.checksumextractor;
     exports hashtools.core.strategy.formatter;
     exports hashtools.core.threadpool;
     exports hashtools.module.checking.controller;
@@ -23,7 +22,6 @@ module hash.tools {
     opens hashtools.core.model;
     opens hashtools.core.source.checksum;
     opens hashtools.core.source.input;
-    opens hashtools.core.strategy.checksumextractor;
     opens hashtools.core.strategy.formatter;
     opens hashtools.core.threadpool;
     opens hashtools.module.checking.controller;
