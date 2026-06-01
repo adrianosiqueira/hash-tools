@@ -1,4 +1,4 @@
-package hashtools.core.source.checksum;
+package hashtools.core.strategy.checksumsource;
 
 import hashtools.core.model.Checksum;
 

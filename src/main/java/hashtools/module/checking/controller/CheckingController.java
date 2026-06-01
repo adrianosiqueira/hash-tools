@@ -1,12 +1,12 @@
 package hashtools.module.checking.controller;
 
 import hashtools.core.model.Problem;
-import hashtools.core.source.checksum.ChecksumSource;
-import hashtools.core.source.checksum.FileChecksumSource;
-import hashtools.core.source.checksum.StringChecksumSource;
-import hashtools.core.source.input.FileInputSource;
-import hashtools.core.source.input.InputSource;
-import hashtools.core.source.input.StringInputSource;
+import hashtools.core.strategy.checksumsource.ChecksumSource;
+import hashtools.core.strategy.checksumsource.FileChecksumSource;
+import hashtools.core.strategy.checksumsource.StringChecksumSource;
+import hashtools.core.strategy.inputsource.FileInputSource;
+import hashtools.core.strategy.inputsource.InputSource;
+import hashtools.core.strategy.inputsource.StringInputSource;
 import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
 import hashtools.module.checking.model.CheckingScreenInput;
 import hashtools.module.checking.service.CheckingService;

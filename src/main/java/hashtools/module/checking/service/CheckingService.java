@@ -2,8 +2,8 @@ package hashtools.module.checking.service;
 
 import hashtools.core.model.Checksum;
 import hashtools.core.model.Problem;
-import hashtools.core.source.checksum.ChecksumSource;
-import hashtools.core.source.input.InputSource;
+import hashtools.core.strategy.checksumsource.ChecksumSource;
+import hashtools.core.strategy.inputsource.InputSource;
 import hashtools.core.threadpool.ThreadPoolFactory;
 import hashtools.module.checking.model.CheckingChecksum;
 import hashtools.module.checking.model.CheckingResult;

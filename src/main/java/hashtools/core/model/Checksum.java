@@ -1,6 +1,6 @@
 package hashtools.core.model;
 
-import hashtools.core.source.input.InputSource;
+import hashtools.core.strategy.inputsource.InputSource;
 
 import java.io.IOException;
 import java.util.Objects;

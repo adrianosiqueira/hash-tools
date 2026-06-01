@@ -1,4 +1,4 @@
-package hashtools.core.source.input;
+package hashtools.core.strategy.inputsource;
 
 import java.io.IOException;
 import java.io.InputStream;
