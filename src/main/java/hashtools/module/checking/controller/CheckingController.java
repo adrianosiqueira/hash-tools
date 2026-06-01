@@ -1,5 +1,6 @@
 package hashtools.module.checking.controller;
 
+import hashtools.core.model.Problem;
 import hashtools.core.source.checksum.ChecksumSource;
 import hashtools.core.source.checksum.FileChecksumSource;
 import hashtools.core.source.checksum.StringChecksumSource;
@@ -8,7 +9,6 @@ import hashtools.core.source.input.InputSource;
 import hashtools.core.source.input.StringInputSource;
 import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
 import hashtools.module.checking.model.CheckingScreenInput;
-import hashtools.module.checking.model.InputValidationResult;
 import hashtools.module.checking.service.CheckingService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
@@ -144,18 +144,16 @@ public class CheckingController implements Initializable {
     private void performChecksumChecking() {
         LOGGER.info("Validating the input data.");
         CheckingScreenInput screenInput = this.collectScreenInput();
-        InputValidationResult validationResult = checkingService.performInputValidation(screenInput);
+        Optional<Problem> problem = checkingService.performInputValidation(screenInput);
 
-        if (validationResult.hasProblems()) {
-            String problems = validationResult.getBulletListFormattedProblems();
-
+        if (problem.isPresent()) {
             new MessageDialog()
                 .withTitle("Checksum Checking")
                 .withHeader("The following problems were found")
-                .withContent(problems)
+                .withContent(problem.get())
                 .show();
 
-            LOGGER.error("The following problems were found:\n{}", problems);
+            LOGGER.error("The following problem was found: {}", problem);
             return;
         }
 
