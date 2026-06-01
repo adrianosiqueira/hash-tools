@@ -2,9 +2,9 @@ package hashtools.core.strategy.formatter;
 
 import java.util.stream.Stream;
 
-public interface HeaderFormatter extends Formatter<String[], String[]> {
+public abstract class HeaderFormatter implements Formatter<String[], String[]> {
 
-    default int getGreatestLength(String[] strings) {
+    protected int getGreatestLength(String[] strings) {
         return Stream
             .of(strings)
             .map(String::length)

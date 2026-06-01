@@ -3,7 +3,7 @@ package hashtools.core.strategy.formatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LeftAlignmentHeaderFormatter implements HeaderFormatter {
+public class LeftAlignmentHeaderFormatter extends HeaderFormatter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LeftAlignmentHeaderFormatter.class);
 
