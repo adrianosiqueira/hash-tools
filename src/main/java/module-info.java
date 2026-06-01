@@ -17,8 +17,6 @@ module hash.tools {
     exports hashtools.module.checking.controller;
     exports hashtools.module.checking.model;
     exports hashtools.module.checking.service;
-    exports hashtools.module.comparison;
-    exports hashtools.module.generation;
     exports hashtools.module.main.controller;
     exports hashtools.view;
     exports hashtools.view.dialog;
@@ -37,8 +35,6 @@ module hash.tools {
     opens hashtools.module.checking.controller;
     opens hashtools.module.checking.model;
     opens hashtools.module.checking.service;
-    opens hashtools.module.comparison;
-    opens hashtools.module.generation;
     opens hashtools.module.main.controller;
     opens hashtools.view;
     opens hashtools.view.dialog;
