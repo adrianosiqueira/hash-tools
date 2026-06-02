@@ -4,10 +4,10 @@ import hashtools.core.model.Problem;
 import hashtools.core.strategy.checksumsource.ChecksumSource;
 import hashtools.core.strategy.checksumsource.FileChecksumSource;
 import hashtools.core.strategy.checksumsource.StringChecksumSource;
+import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
 import hashtools.core.strategy.inputsource.FileInputSource;
 import hashtools.core.strategy.inputsource.InputSource;
 import hashtools.core.strategy.inputsource.StringInputSource;
-import hashtools.core.strategy.formatter.LeftAlignmentHeaderFormatter;
 import hashtools.module.checking.model.CheckingScreenInput;
 import hashtools.module.checking.service.CheckingService;
 import hashtools.view.dialog.FileDialog;
@@ -142,9 +142,8 @@ public class CheckingController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
-        LOGGER.info("Validating the input data.");
         CheckingScreenInput screenInput = this.collectScreenInput();
-        Optional<Problem> problem = checkingService.performInputValidation(screenInput);
+        Optional<Problem> problem = screenInput.identifyProblem();
 
         if (problem.isPresent()) {
             new MessageDialog()
@@ -152,8 +151,6 @@ public class CheckingController implements Initializable {
                 .withHeader("The following problems were found")
                 .withContent(problem.get())
                 .show();
-
-            LOGGER.error("The following problem was found: {}", problem);
             return;
         }
 
