@@ -30,7 +30,7 @@ public class Checksum {
     }
 
     public boolean isValid() {
-        return algorithm != null;
+        return algorithm != Algorithm.NULL_ALGORITHM;
     }
 
     public String getAlgorithmDisplayName() {
