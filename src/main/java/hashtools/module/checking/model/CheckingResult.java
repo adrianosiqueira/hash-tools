@@ -1,7 +1,7 @@
 package hashtools.module.checking.model;
 
 import hashtools.core.model.Algorithm;
-import hashtools.core.strategy.formatter.HeaderFormatter;
+import hashtools.core.strategy.headerformatter.HeaderFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +46,15 @@ public class CheckingResult {
     }
 
     public String formatForConsolePrinting(HeaderFormatter formatter) {
-        String[] alignedHeaders = formatter.format(new String[]{
-            "Algorithm",
-            "Official",
-            "Generated",
-            "Status"
-        });
+        String[] alignedHeaders = formatter.format(
+            new String[]{
+                "Algorithm",
+                "Official",
+                "Generated",
+                "Status"
+            },
+            '.'
+        );
 
 
 
