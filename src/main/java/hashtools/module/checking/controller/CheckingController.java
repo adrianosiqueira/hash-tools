@@ -157,20 +157,17 @@ public class CheckingController implements Initializable {
 
 
         try {
-            LOGGER.info("Performing checksum checking.");
             String formattedResult = checkingService
                 .performChecksumChecking(this.createInputSource(), this.createChecksumSource())
                 .formatForConsolePrinting(new LeftAlignmentHeaderFormatter('.'));
 
             this.showResultScreen(formattedResult);
-            LOGGER.info("Checksum checking finished.");
         } catch (Exception e) {
             new MessageDialog()
                 .withTitle("Checksum Checking")
                 .withHeader("Failed to perform the checksum checking.")
                 .withContent(e)
                 .show();
-            LOGGER.error("Failed to perform checksum checking.", e);
         }
     }
 

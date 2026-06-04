@@ -6,6 +6,8 @@ import hashtools.core.strategy.inputsource.InputSource;
 import hashtools.core.threadpool.ThreadPoolFactory;
 import hashtools.module.checking.model.CheckingChecksum;
 import hashtools.module.checking.model.CheckingResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +19,12 @@ import java.util.concurrent.Future;
 
 public class CheckingService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingService.class);
+
+
+
     public CheckingResult performChecksumChecking(InputSource inputSource, ChecksumSource checksumSource) throws IOException {
+        LOGGER.info("Performing the checksum checking.");
         Objects.requireNonNull(inputSource, "The input source cannot be null");
         Objects.requireNonNull(checksumSource, "The checksum source cannot be null");
 
@@ -51,6 +58,7 @@ public class CheckingService {
                 result.addChecksum(checksum.get());
             }
         } catch (ExecutionException | InterruptedException e) {
+            LOGGER.error("Failed to perform the checksum checking.", e);
             switch (e.getCause()) {
                 case IOException cause -> throw cause;
                 case Throwable cause -> throw new RuntimeException(cause);
@@ -59,6 +67,7 @@ public class CheckingService {
 
 
 
+        LOGGER.info("The checksum checking is finished.");
         return result;
     }
 }
