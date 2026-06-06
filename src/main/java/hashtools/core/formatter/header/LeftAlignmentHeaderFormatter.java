@@ -1,6 +1,6 @@
-package hashtools.core.strategy.headerformatter;
+package hashtools.core.formatter.header;
 
-public class RightAlignmentHeaderFormatter extends HeaderFormatter {
+public class LeftAlignmentHeaderFormatter extends HeaderFormatter {
 
     @Override
     public String[] align(String[] headers, int desiredLength, char spacer) {
@@ -12,7 +12,7 @@ public class RightAlignmentHeaderFormatter extends HeaderFormatter {
             result.append(headers[i]);
 
             while (result.length() < desiredLength) {
-                result.insert(0, spacer);
+                result.append(spacer);
             }
 
             resultStrings[i] = result.toString();

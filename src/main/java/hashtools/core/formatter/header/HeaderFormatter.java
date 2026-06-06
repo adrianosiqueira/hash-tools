@@ -1,4 +1,4 @@
-package hashtools.core.strategy.headerformatter;
+package hashtools.core.formatter.header;
 
 import java.util.stream.Stream;
 
