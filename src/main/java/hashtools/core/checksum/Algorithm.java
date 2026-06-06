@@ -1,6 +1,6 @@
 package hashtools.core.checksum;
 
-import hashtools.core.strategy.inputsource.InputSource;
+import hashtools.core.source.input.InputSource;
 
 import java.io.IOException;
 import java.security.MessageDigest;
