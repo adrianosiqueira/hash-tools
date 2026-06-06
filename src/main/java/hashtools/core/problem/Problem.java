@@ -1,4 +1,4 @@
-package hashtools.core.model;
+package hashtools.core.problem;
 
 import java.util.Objects;
 

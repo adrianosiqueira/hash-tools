@@ -1,6 +1,6 @@
 package hashtools.module.checking.controller;
 
-import hashtools.core.model.Problem;
+import hashtools.core.problem.Problem;
 import hashtools.core.strategy.checksumsource.ChecksumSource;
 import hashtools.core.strategy.checksumsource.FileChecksumSource;
 import hashtools.core.strategy.checksumsource.StringChecksumSource;

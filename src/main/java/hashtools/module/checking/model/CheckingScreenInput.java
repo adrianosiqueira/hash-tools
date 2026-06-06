@@ -1,6 +1,6 @@
 package hashtools.module.checking.model;
 
-import hashtools.core.model.Problem;
+import hashtools.core.problem.Problem;
 import hashtools.view.dialog.FileExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

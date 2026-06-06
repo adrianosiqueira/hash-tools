@@ -6,7 +6,7 @@ module hash.tools {
 
     exports hashtools;
     exports hashtools.core.checksum;
-    exports hashtools.core.model;
+    exports hashtools.core.problem;
     exports hashtools.core.strategy.checksumsource;
     exports hashtools.core.strategy.headerformatter;
     exports hashtools.core.strategy.inputsource;
@@ -21,7 +21,7 @@ module hash.tools {
 
     opens hashtools;
     opens hashtools.core.checksum;
-    opens hashtools.core.model;
+    opens hashtools.core.problem;
     opens hashtools.core.strategy.checksumsource;
     opens hashtools.core.strategy.headerformatter;
     opens hashtools.core.strategy.inputsource;

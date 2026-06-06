@@ -1,6 +1,6 @@
 package hashtools.view.dialog;
 
-import hashtools.core.model.Problem;
+import hashtools.core.problem.Problem;
 import javafx.application.Platform;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXMLLoader;
