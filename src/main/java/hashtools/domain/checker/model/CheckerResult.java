@@ -1,4 +1,4 @@
-package hashtools.domain.checking.model;
+package hashtools.domain.checker.model;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.formatter.header.HeaderFormatter;
@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class CheckingResult {
+public class CheckerResult {
 
-    private List<CheckingChecksum> checksums;
+    private List<CheckerChecksum> checksums;
     private String identification;
 
     private double reliability;
@@ -17,7 +17,7 @@ public class CheckingResult {
 
 
 
-    public CheckingResult() {
+    public CheckerResult() {
         this.checksums = new ArrayList<>();
         this.identification = "";
 
@@ -27,7 +27,7 @@ public class CheckingResult {
 
 
 
-    public void addChecksum(CheckingChecksum checksum) {
+    public void addChecksum(CheckerChecksum checksum) {
         checksums.add(checksum);
         this.invalidateReliability();
     }
@@ -67,7 +67,7 @@ public class CheckingResult {
             lineSeparator + separator
         );
 
-        for (CheckingChecksum checksum : checksums) {
+        for (CheckerChecksum checksum : checksums) {
             result.add(String.format(
                 "%s: %s\n%s: %s\n%s: %s\n%s: %s",
                 alignedHeaders[0], checksum.getAlgorithmDisplayName(),
@@ -117,7 +117,7 @@ public class CheckingResult {
 
         double reliability = (double) checksums
             .stream()
-            .filter(CheckingChecksum::matches)
+            .filter(CheckerChecksum::matches)
             .count()
             / checksums.size();
 

@@ -48,7 +48,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void openCheckingScreen() {
-        this.openScreen("/hashtools/fxml/checking-screen.fxml");
+        this.openScreen("/hashtools/fxml/checker-screen.fxml");
     }
 
     @FXML

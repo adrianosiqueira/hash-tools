@@ -1,4 +1,4 @@
-package hashtools.domain.checking.model;
+package hashtools.domain.checker.model;
 
 import hashtools.core.problem.Problem;
 import hashtools.view.dialog.FileExtension;
@@ -10,9 +10,9 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CheckingScreenInput {
+public class CheckerScreenInput {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingScreenInput.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckerScreenInput.class);
 
 
 
@@ -24,7 +24,7 @@ public class CheckingScreenInput {
 
 
 
-    public CheckingScreenInput() {
+    public CheckerScreenInput() {
         this.input = "";
         this.usingInputFile = true;
 

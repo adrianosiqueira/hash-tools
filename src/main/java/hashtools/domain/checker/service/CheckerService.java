@@ -1,11 +1,11 @@
-package hashtools.domain.checking.service;
+package hashtools.domain.checker.service;
 
 import hashtools.core.checksum.Checksum;
 import hashtools.core.source.checksum.ChecksumSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.threadpool.ThreadPoolFactory;
-import hashtools.domain.checking.model.CheckingChecksum;
-import hashtools.domain.checking.model.CheckingResult;
+import hashtools.domain.checker.model.CheckerChecksum;
+import hashtools.domain.checker.model.CheckerResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,27 +17,27 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-public class CheckingService {
+public class CheckerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckerService.class);
 
 
 
-    public CheckingResult performChecksumChecking(InputSource inputSource, ChecksumSource checksumSource) throws IOException {
+    public CheckerResult performChecksumChecking(InputSource inputSource, ChecksumSource checksumSource) throws IOException {
         LOGGER.info("Performing the checksum checking.");
         Objects.requireNonNull(inputSource, "The input source cannot be null");
         Objects.requireNonNull(checksumSource, "The checksum source cannot be null");
 
 
 
-        List<Future<CheckingChecksum>> futureChecksums = new ArrayList<>();
+        List<Future<CheckerChecksum>> futureChecksums = new ArrayList<>();
 
         try (ExecutorService threadPool = ThreadPoolFactory.createDaemonPool()) {
             for (Checksum official : checksumSource.getValidChecksums()) {
-                Future<CheckingChecksum> futureChecksum = threadPool.submit(() -> {
+                Future<CheckerChecksum> futureChecksum = threadPool.submit(() -> {
                     Checksum generated = official.generateChecksum(inputSource);
 
-                    CheckingChecksum checksum = new CheckingChecksum();
+                    CheckerChecksum checksum = new CheckerChecksum();
                     checksum.setOfficialChecksum(official);
                     checksum.setGeneratedChecksum(generated);
 
@@ -50,11 +50,11 @@ public class CheckingService {
 
 
 
-        CheckingResult result = new CheckingResult();
+        CheckerResult result = new CheckerResult();
         result.setIdentification(inputSource.identify());
 
         try {
-            for (Future<CheckingChecksum> checksum : futureChecksums) {
+            for (Future<CheckerChecksum> checksum : futureChecksums) {
                 result.addChecksum(checksum.get());
             }
         } catch (ExecutionException | InterruptedException e) {

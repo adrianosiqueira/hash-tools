@@ -1,17 +1,17 @@
-package hashtools.domain.checking.model;
+package hashtools.domain.checker.model;
 
 import hashtools.core.checksum.Checksum;
 
 import java.util.Objects;
 
-public class CheckingChecksum {
+public class CheckerChecksum {
 
     private Checksum officialChecksum;
     private Checksum generatedChecksum;
 
 
 
-    public CheckingChecksum() {
+    public CheckerChecksum() {
         this.officialChecksum = new Checksum();
         this.generatedChecksum = new Checksum();
     }

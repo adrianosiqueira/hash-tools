@@ -1,4 +1,4 @@
-package hashtools.domain.checking.controller;
+package hashtools.domain.checker.controller;
 
 import hashtools.core.problem.Problem;
 import hashtools.core.source.checksum.ChecksumSource;
@@ -8,8 +8,8 @@ import hashtools.core.formatter.header.LeftAlignmentHeaderFormatter;
 import hashtools.core.source.input.FileInputSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.source.input.StringInputSource;
-import hashtools.domain.checking.model.CheckingScreenInput;
-import hashtools.domain.checking.service.CheckingService;
+import hashtools.domain.checker.model.CheckerScreenInput;
+import hashtools.domain.checker.service.CheckerService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
@@ -31,9 +31,9 @@ import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class CheckingController implements Initializable {
+public class CheckerController implements Initializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckerController.class);
 
 
 
@@ -85,13 +85,13 @@ public class CheckingController implements Initializable {
 
 
 
-    private CheckingService checkingService;
+    private CheckerService checkerService;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.checkingService = new CheckingService();
+        this.checkerService = new CheckerService();
 
         btnInput
             .disableProperty()
@@ -142,7 +142,7 @@ public class CheckingController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
-        CheckingScreenInput screenInput = this.collectScreenInput();
+        CheckerScreenInput screenInput = this.collectScreenInput();
         Optional<Problem> problem = screenInput.identifyProblem();
 
         if (problem.isPresent()) {
@@ -157,7 +157,7 @@ public class CheckingController implements Initializable {
 
 
         try {
-            String formattedResult = checkingService
+            String formattedResult = checkerService
                 .performChecksumChecking(this.createInputSource(), this.createChecksumSource())
                 .formatForConsolePrinting(new LeftAlignmentHeaderFormatter());
 
@@ -234,8 +234,8 @@ public class CheckingController implements Initializable {
         txtResult.setText(content);
     }
 
-    private CheckingScreenInput collectScreenInput() {
-        CheckingScreenInput screenInput = new CheckingScreenInput();
+    private CheckerScreenInput collectScreenInput() {
+        CheckerScreenInput screenInput = new CheckerScreenInput();
         screenInput.setInput(txtInput.getText());
         screenInput.setUsingInputFile(chkInput.isSelected());
         screenInput.setChecksum(txtChecksum.getText());
