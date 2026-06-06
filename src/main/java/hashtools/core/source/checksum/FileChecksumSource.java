@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class FileChecksumSource implements ChecksumSource {
@@ -32,7 +32,7 @@ public class FileChecksumSource implements ChecksumSource {
 
 
     @Override
-    public Optional<Problem> checkForProblem() {
+    public boolean checkForProblem(Consumer<Problem> problemConsumer) {
         LOGGER.info("Validating the checksum source.");
         Path path = Path.of(filePath);
 
@@ -43,7 +43,8 @@ public class FileChecksumSource implements ChecksumSource {
                 .withFix("Use the 'open' button to properly select the checksum file.");
 
             LOGGER.warn("Found: {}", problem);
-            return Optional.of(problem);
+            problemConsumer.accept(problem);
+            return true;
         }
 
         if (!Files.isRegularFile(path)) {
@@ -53,7 +54,8 @@ public class FileChecksumSource implements ChecksumSource {
                 .withFix("Use the 'open' button to properly select the checksum file.");
 
             LOGGER.warn("Found: {}", problem);
-            return Optional.of(problem);
+            problemConsumer.accept(problem);
+            return true;
         }
 
         if (this.checksumFileHasInvalidExtension()) {
@@ -63,11 +65,12 @@ public class FileChecksumSource implements ChecksumSource {
                 .withFix("Use the 'open' button to properly select the checksum file.");
 
             LOGGER.warn("Found: {}", problem);
-            return Optional.of(problem);
+            problemConsumer.accept(problem);
+            return true;
         }
 
         LOGGER.info("No problem found.");
-        return Optional.empty();
+        return false;
     }
 
     @Override
