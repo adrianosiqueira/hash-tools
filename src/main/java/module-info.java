@@ -5,6 +5,7 @@ module hash.tools {
     requires org.slf4j;
 
     exports hashtools;
+    exports hashtools.core.checksum;
     exports hashtools.core.model;
     exports hashtools.core.strategy.checksumsource;
     exports hashtools.core.strategy.headerformatter;
@@ -19,6 +20,7 @@ module hash.tools {
     exports hashtools.view.javafx;
 
     opens hashtools;
+    opens hashtools.core.checksum;
     opens hashtools.core.model;
     opens hashtools.core.strategy.checksumsource;
     opens hashtools.core.strategy.headerformatter;

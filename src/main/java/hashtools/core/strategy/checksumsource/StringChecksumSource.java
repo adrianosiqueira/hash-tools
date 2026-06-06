@@ -1,6 +1,6 @@
 package hashtools.core.strategy.checksumsource;
 
-import hashtools.core.model.Checksum;
+import hashtools.core.checksum.Checksum;
 
 import java.io.IOException;
 import java.util.ArrayList;

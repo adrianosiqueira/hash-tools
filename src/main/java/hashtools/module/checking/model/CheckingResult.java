@@ -1,6 +1,6 @@
 package hashtools.module.checking.model;
 
-import hashtools.core.model.Algorithm;
+import hashtools.core.checksum.Algorithm;
 import hashtools.core.strategy.headerformatter.HeaderFormatter;
 
 import java.util.ArrayList;

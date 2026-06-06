@@ -1,6 +1,6 @@
 package hashtools.module.checking.service;
 
-import hashtools.core.model.Checksum;
+import hashtools.core.checksum.Checksum;
 import hashtools.core.strategy.checksumsource.ChecksumSource;
 import hashtools.core.strategy.inputsource.InputSource;
 import hashtools.core.threadpool.ThreadPoolFactory;

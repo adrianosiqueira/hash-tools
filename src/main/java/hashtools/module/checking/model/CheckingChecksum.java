@@ -1,6 +1,6 @@
 package hashtools.module.checking.model;
 
-import hashtools.core.model.Checksum;
+import hashtools.core.checksum.Checksum;
 
 import java.util.Objects;
 
