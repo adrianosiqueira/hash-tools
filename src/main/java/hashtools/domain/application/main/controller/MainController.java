@@ -1,4 +1,4 @@
-package hashtools.domain.main.controller;
+package hashtools.domain.application.main.controller;
 
 import hashtools.view.dialog.MessageDialog;
 import hashtools.view.javafx.JavaFXLoader;
