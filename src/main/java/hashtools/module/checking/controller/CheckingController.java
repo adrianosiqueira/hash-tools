@@ -1,9 +1,9 @@
 package hashtools.module.checking.controller;
 
 import hashtools.core.problem.Problem;
-import hashtools.core.strategy.checksumsource.ChecksumSource;
-import hashtools.core.strategy.checksumsource.FileChecksumSource;
-import hashtools.core.strategy.checksumsource.StringChecksumSource;
+import hashtools.core.source.checksum.ChecksumSource;
+import hashtools.core.source.checksum.FileChecksumSource;
+import hashtools.core.source.checksum.StringChecksumSource;
 import hashtools.core.strategy.headerformatter.LeftAlignmentHeaderFormatter;
 import hashtools.core.strategy.inputsource.FileInputSource;
 import hashtools.core.strategy.inputsource.InputSource;
