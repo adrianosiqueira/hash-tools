@@ -1,11 +1,11 @@
-package hashtools.domain.checker.service;
+package hashtools.domain.checksum.checker.service;
 
 import hashtools.core.checksum.Checksum;
 import hashtools.core.source.checksum.ChecksumSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.threadpool.ThreadPoolFactory;
-import hashtools.domain.checker.model.CheckerChecksum;
-import hashtools.domain.checker.model.CheckerResult;
+import hashtools.domain.checksum.checker.model.CheckerChecksum;
+import hashtools.domain.checksum.checker.model.CheckerResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

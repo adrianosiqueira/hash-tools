@@ -1,4 +1,4 @@
-package hashtools.domain.checker.controller;
+package hashtools.domain.checksum.checker.controller;
 
 import hashtools.core.problem.Problem;
 import hashtools.core.source.checksum.ChecksumSource;
@@ -7,8 +7,8 @@ import hashtools.core.source.checksum.StringChecksumSource;
 import hashtools.core.source.input.FileInputSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.source.input.StringInputSource;
-import hashtools.domain.checker.model.CheckerScreenInput;
-import hashtools.domain.checker.service.CheckerService;
+import hashtools.domain.checksum.checker.model.CheckerScreenInput;
+import hashtools.domain.checksum.checker.service.CheckerService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;

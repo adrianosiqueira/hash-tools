@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<StackPane fx:controller="hashtools.domain.checker.controller.CheckerController" fx:id="pnlRoot" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<StackPane fx:controller="hashtools.domain.checksum.checker.controller.CheckerController" fx:id="pnlRoot" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <GridPane alignment="CENTER" fx:id="pnlForm" hgap="20" vgap="50">
         <columnConstraints>
             <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>

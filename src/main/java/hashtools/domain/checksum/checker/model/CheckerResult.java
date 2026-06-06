@@ -1,4 +1,4 @@
-package hashtools.domain.checker.model;
+package hashtools.domain.checksum.checker.model;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.formatter.header.HeaderFormatter;
