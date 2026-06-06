@@ -1,7 +1,10 @@
 package hashtools.core.source.checksum;
 
 import hashtools.core.checksum.Checksum;
+import hashtools.core.problem.Problem;
 import hashtools.view.dialog.FileExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,9 +12,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class FileChecksumSource implements ChecksumSource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileChecksumSource.class);
+
+
 
     private String filePath;
 
@@ -24,17 +32,42 @@ public class FileChecksumSource implements ChecksumSource {
 
 
     @Override
-    public boolean isValid() {
-        String fileExtension = this.getFileExtension();
+    public Optional<Problem> checkForProblem() {
+        LOGGER.info("Validating the checksum source.");
+        Path path = Path.of(filePath);
 
-        if (!FileExtension.HASH.containsExtension(fileExtension)) {
-            return false;
+        if (Files.notExists(path)) {
+            Problem problem = new Problem()
+                .withDescription("The checksum file does not exist.")
+                .withCause("The file may be deleted after selection or you entered a incorrect file path.")
+                .withFix("Use the 'open' button to properly select the checksum file.");
+
+            LOGGER.warn("Found: {}", problem);
+            return Optional.of(problem);
         }
 
+        if (!Files.isRegularFile(path)) {
+            Problem problem = new Problem()
+                .withDescription("The checksum file is not a file.")
+                .withCause("You may incorrectly entered the file path or the path ends in a directory.")
+                .withFix("Use the 'open' button to properly select the checksum file.");
 
+            LOGGER.warn("Found: {}", problem);
+            return Optional.of(problem);
+        }
 
-        Path path = Path.of(filePath);
-        return Files.isRegularFile(path);
+        if (this.checksumFileHasInvalidExtension()) {
+            Problem problem = new Problem()
+                .withDescription("The checksum file is not valid.")
+                .withCause("You are attempting to use a file with an invalid extension.")
+                .withFix("Use the 'open' button to properly select the checksum file.");
+
+            LOGGER.warn("Found: {}", problem);
+            return Optional.of(problem);
+        }
+
+        LOGGER.info("No problem found.");
+        return Optional.empty();
     }
 
     @Override
@@ -60,11 +93,17 @@ public class FileChecksumSource implements ChecksumSource {
 
 
 
-    private String getFileExtension() {
+    private boolean checksumFileHasInvalidExtension() {
         int lastDotIndex = filePath.lastIndexOf('.');
 
-        return lastDotIndex > 0
+        String extension = lastDotIndex > 0
             ? filePath.substring(lastDotIndex + 1)
             : "";
+
+
+
+        return !FileExtension
+            .HASH
+            .containsExtension(extension);
     }
 }
