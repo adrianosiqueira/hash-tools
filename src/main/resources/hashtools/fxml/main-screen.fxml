@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<HBox fx:controller="hashtools.module.main.controller.MainController" fx:id="pnlRoot" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<HBox fx:controller="hashtools.domain.main.controller.MainController" fx:id="pnlRoot" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <VBox HBox.hgrow="NEVER" fx:id="pnlButtons">
         <Button VBox.vgrow="ALWAYS" fx:id="btnChecking" maxHeight="1E6" maxWidth="1E6" onAction="#openCheckingScreen" text="Check"/>
         <Button VBox.vgrow="ALWAYS" fx:id="btnGeneration" maxHeight="1E6" maxWidth="1E6" onAction="#openGenerationScreen" text="Generate"/>

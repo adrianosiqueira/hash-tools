@@ -1,4 +1,4 @@
-package hashtools.module.checking.model;
+package hashtools.domain.checking.model;
 
 import hashtools.core.problem.Problem;
 import hashtools.view.dialog.FileExtension;

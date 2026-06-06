@@ -1,4 +1,4 @@
-package hashtools.module.checking.controller;
+package hashtools.domain.checking.controller;
 
 import hashtools.core.problem.Problem;
 import hashtools.core.source.checksum.ChecksumSource;
@@ -8,8 +8,8 @@ import hashtools.core.formatter.header.LeftAlignmentHeaderFormatter;
 import hashtools.core.source.input.FileInputSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.source.input.StringInputSource;
-import hashtools.module.checking.model.CheckingScreenInput;
-import hashtools.module.checking.service.CheckingService;
+import hashtools.domain.checking.model.CheckingScreenInput;
+import hashtools.domain.checking.service.CheckingService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
