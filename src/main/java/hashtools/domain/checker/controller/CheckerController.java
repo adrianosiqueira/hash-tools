@@ -4,7 +4,6 @@ import hashtools.core.problem.Problem;
 import hashtools.core.source.checksum.ChecksumSource;
 import hashtools.core.source.checksum.FileChecksumSource;
 import hashtools.core.source.checksum.StringChecksumSource;
-import hashtools.core.formatter.header.LeftAlignmentHeaderFormatter;
 import hashtools.core.source.input.FileInputSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.source.input.StringInputSource;
@@ -159,7 +158,7 @@ public class CheckerController implements Initializable {
         try {
             String formattedResult = checkerService
                 .performChecksumChecking(this.createInputSource(), this.createChecksumSource())
-                .formatForConsolePrinting(new LeftAlignmentHeaderFormatter());
+                .formatForConsolePrinting();
 
             this.showResultScreen(formattedResult);
         } catch (Exception e) {

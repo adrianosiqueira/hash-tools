@@ -45,21 +45,19 @@ public class CheckerResult {
         return reliability;
     }
 
-    public String formatForConsolePrinting(HeaderFormatter formatter) {
-        String[] alignedHeaders = formatter.format(
-            new String[]{
-                "Algorithm",
-                "Official",
-                "Generated",
-                "Status"
-            },
-            '.'
-        );
+    public String formatForConsolePrinting() {
+        HeaderFormatter formatter = new HeaderFormatter();
+        String[] headers = formatter.alignToLeft(new String[]{
+            "Algorithm",
+            "Official",
+            "Generated",
+            "Status of the checking"
+        });
 
 
 
         String lineSeparator = System.lineSeparator();
-        String separator = "-".repeat(alignedHeaders[0].length() + Algorithm.SHA512.getLength() + 2);
+        String separator = "-".repeat(headers[0].length() + Algorithm.SHA512.getLength() + 2);
 
         StringJoiner result = new StringJoiner(
             lineSeparator + separator + lineSeparator,
@@ -70,10 +68,10 @@ public class CheckerResult {
         for (CheckerChecksum checksum : checksums) {
             result.add(String.format(
                 "%s: %s\n%s: %s\n%s: %s\n%s: %s",
-                alignedHeaders[0], checksum.getAlgorithmDisplayName(),
-                alignedHeaders[1], checksum.getOfficialHash(),
-                alignedHeaders[2], checksum.getGeneratedHash(),
-                alignedHeaders[3], checksum.matches()
+                headers[0], checksum.getAlgorithmDisplayName(),
+                headers[1], checksum.getOfficialHash(),
+                headers[2], checksum.getGeneratedHash(),
+                headers[3], checksum.matches()
             ));
         }
 

@@ -2,20 +2,25 @@ package hashtools.core.formatter.header;
 
 import java.util.stream.Stream;
 
-public abstract class HeaderFormatter {
+public class HeaderFormatter {
 
+    public String[] alignToLeft(String[] headers) {
+        String[] alignedHeaders = new String[headers.length];
+        int desiredLength = this.getGreatestLength(headers);
 
-    public String[] format(String[] headers, char spacer) {
-        return this.align(
-            headers,
-            this.getGreatestLength(headers),
-            spacer
-        );
+        for (int i = 0; i < headers.length; i++) {
+            StringBuilder header = new StringBuilder();
+            header.append(headers[i]);
+
+            while (header.length() < desiredLength) {
+                header.append(this.fill());
+            }
+
+            alignedHeaders[i] = header.toString();
+        }
+
+        return alignedHeaders;
     }
-
-
-
-    protected abstract String[] align(String[] headers, int desiredLength, char spacer);
 
 
 
@@ -25,5 +30,9 @@ public abstract class HeaderFormatter {
             .map(String::length)
             .reduce(Integer::max)
             .orElse(0);
+    }
+
+    private char fill() {
+        return '.';
     }
 }
