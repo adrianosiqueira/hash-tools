@@ -1,10 +1,19 @@
 package hashtools.core.source.input;
 
+import hashtools.core.problem.Problem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class StringInputSource implements InputSource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StringInputSource.class);
+
+
 
     private String string;
 
@@ -17,8 +26,10 @@ public class StringInputSource implements InputSource {
 
 
     @Override
-    public boolean isValid() {
-        return true;
+    public boolean checkForProblem(Consumer<Problem> problemConsumer) {
+        LOGGER.info("Validating the input source.");
+        LOGGER.info("No problem found.");
+        return false;
     }
 
     @Override

@@ -1,13 +1,22 @@
 package hashtools.core.source.input;
 
+import hashtools.core.problem.Problem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class FileInputSource implements InputSource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileInputSource.class);
+
+
 
     private String filePath;
 
@@ -20,9 +29,23 @@ public class FileInputSource implements InputSource {
 
 
     @Override
-    public boolean isValid() {
+    public boolean checkForProblem(Consumer<Problem> problemConsumer) {
+        LOGGER.info("Validating the input source.");
         Path path = Path.of(filePath);
-        return Files.isRegularFile(path);
+
+        if (!Files.isRegularFile(path)) {
+            Problem problem = new Problem()
+                .withDescription("The input is not a file.")
+                .withCause("You may incorrectly entered the file path.")
+                .withFix("Use the 'open' button to properly select a file.");
+
+            LOGGER.warn("Found: {}", problem);
+            problemConsumer.accept(problem);
+            return true;
+        }
+
+        LOGGER.info("No problem found.");
+        return false;
     }
 
     @Override
