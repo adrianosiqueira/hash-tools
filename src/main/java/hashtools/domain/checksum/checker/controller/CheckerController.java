@@ -7,7 +7,6 @@ import hashtools.core.source.checksum.StringChecksumSource;
 import hashtools.core.source.input.FileInputSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.source.input.StringInputSource;
-import hashtools.domain.checksum.checker.model.CheckerScreenInput;
 import hashtools.domain.checksum.checker.service.CheckerService;
 import hashtools.view.dialog.FileDialog;
 import hashtools.view.dialog.FileExtension;
@@ -141,15 +140,14 @@ public class CheckerController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
-        CheckerScreenInput screenInput = this.collectScreenInput();
-        Optional<Problem> problem = screenInput.identifyProblem();
+        InputSource inputSource = this.createInputSource();
+        ChecksumSource checksumSource = this.createChecksumSource();
 
-        if (problem.isPresent()) {
-            new MessageDialog()
-                .withTitle("Checksum Checking")
-                .withHeader("The following problems were found")
-                .withContent(problem.get())
-                .show();
+
+
+        if (inputSource.checkForProblem(this::showValidationIssueDialog)) {
+            return;
+        } else if (checksumSource.checkForProblem(this::showValidationIssueDialog)) {
             return;
         }
 
@@ -157,7 +155,7 @@ public class CheckerController implements Initializable {
 
         try {
             String formattedResult = checkerService
-                .performChecksumChecking(this.createInputSource(), this.createChecksumSource())
+                .performChecksumChecking(inputSource, checksumSource)
                 .formatForConsolePrinting();
 
             this.showResultScreen(formattedResult);
@@ -233,14 +231,12 @@ public class CheckerController implements Initializable {
         txtResult.setText(content);
     }
 
-    private CheckerScreenInput collectScreenInput() {
-        CheckerScreenInput screenInput = new CheckerScreenInput();
-        screenInput.setInput(txtInput.getText());
-        screenInput.setUsingInputFile(chkInput.isSelected());
-        screenInput.setChecksum(txtChecksum.getText());
-        screenInput.setUsingChecksumFile(chkChecksum.isSelected());
-
-        return screenInput;
+    private void showValidationIssueDialog(Problem problem) {
+        new MessageDialog()
+            .withTitle("Checksum Checking")
+            .withHeader("The following problem was found")
+            .withContent(problem)
+            .show();
     }
 
     private InputSource createInputSource() {
