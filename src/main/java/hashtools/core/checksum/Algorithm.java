@@ -76,7 +76,7 @@ public enum Algorithm {
 
     public Checksum generateChecksum(InputSource inputSource) throws IOException {
         if (this == NULL_ALGORITHM) {
-            return new Checksum("");
+            return new Checksum();
         }
 
 
