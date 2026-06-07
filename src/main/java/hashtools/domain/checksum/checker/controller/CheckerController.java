@@ -188,37 +188,28 @@ public class CheckerController implements Initializable {
 
 
 
-        Path destination = selectedFile.get();
-        String content = txtResult.getText();
-
-        StandardOpenOption[] options = {
-            StandardOpenOption.CREATE,
-            StandardOpenOption.TRUNCATE_EXISTING
-        };
-
-
-
         try {
             Files.writeString(
-                destination,
-                content,
-                options
+                selectedFile.get(),
+                txtResult.getText(),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING
             );
 
             new MessageDialog()
                 .withTitle("Checksum Checking")
-                .withContent("Results saved in: " + destination)
+                .withContent("Results saved in: " + selectedFile.get())
                 .show();
 
-            LOGGER.info("Results saved to '{}'.", destination);
+            LOGGER.info("Results saved to '{}'.", selectedFile.get());
         } catch (Exception e) {
             new MessageDialog()
                 .withTitle("Checking Result Saving")
-                .withHeader("Failed to save the results into: " + destination)
+                .withHeader("Failed to save the results into: " + selectedFile.get())
                 .withContent(e)
                 .show();
 
-            LOGGER.error("Failed to save the results to '{}'.", destination, e);
+            LOGGER.error("Failed to save the results to '{}'.", selectedFile.get(), e);
         }
     }
 
