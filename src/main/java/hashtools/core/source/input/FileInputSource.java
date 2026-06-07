@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.Optional;
 
 public class FileInputSource implements InputSource {
 
@@ -29,9 +29,19 @@ public class FileInputSource implements InputSource {
 
 
     @Override
-    public boolean checkForProblem(Consumer<Problem> problemConsumer) {
+    public Optional<Problem> checkForProblem() {
         LOGGER.info("Validating the input source.");
         Path path = Path.of(filePath);
+
+        if (Files.notExists(path)) {
+            Problem problem = new Problem()
+                .withDescription("The input file does not exist.")
+                .withCause("The file may be deleted after selection or you entered a incorrect file path.")
+                .withFix("Use the 'open' button to properly select the input file.");
+
+            LOGGER.warn("Found: {}", problem);
+            return Optional.of(problem);
+        }
 
         if (!Files.isRegularFile(path)) {
             Problem problem = new Problem()
@@ -40,12 +50,11 @@ public class FileInputSource implements InputSource {
                 .withFix("Use the 'open' button to properly select a file.");
 
             LOGGER.warn("Found: {}", problem);
-            problemConsumer.accept(problem);
-            return true;
+            return Optional.of(problem);
         }
 
         LOGGER.info("No problem found.");
-        return false;
+        return Optional.empty();
     }
 
     @Override

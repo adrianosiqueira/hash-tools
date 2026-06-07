@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class StringChecksumSource implements ChecksumSource {
@@ -29,10 +29,10 @@ public class StringChecksumSource implements ChecksumSource {
 
 
     @Override
-    public boolean checkForProblem(Consumer<Problem> problemConsumer) {
+    public Optional<Problem> checkForProblem() {
         LOGGER.info("Validating the checksum source.");
         LOGGER.info("No problem found.");
-        return false;
+        return Optional.empty();
     }
 
     @Override

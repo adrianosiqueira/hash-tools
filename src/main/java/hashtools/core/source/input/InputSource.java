@@ -4,11 +4,11 @@ import hashtools.core.problem.Problem;
 
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.util.function.Consumer;
+import java.util.Optional;
 
 public interface InputSource {
 
-    boolean checkForProblem(Consumer<Problem> problemConsumer);
+    Optional<Problem> checkForProblem();
 
     void updateMessageDigest(MessageDigest messageDigest) throws IOException;
 

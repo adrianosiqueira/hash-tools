@@ -5,11 +5,11 @@ import hashtools.core.problem.Problem;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Optional;
 
 public interface ChecksumSource {
 
-    boolean checkForProblem(Consumer<Problem> problemConsumer);
+    Optional<Problem> checkForProblem();
 
     List<Checksum> getValidChecksums() throws IOException;
 }

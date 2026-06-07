@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.Optional;
 
 public class StringInputSource implements InputSource {
 
@@ -26,10 +26,10 @@ public class StringInputSource implements InputSource {
 
 
     @Override
-    public boolean checkForProblem(Consumer<Problem> problemConsumer) {
+    public Optional<Problem> checkForProblem() {
         LOGGER.info("Validating the input source.");
         LOGGER.info("No problem found.");
-        return false;
+        return Optional.empty();
     }
 
     @Override

@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class CheckerController implements Initializable {
 
@@ -140,14 +141,29 @@ public class CheckerController implements Initializable {
 
     @FXML
     private void performChecksumChecking() {
+        Consumer<Problem> problemDialog = problem -> new MessageDialog()
+            .withTitle("Checksum Checking")
+            .withHeader("The following problem was found")
+            .withContent(problem)
+            .show();
+
+
+
         InputSource inputSource = this.createInputSource();
-        ChecksumSource checksumSource = this.createChecksumSource();
+        Optional<Problem> inputSourceProblem = inputSource.checkForProblem();
 
-
-
-        if (inputSource.checkForProblem(this::showValidationIssueDialog)) {
+        if (inputSourceProblem.isPresent()) {
+            problemDialog.accept(inputSourceProblem.get());
             return;
-        } else if (checksumSource.checkForProblem(this::showValidationIssueDialog)) {
+        }
+
+
+
+        ChecksumSource checksumSource = this.createChecksumSource();
+        Optional<Problem> checksumSourceProblem = checksumSource.checkForProblem();
+
+        if (checksumSourceProblem.isPresent()) {
+            problemDialog.accept(checksumSourceProblem.get());
             return;
         }
 
@@ -220,14 +236,6 @@ public class CheckerController implements Initializable {
         pnlResult.setVisible(true);
 
         txtResult.setText(content);
-    }
-
-    private void showValidationIssueDialog(Problem problem) {
-        new MessageDialog()
-            .withTitle("Checksum Checking")
-            .withHeader("The following problem was found")
-            .withContent(problem)
-            .show();
     }
 
     private InputSource createInputSource() {
