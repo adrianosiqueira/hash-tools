@@ -88,7 +88,8 @@ public class CheckerResult {
             + lineSeparator
             + result
             + lineSeparator
-            + formattedReliability;
+            + formattedReliability
+            + lineSeparator;
     }
 
 
