@@ -51,7 +51,7 @@ public class CheckerResult {
             "Algorithm",
             "Official",
             "Generated",
-            "Status of the checking"
+            "Status"
         });
 
 
