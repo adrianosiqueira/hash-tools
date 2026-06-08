@@ -2,7 +2,7 @@ package hashtools.domain.checksum.checker.model;
 
 import hashtools.core.checksum.Checksum;
 
-import java.util.Objects;
+import java.util.Optional;
 
 public class CheckerChecksum {
 
@@ -19,8 +19,7 @@ public class CheckerChecksum {
 
 
     public boolean matches() {
-        return officialChecksum != null
-            && officialChecksum.matches(generatedChecksum);
+        return officialChecksum.matches(generatedChecksum);
     }
 
     public String getAlgorithmDisplayName() {
@@ -38,10 +37,14 @@ public class CheckerChecksum {
 
 
     public void setOfficialChecksum(Checksum officialChecksum) {
-        this.officialChecksum = Objects.requireNonNullElse(officialChecksum, new Checksum());
+        this.officialChecksum = Optional
+            .ofNullable(officialChecksum)
+            .orElseGet(Checksum::new);
     }
 
     public void setGeneratedChecksum(Checksum generatedChecksum) {
-        this.generatedChecksum = Objects.requireNonNullElse(generatedChecksum, new Checksum());
+        this.generatedChecksum = Optional
+            .ofNullable(generatedChecksum)
+            .orElseGet(Checksum::new);
     }
 }
