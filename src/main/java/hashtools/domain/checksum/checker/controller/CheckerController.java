@@ -1,5 +1,8 @@
 package hashtools.domain.checksum.checker.controller;
 
+import hashtools.core.file.EnhancedFile;
+import hashtools.core.file.FileDialog;
+import hashtools.core.file.FileExtension;
 import hashtools.core.problem.Problem;
 import hashtools.core.source.checksum.ChecksumSource;
 import hashtools.core.source.checksum.FileChecksumSource;
@@ -8,8 +11,6 @@ import hashtools.core.source.input.FileInputSource;
 import hashtools.core.source.input.InputSource;
 import hashtools.core.source.input.StringInputSource;
 import hashtools.domain.checksum.checker.service.CheckerService;
-import hashtools.view.dialog.FileDialog;
-import hashtools.view.dialog.FileExtension;
 import hashtools.view.dialog.MessageDialog;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,10 +23,8 @@ import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -105,27 +104,31 @@ public class CheckerController implements Initializable {
 
     @FXML
     private void openInputFile() {
-        new FileDialog()
-            .setTitle("Select the input file")
-            .showOpenDialog(null)
-            .map(Path::toString)
-            .ifPresent(path -> {
-                txtInput.setText(path);
-                LOGGER.debug("Selected '{}' as the input file.", path);
-            });
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select the input file")
+            .openForReading();
+
+        if (file == null) {
+            return;
+        }
+
+        txtInput.setText(file.toString());
+        LOGGER.debug("Selected '{}' as the input file.", file);
     }
 
     @FXML
     private void openChecksumFile() {
-        new FileDialog()
-            .setTitle("Select the checksums file")
-            .setSelectedExtension(FileExtension.HASH)
-            .showOpenDialog(null)
-            .map(Path::toString)
-            .ifPresent(path -> {
-                txtChecksum.setText(path);
-                LOGGER.debug("Selected '{}' as the checksum file.", path);
-            });
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select the checksums file")
+            .withDefaultExtension(FileExtension.HASH)
+            .openForReading();
+
+        if (file == null) {
+            return;
+        }
+
+        txtChecksum.setText(file.toString());
+        LOGGER.debug("Selected '{}' as the checksum file.", file);
     }
 
     @FXML
@@ -194,38 +197,33 @@ public class CheckerController implements Initializable {
 
     @FXML
     private void saveResult() {
-        Optional<Path> selectedFile = new FileDialog()
-            .setTitle("Select where to save")
-            .showSaveDialog(null);
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select where to save")
+            .openForWriting();
 
-        if (selectedFile.isEmpty()) {
+        if (file == null) {
             return;
         }
 
 
 
         try {
-            Files.writeString(
-                selectedFile.get(),
-                txtResult.getText(),
-                StandardOpenOption.CREATE,
-                StandardOpenOption.TRUNCATE_EXISTING
-            );
+            file.replaceContent(txtResult.getText());
 
             new MessageDialog()
                 .withTitle("Checksum Checking")
-                .withContent("Results saved in: " + selectedFile.get())
+                .withContent("Results saved in: " + file)
                 .show();
 
-            LOGGER.info("Results saved to '{}'.", selectedFile.get());
-        } catch (Exception e) {
+            LOGGER.info("Results saved to '{}'.", file);
+        } catch (IOException e) {
             new MessageDialog()
                 .withTitle("Checking Result Saving")
-                .withHeader("Failed to save the results into: " + selectedFile.get())
+                .withHeader("Failed to save the results into: " + file)
                 .withContent(e)
                 .show();
 
-            LOGGER.error("Failed to save the results to '{}'.", selectedFile.get(), e);
+            LOGGER.error("Failed to save the results to '{}'.", file, e);
         }
     }
 

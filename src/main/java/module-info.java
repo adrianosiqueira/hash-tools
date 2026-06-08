@@ -6,6 +6,7 @@ module hash.tools {
 
     exports hashtools;
     exports hashtools.core.checksum;
+    exports hashtools.core.file;
     exports hashtools.core.formatter.header;
     exports hashtools.core.problem;
     exports hashtools.core.source.checksum;
@@ -21,6 +22,7 @@ module hash.tools {
 
     opens hashtools;
     opens hashtools.core.checksum;
+    opens hashtools.core.file;
     opens hashtools.core.formatter.header;
     opens hashtools.core.problem;
     opens hashtools.core.source.checksum;
