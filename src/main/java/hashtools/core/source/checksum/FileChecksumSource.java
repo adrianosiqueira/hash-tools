@@ -1,8 +1,8 @@
 package hashtools.core.source.checksum;
 
 import hashtools.core.checksum.Checksum;
+import hashtools.core.file.FileExtension;
 import hashtools.core.problem.Problem;
-import hashtools.view.dialog.FileExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

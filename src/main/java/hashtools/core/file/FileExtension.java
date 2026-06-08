@@ -1,4 +1,4 @@
-package hashtools.view.dialog;
+package hashtools.core.file;
 
 import javafx.stage.FileChooser;
 
