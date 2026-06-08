@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EnhancedFile {
 
@@ -13,25 +14,42 @@ public class EnhancedFile {
 
 
 
-    public EnhancedFile(Path path) {
-        this.path = Objects
-            .requireNonNull(path, "The path cannot be null")
-            .toAbsolutePath();
+    private EnhancedFile(Path path) {
+        this.path = path;
     }
 
-    public EnhancedFile(File file) {
-        this.path = Objects
-            .requireNonNull(file, "The file cannot be null")
-            .toPath()
-            .toAbsolutePath();
+
+
+    public static EnhancedFile create(Path path) {
+        return Optional
+            .ofNullable(path)
+            .map(EnhancedFile::new)
+            .orElse(null);
     }
 
-    public EnhancedFile(String filePath) {
-        Objects.requireNonNull(filePath, "The file path cannot be null");
+    public static EnhancedFile create(File file) {
+        return Optional
+            .ofNullable(file)
+            .map(File::toPath)
+            .map(EnhancedFile::new)
+            .orElse(null);
+    }
 
-        this.path = Path
-            .of(filePath)
-            .toAbsolutePath();
+    public static EnhancedFile create(String filePath) {
+        return Optional
+            .ofNullable(filePath)
+            .map(Path::of)
+            .map(EnhancedFile::new)
+            .orElse(null);
+    }
+
+    public static EnhancedFile create(AtomicReference<File> fileReference) {
+        return Optional
+            .ofNullable(fileReference)
+            .map(AtomicReference::get)
+            .map(File::toPath)
+            .map(EnhancedFile::new)
+            .orElse(null);
     }
 
 

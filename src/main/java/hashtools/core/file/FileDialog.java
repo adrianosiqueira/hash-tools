@@ -98,8 +98,6 @@ public class FileDialog {
 
 
 
-        return fileReference.get() != null
-            ? new EnhancedFile(fileReference.get())
-            : null;
+        return EnhancedFile.create(fileReference);
     }
 }
