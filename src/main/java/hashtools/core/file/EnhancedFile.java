@@ -51,33 +51,29 @@ public class EnhancedFile {
 
 
 
-    public EnhancedFile appendContent(String content) throws IOException {
+    public void appendContent(String content) throws IOException {
         Files.writeString(
             path,
             content,
             StandardOpenOption.CREATE,
             StandardOpenOption.APPEND
         );
-
-        return this;
     }
 
-    public EnhancedFile replaceContent(String content) throws IOException {
+    public void replaceContent(String content) throws IOException {
         Files.writeString(
             path,
             content,
             StandardOpenOption.CREATE,
             StandardOpenOption.TRUNCATE_EXISTING
         );
-
-        return this;
     }
 
-    public EnhancedFile clearContent() throws IOException {
-        return this.replaceContent("");
+    public void clearContent() throws IOException {
+        this.replaceContent("");
     }
 
-    public EnhancedFile appendNewLine() throws IOException {
-        return this.appendContent(System.lineSeparator());
+    public void appendNewLine() throws IOException {
+        this.appendContent(System.lineSeparator());
     }
 }
