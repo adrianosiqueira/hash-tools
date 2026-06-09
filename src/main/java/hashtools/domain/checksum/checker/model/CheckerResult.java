@@ -5,6 +5,7 @@ import hashtools.core.formatter.header.HeaderFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 public class CheckerResult {
@@ -12,37 +13,38 @@ public class CheckerResult {
     private List<CheckerChecksum> checksums;
     private String identification;
 
-    private double reliability;
-    private boolean reliabilityNeedsCalculation;
-
 
 
     public CheckerResult() {
         this.checksums = new ArrayList<>();
         this.identification = "";
-
-        this.reliability = 0.0;
-        this.reliabilityNeedsCalculation = true;
     }
 
 
 
     public void addChecksum(CheckerChecksum checksum) {
-        checksums.add(checksum);
-        this.invalidateReliability();
+        Optional
+            .ofNullable(checksum)
+            .ifPresent(checksums::add);
     }
 
     public void setIdentification(String identification) {
-        this.identification = identification;
+        this.identification = Optional
+            .ofNullable(identification)
+            .orElse("");
     }
 
     public double getReliability() {
-        if (reliabilityNeedsCalculation) {
-            this.calculateReliability();
-            this.validateReliability();
+        if (checksums.isEmpty()) {
+            return 0.0;
         }
 
-        return reliability;
+
+        return (double) checksums
+            .stream()
+            .filter(CheckerChecksum::matches)
+            .count()
+            / checksums.size();
     }
 
     public String formatForConsolePrinting() {
@@ -90,36 +92,5 @@ public class CheckerResult {
             + lineSeparator
             + formattedReliability
             + lineSeparator;
-    }
-
-
-
-    private void setReliability(double reliability) {
-        this.reliability = reliability < 0.5
-            ? Math.max(reliability, 0.0)
-            : Math.min(reliability, 1.0);
-    }
-
-    private void validateReliability() {
-        this.reliabilityNeedsCalculation = false;
-    }
-
-    private void invalidateReliability() {
-        this.reliabilityNeedsCalculation = true;
-    }
-
-    private void calculateReliability() {
-        if (checksums.isEmpty()) {
-            this.setReliability(0.0);
-            return;
-        }
-
-        double reliability = (double) checksums
-            .stream()
-            .filter(CheckerChecksum::matches)
-            .count()
-            / checksums.size();
-
-        this.setReliability(reliability);
     }
 }
