@@ -4,6 +4,8 @@ module hash.tools {
     requires org.slf4j;
 
     exports hashtools;
+    exports hashtools.core.checksum;
 
     opens hashtools;
+    opens hashtools.core.checksum;
 }
