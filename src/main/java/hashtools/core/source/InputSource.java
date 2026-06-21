@@ -1,5 +1,6 @@
 package hashtools.core.source;
 
+import hashtools.core.strategy.identification.FileInputIdentification;
 import hashtools.core.strategy.identification.InputIdentification;
 import hashtools.core.strategy.identification.TextInputIdentification;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdate;
@@ -26,7 +27,7 @@ public class InputSource {
     public static InputSource fileInputSource(String filePath) {
         return new InputSource(
             _ -> {},
-            () -> "",
+            new FileInputIdentification(filePath),
             new FileInputProblemDetection(filePath)
         );
     }
