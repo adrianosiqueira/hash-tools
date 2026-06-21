@@ -28,19 +28,7 @@ public class EnhancedFile {
     }
 
     public boolean hasFileExtension(FileExtension extension) {
-        String filePath = file
-            .getFileName()
-            .toString();
-
-
-
-        int dotIndex = filePath.lastIndexOf('.');
-
-        String fileExtension = dotIndex > 0
-            ? filePath.substring(dotIndex + 1)
-            : "";
-
-
+        String fileExtension = this.getFileExtension();
         return extension.containsExtension(fileExtension);
     }
 
@@ -57,5 +45,19 @@ public class EnhancedFile {
             StandardOpenOption.CREATE,
             StandardOpenOption.TRUNCATE_EXISTING
         );
+    }
+
+
+
+    private String getFileExtension() {
+        String filePath = file
+            .getFileName()
+            .toString();
+
+        int dotIndex = filePath.lastIndexOf('.');
+
+        return dotIndex > 0
+            ? filePath.substring(dotIndex + 1)
+            : "";
     }
 }
