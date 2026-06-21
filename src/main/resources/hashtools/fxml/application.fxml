@@ -8,9 +8,9 @@
 <HBox fx:controller="hashtools.module.application.controller.ApplicationController" spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
 
     <VBox HBox.hgrow="NEVER">
-        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" text="Checker"/>
-        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" text="Generator"/>
-        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" text="Comparator"/>
+        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" onAction="#openCheckerScreen" text="Checker"/>
+        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" onAction="#openGeneratorScreen" text="Generator"/>
+        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" onAction="#openComparatorScreen" text="Comparator"/>
     </VBox>
 
 

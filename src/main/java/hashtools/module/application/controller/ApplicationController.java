@@ -21,4 +21,21 @@ public class ApplicationController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.applicationService = new ApplicationService();
     }
+
+
+
+    @FXML
+    private void openCheckerScreen() {
+        applicationService.openCheckerScreen(pnlContent.getChildren()::setAll);
+    }
+
+    @FXML
+    private void openComparatorScreen() {
+        applicationService.openComparatorScreen(pnlContent.getChildren()::setAll);
+    }
+
+    @FXML
+    private void openGeneratorScreen() {
+        applicationService.openGeneratorScreen(pnlContent.getChildren()::setAll);
+    }
 }
