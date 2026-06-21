@@ -1,10 +1,10 @@
 package hashtools.core.source;
 
 import hashtools.core.strategy.extraction.ChecksumExtraction;
+import hashtools.core.strategy.extraction.FileChecksumExtraction;
 import hashtools.core.strategy.extraction.TextChecksumExtraction;
 import hashtools.core.strategy.problem.ProblemDetection;
 
-import java.util.List;
 import java.util.Optional;
 
 public class ChecksumSource {
@@ -23,7 +23,7 @@ public class ChecksumSource {
 
     public static ChecksumSource fileChecksumSource(String filePath) {
         return new ChecksumSource(
-            List::of,
+            new FileChecksumExtraction(filePath),
             Optional::empty
         );
     }
