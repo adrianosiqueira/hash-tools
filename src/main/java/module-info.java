@@ -11,6 +11,7 @@ module hash.tools {
     exports hashtools.core.strategy.messagedigest;
     exports hashtools.core.strategy.problem;
     exports hashtools.core.threadpool;
+    exports hashtools.view.window;
 
     opens hashtools;
     opens hashtools.core.checksum;
@@ -20,4 +21,5 @@ module hash.tools {
     opens hashtools.core.strategy.messagedigest;
     opens hashtools.core.strategy.problem;
     opens hashtools.core.threadpool;
+    opens hashtools.view.window;
 }
