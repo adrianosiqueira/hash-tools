@@ -2,6 +2,7 @@ package hashtools.view.util;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.Locale;
@@ -27,8 +28,15 @@ public class JavaFxLoader extends FXMLLoader {
         super.setResources(bundle);
     }
 
+
+
     public void consumeScene(Consumer<Scene> consumer) {
         Scene scene = new Scene(this.getRoot());
         consumer.accept(scene);
+    }
+
+    public void consumePane(Consumer<Pane> consumer) {
+        Pane pane = this.getRoot();
+        consumer.accept(pane);
     }
 }
