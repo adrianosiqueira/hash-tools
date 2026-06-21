@@ -4,6 +4,7 @@ import hashtools.core.strategy.identification.FileInputIdentification;
 import hashtools.core.strategy.identification.InputIdentification;
 import hashtools.core.strategy.identification.TextInputIdentification;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdate;
+import hashtools.core.strategy.messagedigest.TextMessageDigestUpdate;
 import hashtools.core.strategy.problem.FileInputProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
 import hashtools.core.strategy.problem.TextInputProblemDetection;
@@ -34,7 +35,7 @@ public class InputSource {
 
     public static InputSource textInputSource(String text) {
         return new InputSource(
-            _ -> {},
+            new TextMessageDigestUpdate(text),
             new TextInputIdentification(text),
             new TextInputProblemDetection(text)
         );
