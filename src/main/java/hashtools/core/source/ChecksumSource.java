@@ -1,6 +1,7 @@
 package hashtools.core.source;
 
 import hashtools.core.strategy.extraction.ChecksumExtraction;
+import hashtools.core.strategy.extraction.TextChecksumExtraction;
 import hashtools.core.strategy.problem.ProblemDetection;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class ChecksumSource {
 
     public static ChecksumSource textChecksumSource(String text) {
         return new ChecksumSource(
-            List::of,
+            new TextChecksumExtraction(text),
             Optional::empty
         );
     }
