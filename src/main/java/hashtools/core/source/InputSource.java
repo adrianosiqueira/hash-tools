@@ -2,10 +2,9 @@ package hashtools.core.source;
 
 import hashtools.core.strategy.identification.InputIdentification;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdate;
+import hashtools.core.strategy.problem.FileInputProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
 import hashtools.core.strategy.problem.TextInputProblemDetection;
-
-import java.util.Optional;
 
 public class InputSource {
 
@@ -27,7 +26,7 @@ public class InputSource {
         return new InputSource(
             _ -> {},
             () -> "",
-            Optional::empty
+            new FileInputProblemDetection(filePath)
         );
     }
 
