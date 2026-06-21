@@ -8,10 +8,12 @@ module hash.tools {
     exports hashtools.core.strategy.extraction;
     exports hashtools.core.strategy.identification;
     exports hashtools.core.strategy.messagedigest;
+    exports hashtools.core.strategy.problem;
 
     opens hashtools;
     opens hashtools.core.checksum;
     opens hashtools.core.strategy.extraction;
     opens hashtools.core.strategy.identification;
     opens hashtools.core.strategy.messagedigest;
+    opens hashtools.core.strategy.problem;
 }
