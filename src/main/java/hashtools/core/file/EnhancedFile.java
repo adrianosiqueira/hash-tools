@@ -44,6 +44,12 @@ public class EnhancedFile {
         return extension.containsExtension(fileExtension);
     }
 
+    public String getAbsolutePath() {
+        return file
+            .toAbsolutePath()
+            .toString();
+    }
+
     public void replaceContent(String content) throws IOException {
         Files.writeString(
             file,

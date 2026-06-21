@@ -1,25 +1,24 @@
 package hashtools.core.strategy.identification;
 
-import java.nio.file.Path;
+import hashtools.core.file.EnhancedFile;
+
 import java.util.Objects;
 
 public class FileInputIdentification implements InputIdentification {
 
-    private Path file;
+    private EnhancedFile file;
 
 
 
     public FileInputIdentification(String filePath) {
         Objects.requireNonNull(filePath);
-        this.file = Path.of(filePath);
+        this.file = new EnhancedFile(filePath);
     }
 
 
 
     @Override
     public String identify() {
-        return file
-            .toAbsolutePath()
-            .toString();
+        return file.getAbsolutePath();
     }
 }
