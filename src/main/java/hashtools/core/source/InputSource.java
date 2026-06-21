@@ -1,6 +1,7 @@
 package hashtools.core.source;
 
 import hashtools.core.strategy.identification.InputIdentification;
+import hashtools.core.strategy.identification.TextInputIdentification;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdate;
 import hashtools.core.strategy.problem.FileInputProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
@@ -33,7 +34,7 @@ public class InputSource {
     public static InputSource textInputSource(String text) {
         return new InputSource(
             _ -> {},
-            () -> "",
+            new TextInputIdentification(text),
             new TextInputProblemDetection(text)
         );
     }
