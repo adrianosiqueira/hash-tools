@@ -12,6 +12,7 @@ module hash.tools {
     exports hashtools.core.strategy.problem;
     exports hashtools.core.threadpool;
     exports hashtools.module.application.controller;
+    exports hashtools.module.application.service;
     exports hashtools.view.util;
     exports hashtools.view.window;
 
@@ -24,6 +25,7 @@ module hash.tools {
     opens hashtools.core.strategy.problem;
     opens hashtools.core.threadpool;
     opens hashtools.module.application.controller;
+    opens hashtools.module.application.service;
     opens hashtools.view.util;
     opens hashtools.view.window;
 }
