@@ -5,20 +5,20 @@ import java.util.Objects;
 
 public class FileInputIdentification implements InputIdentification {
 
-    private String filePath;
+    private Path file;
 
 
 
     public FileInputIdentification(String filePath) {
-        this.filePath = Objects.requireNonNull(filePath);
+        Objects.requireNonNull(filePath);
+        this.file = Path.of(filePath);
     }
 
 
 
     @Override
     public String identify() {
-        return Path
-            .of(filePath)
+        return file
             .toAbsolutePath()
             .toString();
     }

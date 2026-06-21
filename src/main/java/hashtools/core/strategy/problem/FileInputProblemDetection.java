@@ -7,20 +7,19 @@ import java.util.Optional;
 
 public class FileInputProblemDetection implements ProblemDetection {
 
-    private String filePath;
+    private EnhancedFile file;
 
 
 
     public FileInputProblemDetection(String filePath) {
-        this.filePath = Objects.requireNonNull(filePath);
+        Objects.requireNonNull(filePath);
+        this.file = new EnhancedFile(filePath);
     }
 
 
 
     @Override
     public Optional<String> detect() {
-        EnhancedFile file = new EnhancedFile(filePath);
-
         if (!file.exists()) {
             return Optional.of("The input file does not exist. Use the dialog selector to select a valid file.");
         } else if (!file.isRegularFile()) {
