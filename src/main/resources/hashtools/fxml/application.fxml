@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<HBox fx:controller="hashtools.module.application.controller.ApplicationController" spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+
+    <VBox HBox.hgrow="NEVER">
+        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" text="Checker"/>
+        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" text="Generator"/>
+        <Button VBox.vgrow="ALWAYS" maxHeight="1E6" maxWidth="1E6" text="Comparator"/>
+    </VBox>
+
+
+
+    <StackPane HBox.hgrow="ALWAYS" fx:id="pnlContent">
+        <padding>
+            <Insets topRightBottomLeft="20"/>
+        </padding>
+    </StackPane>
+</HBox>
