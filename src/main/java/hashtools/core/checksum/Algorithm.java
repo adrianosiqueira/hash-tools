@@ -1,5 +1,9 @@
 package hashtools.core.checksum;
 
+import hashtools.core.strategy.messagedigest.MessageDigestUpdate;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -38,6 +42,26 @@ public enum Algorithm {
             .of(Algorithm.values())
             .filter(algorithm -> algorithm.length == searchLength)
             .findFirst();
+    }
+
+
+
+    public Checksum generateChecksum(MessageDigestUpdate update) throws RuntimeException {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(this.name);
+            update.update(messageDigest);
+
+            byte[] bytes = messageDigest.digest();
+            StringBuilder hash = new StringBuilder();
+
+            for (byte b : bytes) {
+                hash.append(String.format("%02x", b));
+            }
+
+            return new Checksum(hash.toString());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Internal error regarding to the algorithm name. Report it to the developer.", e);
+        }
     }
 
 
