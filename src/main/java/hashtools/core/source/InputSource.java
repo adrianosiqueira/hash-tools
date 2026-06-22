@@ -72,4 +72,8 @@ public class InputSource {
     public void updateMessageDigest(MessageDigest messageDigest) throws RuntimeException {
         messageDigestUpdate.update(messageDigest);
     }
+
+    public Optional<String> detectProblem() {
+        return problemDetection.detect();
+    }
 }
