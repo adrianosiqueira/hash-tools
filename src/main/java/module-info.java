@@ -14,6 +14,7 @@ module hash.tools {
     exports hashtools.core.threadpool;
     exports hashtools.module.application.controller;
     exports hashtools.module.application.service;
+    exports hashtools.module.checker.controller;
     exports hashtools.module.checker.domain;
     exports hashtools.module.checker.service;
     exports hashtools.view.util;
@@ -30,6 +31,7 @@ module hash.tools {
     opens hashtools.core.threadpool;
     opens hashtools.module.application.controller;
     opens hashtools.module.application.service;
+    opens hashtools.module.checker.controller;
     opens hashtools.module.checker.domain;
     opens hashtools.module.checker.service;
     opens hashtools.view.util;
