@@ -17,6 +17,7 @@ module hash.tools {
     exports hashtools.module.checker.controller;
     exports hashtools.module.checker.domain;
     exports hashtools.module.checker.service;
+    exports hashtools.module.comparator.domain;
     exports hashtools.view.util;
     exports hashtools.view.window;
 
@@ -34,6 +35,7 @@ module hash.tools {
     opens hashtools.module.checker.controller;
     opens hashtools.module.checker.domain;
     opens hashtools.module.checker.service;
+    opens hashtools.module.comparator.domain;
     opens hashtools.view.util;
     opens hashtools.view.window;
 }
