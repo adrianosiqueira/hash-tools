@@ -10,6 +10,7 @@ import hashtools.core.strategy.problem.FileInputProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
 import hashtools.core.strategy.problem.TextInputProblemDetection;
 
+import java.security.MessageDigest;
 import java.util.Optional;
 
 public class InputSource {
@@ -64,5 +65,11 @@ public class InputSource {
 
     public ProblemDetection getProblemDetection() {
         return problemDetection;
+    }
+
+
+
+    public void updateMessageDigest(MessageDigest messageDigest) throws RuntimeException {
+        messageDigestUpdate.update(messageDigest);
     }
 }
