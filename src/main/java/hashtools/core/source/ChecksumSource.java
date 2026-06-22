@@ -61,4 +61,8 @@ public class ChecksumSource {
     public List<Checksum> extractOfficialChecksums() throws RuntimeException {
         return checksumExtraction.extract();
     }
+
+    public Optional<String> detectProblem() {
+        return problemDetection.detect();
+    }
 }
