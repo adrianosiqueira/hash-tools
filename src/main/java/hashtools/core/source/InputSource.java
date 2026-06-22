@@ -10,6 +10,8 @@ import hashtools.core.strategy.problem.FileInputProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
 import hashtools.core.strategy.problem.TextInputProblemDetection;
 
+import java.util.Optional;
+
 public class InputSource {
 
     private MessageDigestUpdate messageDigestUpdate;
@@ -39,6 +41,14 @@ public class InputSource {
             new TextMessageDigestUpdate(text),
             new TextInputIdentification(text),
             new TextInputProblemDetection(text)
+        );
+    }
+
+    public static InputSource nullInputSource() {
+        return new InputSource(
+            _ -> {},
+            () -> "",
+            Optional::empty
         );
     }
 

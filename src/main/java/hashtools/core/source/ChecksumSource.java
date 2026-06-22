@@ -7,6 +7,9 @@ import hashtools.core.strategy.problem.FileChecksumProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
 import hashtools.core.strategy.problem.TextChecksumProblemDetection;
 
+import java.util.List;
+import java.util.Optional;
+
 public class ChecksumSource {
 
     private ChecksumExtraction checksumExtraction;
@@ -32,6 +35,13 @@ public class ChecksumSource {
         return new ChecksumSource(
             new TextChecksumExtraction(text),
             new TextChecksumProblemDetection(text)
+        );
+    }
+
+    public static ChecksumSource nullChecksumSource() {
+        return new ChecksumSource(
+            List::of,
+            Optional::empty
         );
     }
 
