@@ -1,5 +1,6 @@
 package hashtools.core.source;
 
+import hashtools.core.checksum.Checksum;
 import hashtools.core.strategy.extraction.ChecksumExtraction;
 import hashtools.core.strategy.extraction.FileChecksumExtraction;
 import hashtools.core.strategy.extraction.TextChecksumExtraction;
@@ -53,5 +54,11 @@ public class ChecksumSource {
 
     public ProblemDetection getProblemDetection() {
         return problemDetection;
+    }
+
+
+
+    public List<Checksum> extractOfficialChecksums() throws RuntimeException {
+        return checksumExtraction.extract();
     }
 }
