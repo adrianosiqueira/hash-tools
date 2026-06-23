@@ -2,6 +2,7 @@ package hashtools.module.generator.service;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.checksum.Checksum;
+import hashtools.core.source.AlgorithmSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.generator.domain.ChecksumGenerationCallback;
@@ -10,7 +11,6 @@ import hashtools.module.generator.domain.ChecksumGenerationResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,16 +19,14 @@ public class GeneratorService {
 
     public void performChecksumGeneration(ChecksumGenerationParameter parameter, ChecksumGenerationCallback callback) {
         InputSource inputSource = parameter.getInputSource();
-        List<Algorithm> algorithms = parameter.getAlgorithms();
+        AlgorithmSource algorithmSource = parameter.getAlgorithmSource();
 
 
 
         // Problem detection
         String problem = inputSource
             .detectProblem()
-            .or(() -> algorithms.isEmpty()
-                ? Optional.of("There is no algorithms selected")
-                : Optional.empty())
+            .or(algorithmSource::detectProblem)
             .orElse(null);
 
         if (problem != null) {
@@ -40,6 +38,7 @@ public class GeneratorService {
 
         try {
             // Processing data
+            List<Algorithm> algorithms = algorithmSource.getAlgorithms();
             List<Future<Checksum>> futureChecksums = new ArrayList<>();
             ChecksumGenerationResult result = new ChecksumGenerationResult();
 

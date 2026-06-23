@@ -1,6 +1,6 @@
 package hashtools.module.generator.controller;
 
-import hashtools.core.checksum.Algorithm;
+import hashtools.core.source.AlgorithmSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.generator.domain.ChecksumGenerationCallback;
@@ -16,8 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GeneratorController implements Initializable {
@@ -56,14 +54,14 @@ public class GeneratorController implements Initializable {
 
             // Data retrieval
             InputSource inputSource = this.createInputSource();
-            List<Algorithm> algorithms = this.createAlgorithmList();
+            AlgorithmSource algorithmSource = this.createAlgorithmSource();
 
 
 
             // Communication setup
             ChecksumGenerationParameter parameter = new ChecksumGenerationParameter();
             parameter.setInputSource(inputSource);
-            parameter.setAlgorithms(algorithms);
+            parameter.setAlgorithmSource(algorithmSource);
 
             ChecksumGenerationCallback callback = new ChecksumGenerationCallback();
             callback.addProgressConsumer(this::trackProgress);
@@ -93,18 +91,8 @@ public class GeneratorController implements Initializable {
             : InputSource.textInputSource(txtInput.getText());
     }
 
-    private List<Algorithm> createAlgorithmList() {
-        return pnlAlgorithm
-            .getChildren()
-            .stream()
-            .filter(CheckBox.class::isInstance)
-            .map(CheckBox.class::cast)
-            .filter(CheckBox::isSelected)
-            .map(CheckBox::getText)
-            .map(Algorithm::getByName)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .toList();
+    private AlgorithmSource createAlgorithmSource() {
+        return AlgorithmSource.checkBoxAlgorithmSource(pnlAlgorithm);
     }
 
 
