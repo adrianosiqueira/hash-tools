@@ -1,6 +1,9 @@
 package hashtools.module.generator.controller;
 
+import hashtools.core.checksum.Checksum;
 import hashtools.core.communication.Callback;
+import hashtools.core.file.EnhancedFile;
+import hashtools.core.file.FileDialog;
 import hashtools.core.source.AlgorithmSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
@@ -15,8 +18,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class GeneratorController implements Initializable {
 
@@ -66,6 +71,7 @@ public class GeneratorController implements Initializable {
             Callback<ChecksumGenerationResult> callback = new Callback<>();
             callback.addProgressConsumer(this::trackProgress);
             callback.addResultConsumer(this::presentResult);
+            callback.addResultConsumer(this::saveResult);
             callback.addProblemConsumer(this::showMessageDialog);
             callback.addExceptionConsumer(this::logException);
 
@@ -81,6 +87,16 @@ public class GeneratorController implements Initializable {
 
     @FXML
     private void openInputFile() {
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select the input file")
+            .openForReading()
+            .orElse(null);
+
+        if (file == null) {
+            return;
+        }
+
+        txtInput.setText(file.toString());
     }
 
 
@@ -106,7 +122,29 @@ public class GeneratorController implements Initializable {
 
         IO.println(result.getIdentification());
         result.getChecksums().forEach(IO::println);
-        // Open a dialog to save the result
+    }
+
+    private void saveResult(ChecksumGenerationResult result) {
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select where to save the checksums")
+            .openForWriting()
+            .orElse(null);
+
+        if (file == null) {
+            return;
+        }
+
+        String content = result
+            .getChecksums()
+            .stream()
+            .map(Checksum::toString)
+            .collect(Collectors.joining("\n"));
+
+        try {
+            file.replaceContent(content);
+        } catch (IOException e) {
+            logException(e);
+        }
     }
 
     private void showMessageDialog(String message) {

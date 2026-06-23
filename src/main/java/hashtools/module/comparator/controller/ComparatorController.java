@@ -1,6 +1,8 @@
 package hashtools.module.comparator.controller;
 
 import hashtools.core.communication.Callback;
+import hashtools.core.file.EnhancedFile;
+import hashtools.core.file.FileDialog;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
@@ -80,10 +82,30 @@ public class ComparatorController implements Initializable {
 
     @FXML
     private void openInputFile1() {
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select the first input file")
+            .openForReading()
+            .orElse(null);
+
+        if (file == null) {
+            return;
+        }
+
+        txtInput1.setText(file.toString());
     }
 
     @FXML
     private void openInputFile2() {
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select the second input file")
+            .openForReading()
+            .orElse(null);
+
+        if (file == null) {
+            return;
+        }
+
+        txtInput2.setText(file.toString());
     }
 
 

@@ -1,6 +1,9 @@
 package hashtools.module.checker.controller;
 
 import hashtools.core.communication.Callback;
+import hashtools.core.file.EnhancedFile;
+import hashtools.core.file.FileDialog;
+import hashtools.core.file.FileExtension;
 import hashtools.core.source.ChecksumSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
@@ -82,10 +85,31 @@ public class CheckerController implements Initializable {
 
     @FXML
     private void openInputFile() {
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select the input file")
+            .openForReading()
+            .orElse(null);
+
+        if (file == null) {
+            return;
+        }
+
+        txtInput.setText(file.toString());
     }
 
     @FXML
     private void openChecksumFile() {
+        EnhancedFile file = new FileDialog()
+            .withTitle("Select the checksum file")
+            .withDefaultExtension(FileExtension.HASH)
+            .openForReading()
+            .orElse(null);
+
+        if (file == null) {
+            return;
+        }
+
+        txtChecksum.setText(file.toString());
     }
 
 
