@@ -44,6 +44,18 @@ public enum Algorithm {
             .findFirst();
     }
 
+    public static Optional<Algorithm> getByName(String name) {
+        String searchName = Objects
+            .requireNonNullElse(name, "")
+            .toLowerCase()
+            .replaceAll("[^a-z0-9]", "");
+
+        return Stream
+            .of(Algorithm.values())
+            .filter(algorithm -> algorithm.name.equals(searchName))
+            .findFirst();
+    }
+
 
 
     public Checksum generateChecksum(MessageDigestUpdate update) throws RuntimeException {
