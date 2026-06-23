@@ -1,5 +1,6 @@
 package hashtools.core.file;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +16,11 @@ public class EnhancedFile {
     public EnhancedFile(String filePath) {
         Objects.requireNonNull(filePath);
         this.file = Path.of(filePath);
+    }
+
+    public EnhancedFile(File file) {
+        Objects.requireNonNull(file);
+        this.file = file.toPath();
     }
 
 
