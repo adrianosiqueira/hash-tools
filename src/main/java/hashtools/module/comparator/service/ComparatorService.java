@@ -3,14 +3,13 @@ package hashtools.module.comparator.service;
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.checksum.Checksum;
 import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPoolFactory;
+import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.comparator.domain.ChecksumComparisonCallback;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
 import hashtools.module.comparator.domain.ChecksumComparisonResult;
 import hashtools.module.comparator.domain.ComparatorChecksum;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class ComparatorService {
@@ -34,7 +33,7 @@ public class ComparatorService {
 
 
 
-        try (ExecutorService threadPool = ThreadPoolFactory.fixedDaemonPool()) {
+        try {
             // Processing data
             Algorithm algorithm = parameter.getAlgorithm();
             ChecksumComparisonResult result = new ChecksumComparisonResult();
@@ -42,8 +41,8 @@ public class ComparatorService {
 
 
             // Parallel checksum generation
-            Future<Checksum> futureChecksum1 = threadPool.submit(() -> algorithm.generateChecksum(inputSource1::updateMessageDigest));
-            Future<Checksum> futureChecksum2 = threadPool.submit(() -> algorithm.generateChecksum(inputSource2::updateMessageDigest));
+            Future<Checksum> futureChecksum1 = ThreadPool.FIXED_DAEMON.submit(() -> algorithm.generateChecksum(inputSource1::updateMessageDigest));
+            Future<Checksum> futureChecksum2 = ThreadPool.FIXED_DAEMON.submit(() -> algorithm.generateChecksum(inputSource2::updateMessageDigest));
 
 
 

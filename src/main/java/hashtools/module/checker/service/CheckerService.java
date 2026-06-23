@@ -3,7 +3,7 @@ package hashtools.module.checker.service;
 import hashtools.core.checksum.Checksum;
 import hashtools.core.source.ChecksumSource;
 import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPoolFactory;
+import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.checker.domain.CheckerChecksum;
 import hashtools.module.checker.domain.ChecksumCheckingCallback;
 import hashtools.module.checker.domain.ChecksumCheckingParameter;
@@ -12,7 +12,6 @@ import hashtools.module.checker.domain.ChecksumCheckingResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,7 +36,7 @@ public class CheckerService {
 
 
 
-        try (ExecutorService threadPool = ThreadPoolFactory.fixedDaemonPool()) {
+        try {
             // Processing data
             List<Checksum> officialChecksums = checksumSource.extractOfficialChecksums();
             List<Future<CheckerChecksum>> futureChecksums = new ArrayList<>();
@@ -51,7 +50,7 @@ public class CheckerService {
 
             // Parallel checksum generation
             for (Checksum official : officialChecksums) {
-                futureChecksums.add(threadPool.submit(() -> {
+                futureChecksums.add(ThreadPool.FIXED_DAEMON.submit(() -> {
                     Checksum generated = official
                         .getAlgorithm()
                         .generateChecksum(inputSource::updateMessageDigest);

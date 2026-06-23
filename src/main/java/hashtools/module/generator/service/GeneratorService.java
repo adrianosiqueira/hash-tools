@@ -3,7 +3,7 @@ package hashtools.module.generator.service;
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.checksum.Checksum;
 import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPoolFactory;
+import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.generator.domain.ChecksumGenerationCallback;
 import hashtools.module.generator.domain.ChecksumGenerationParameter;
 import hashtools.module.generator.domain.ChecksumGenerationResult;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -39,7 +38,7 @@ public class GeneratorService {
 
 
 
-        try (ExecutorService threadPool = ThreadPoolFactory.fixedDaemonPool()) {
+        try {
             // Processing data
             List<Future<Checksum>> futureChecksums = new ArrayList<>();
             ChecksumGenerationResult result = new ChecksumGenerationResult();
@@ -53,7 +52,7 @@ public class GeneratorService {
 
             // Parallel checksum generation
             for (Algorithm algorithm : algorithms) {
-                futureChecksums.add(threadPool.submit(() -> {
+                futureChecksums.add(ThreadPool.FIXED_DAEMON.submit(() -> {
                     Checksum checksum = algorithm.generateChecksum(inputSource::updateMessageDigest);
 
 

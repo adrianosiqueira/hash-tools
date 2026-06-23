@@ -1,7 +1,7 @@
 package hashtools.module.comparator.controller;
 
 import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPoolFactory;
+import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.comparator.domain.ChecksumComparisonCallback;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
 import hashtools.module.comparator.domain.ChecksumComparisonResult;
@@ -15,7 +15,6 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
 
 public class ComparatorController implements Initializable {
 
@@ -35,21 +34,19 @@ public class ComparatorController implements Initializable {
     private ProgressBar prgEquality;
 
     private ComparatorService comparatorService;
-    private ExecutorService localThreadPool;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.comparatorService = new ComparatorService();
-        this.localThreadPool = ThreadPoolFactory.cachedDaemonPool();
     }
 
 
 
     @FXML
     private void performChecksumComparison() {
-        localThreadPool.execute(() -> {
+        ThreadPool.CACHED_DAEMON.execute(() -> {
             // User feedback
             disableUi();
 

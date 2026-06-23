@@ -2,7 +2,7 @@ package hashtools.module.generator.controller;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPoolFactory;
+import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.generator.domain.ChecksumGenerationCallback;
 import hashtools.module.generator.domain.ChecksumGenerationParameter;
 import hashtools.module.generator.domain.ChecksumGenerationResult;
@@ -19,7 +19,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
 
 public class GeneratorController implements Initializable {
 
@@ -37,21 +36,19 @@ public class GeneratorController implements Initializable {
     private ProgressBar prgProgress;
 
     private GeneratorService generatorService;
-    private ExecutorService localThreadPool;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.generatorService = new GeneratorService();
-        this.localThreadPool = ThreadPoolFactory.cachedDaemonPool();
     }
 
 
 
     @FXML
     private void performChecksumGeneration() {
-        localThreadPool.execute(() -> {
+        ThreadPool.CACHED_DAEMON.execute(() -> {
             // User feedback
             disableUi();
 

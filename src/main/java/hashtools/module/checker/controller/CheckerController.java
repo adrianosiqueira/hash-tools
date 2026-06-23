@@ -2,7 +2,7 @@ package hashtools.module.checker.controller;
 
 import hashtools.core.source.ChecksumSource;
 import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPoolFactory;
+import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.checker.domain.ChecksumCheckingCallback;
 import hashtools.module.checker.domain.ChecksumCheckingParameter;
 import hashtools.module.checker.domain.ChecksumCheckingResult;
@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
 
 public class CheckerController implements Initializable {
 
@@ -36,21 +35,19 @@ public class CheckerController implements Initializable {
     private ProgressBar prgReliability;
 
     private CheckerService checkerService;
-    private ExecutorService localThreadPool;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.checkerService = new CheckerService();
-        this.localThreadPool = ThreadPoolFactory.cachedDaemonPool();
     }
 
 
 
     @FXML
     private void performChecksumChecking() {
-        localThreadPool.execute(() -> {
+        ThreadPool.CACHED_DAEMON.execute(() -> {
             // User feedback
             disableUi();
 
