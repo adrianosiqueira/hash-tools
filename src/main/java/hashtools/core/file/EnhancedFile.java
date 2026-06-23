@@ -15,12 +15,16 @@ public class EnhancedFile {
 
     public EnhancedFile(String filePath) {
         Objects.requireNonNull(filePath);
-        this.file = Path.of(filePath);
+        this.file = Path
+            .of(filePath)
+            .toAbsolutePath();
     }
 
     public EnhancedFile(File file) {
         Objects.requireNonNull(file);
-        this.file = file.toPath();
+        this.file = file
+            .toPath()
+            .toAbsolutePath();
     }
 
 
@@ -39,9 +43,7 @@ public class EnhancedFile {
     }
 
     public String getAbsolutePath() {
-        return file
-            .toAbsolutePath()
-            .toString();
+        return file.toString();
     }
 
     public void replaceContent(String content) throws IOException {
@@ -51,6 +53,13 @@ public class EnhancedFile {
             StandardOpenOption.CREATE,
             StandardOpenOption.TRUNCATE_EXISTING
         );
+    }
+
+
+
+    @Override
+    public String toString() {
+        return this.getAbsolutePath();
     }
 
 
