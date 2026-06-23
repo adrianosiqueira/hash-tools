@@ -1,11 +1,11 @@
 package hashtools.module.checker.service;
 
 import hashtools.core.checksum.Checksum;
+import hashtools.core.communication.Callback;
 import hashtools.core.source.ChecksumSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
 import hashtools.module.checker.domain.CheckerChecksum;
-import hashtools.module.checker.domain.ChecksumCheckingCallback;
 import hashtools.module.checker.domain.ChecksumCheckingParameter;
 import hashtools.module.checker.domain.ChecksumCheckingResult;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CheckerService {
 
-    public void performChecksumChecking(ChecksumCheckingParameter parameter, ChecksumCheckingCallback callback) {
+    public void performChecksumChecking(ChecksumCheckingParameter parameter, Callback<ChecksumCheckingResult> callback) {
         InputSource inputSource = parameter.getInputSource();
         ChecksumSource checksumSource = parameter.getChecksumSource();
 

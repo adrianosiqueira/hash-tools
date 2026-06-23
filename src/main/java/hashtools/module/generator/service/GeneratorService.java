@@ -2,10 +2,10 @@ package hashtools.module.generator.service;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.checksum.Checksum;
+import hashtools.core.communication.Callback;
 import hashtools.core.source.AlgorithmSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
-import hashtools.module.generator.domain.ChecksumGenerationCallback;
 import hashtools.module.generator.domain.ChecksumGenerationParameter;
 import hashtools.module.generator.domain.ChecksumGenerationResult;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneratorService {
 
-    public void performChecksumGeneration(ChecksumGenerationParameter parameter, ChecksumGenerationCallback callback) {
+    public void performChecksumGeneration(ChecksumGenerationParameter parameter, Callback<ChecksumGenerationResult> callback) {
         InputSource inputSource = parameter.getInputSource();
         AlgorithmSource algorithmSource = parameter.getAlgorithmSource();
 

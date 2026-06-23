@@ -1,8 +1,8 @@
 package hashtools.module.comparator.controller;
 
+import hashtools.core.communication.Callback;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
-import hashtools.module.comparator.domain.ChecksumComparisonCallback;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
 import hashtools.module.comparator.domain.ChecksumComparisonResult;
 import hashtools.module.comparator.service.ComparatorService;
@@ -63,7 +63,7 @@ public class ComparatorController implements Initializable {
             parameter.setInputSource1(inputSource1);
             parameter.setInputSource2(inputSource2);
 
-            ChecksumComparisonCallback callback = new ChecksumComparisonCallback();
+            Callback<ChecksumComparisonResult> callback = new Callback<>();
             callback.addResultConsumer(this::presentResult);
             callback.addProblemConsumer(this::showMessageDialog);
             callback.addExceptionConsumer(this::logException);

@@ -5,6 +5,7 @@ module hash.tools {
 
     exports hashtools;
     exports hashtools.core.checksum;
+    exports hashtools.core.communication;
     exports hashtools.core.file;
     exports hashtools.core.source;
     exports hashtools.core.strategy.extraction;
@@ -28,6 +29,7 @@ module hash.tools {
 
     opens hashtools;
     opens hashtools.core.checksum;
+    opens hashtools.core.communication;
     opens hashtools.core.file;
     opens hashtools.core.source;
     opens hashtools.core.strategy.extraction;

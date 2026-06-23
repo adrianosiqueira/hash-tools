@@ -1,9 +1,9 @@
 package hashtools.module.checker.controller;
 
+import hashtools.core.communication.Callback;
 import hashtools.core.source.ChecksumSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
-import hashtools.module.checker.domain.ChecksumCheckingCallback;
 import hashtools.module.checker.domain.ChecksumCheckingParameter;
 import hashtools.module.checker.domain.ChecksumCheckingResult;
 import hashtools.module.checker.service.CheckerService;
@@ -64,7 +64,7 @@ public class CheckerController implements Initializable {
             parameter.setInputSource(inputSource);
             parameter.setChecksumSource(checksumSource);
 
-            ChecksumCheckingCallback callback = new ChecksumCheckingCallback();
+            Callback<ChecksumCheckingResult> callback = new Callback<>();
             callback.addProgressConsumer(this::trackProgress);
             callback.addResultConsumer(this::presentResult);
             callback.addProblemConsumer(this::showMessageDialog);

@@ -1,9 +1,9 @@
 package hashtools.module.generator.controller;
 
+import hashtools.core.communication.Callback;
 import hashtools.core.source.AlgorithmSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
-import hashtools.module.generator.domain.ChecksumGenerationCallback;
 import hashtools.module.generator.domain.ChecksumGenerationParameter;
 import hashtools.module.generator.domain.ChecksumGenerationResult;
 import hashtools.module.generator.service.GeneratorService;
@@ -63,7 +63,7 @@ public class GeneratorController implements Initializable {
             parameter.setInputSource(inputSource);
             parameter.setAlgorithmSource(algorithmSource);
 
-            ChecksumGenerationCallback callback = new ChecksumGenerationCallback();
+            Callback<ChecksumGenerationResult> callback = new Callback<>();
             callback.addProgressConsumer(this::trackProgress);
             callback.addResultConsumer(this::presentResult);
             callback.addProblemConsumer(this::showMessageDialog);

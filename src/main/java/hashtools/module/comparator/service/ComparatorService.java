@@ -2,9 +2,9 @@ package hashtools.module.comparator.service;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.checksum.Checksum;
+import hashtools.core.communication.Callback;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
-import hashtools.module.comparator.domain.ChecksumComparisonCallback;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
 import hashtools.module.comparator.domain.ChecksumComparisonResult;
 import hashtools.module.comparator.domain.ComparatorChecksum;
@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ComparatorService {
 
-    public void performChecksumComparison(ChecksumComparisonParameter parameter, ChecksumComparisonCallback callback) {
+    public void performChecksumComparison(ChecksumComparisonParameter parameter, Callback<ChecksumComparisonResult> callback) {
         InputSource inputSource1 = parameter.getInputSource1();
         InputSource inputSource2 = parameter.getInputSource2();
 

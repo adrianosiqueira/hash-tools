@@ -1,33 +1,33 @@
-package hashtools.module.generator.domain;
+package hashtools.core.communication;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class ChecksumGenerationCallback {
+public class Callback<T> {
 
+    private Consumer<T> resultConsumer;
     private Consumer<Double> progressConsumer;
-    private Consumer<ChecksumGenerationResult> resultConsumer;
 
     private Consumer<String> problemConsumer;
     private Consumer<Exception> exceptionConsumer;
 
 
 
-    public ChecksumGenerationCallback() {
-        this.progressConsumer = _ -> {};
+    public Callback() {
         this.resultConsumer = _ -> {};
+        this.progressConsumer = _ -> {};
         this.problemConsumer = _ -> {};
         this.exceptionConsumer = _ -> {};
     }
 
 
 
-    public void sendProgress(double progress) {
-        progressConsumer.accept(progress);
+    public void sendResult(T result) {
+        resultConsumer.accept(result);
     }
 
-    public void sendResult(ChecksumGenerationResult result) {
-        resultConsumer.accept(result);
+    public void sendProgress(double progress) {
+        progressConsumer.accept(progress);
     }
 
     public void sendProblem(String problem) {
@@ -40,19 +40,19 @@ public class ChecksumGenerationCallback {
 
 
 
+    public void addResultConsumer(Consumer<T> consumer) {
+        Objects.requireNonNull(consumer);
+
+        this.resultConsumer = this
+            .resultConsumer
+            .andThen(consumer);
+    }
+
     public void addProgressConsumer(Consumer<Double> consumer) {
         Objects.requireNonNull(consumer);
 
         this.progressConsumer = this
             .progressConsumer
-            .andThen(consumer);
-    }
-
-    public void addResultConsumer(Consumer<ChecksumGenerationResult> consumer) {
-        Objects.requireNonNull(consumer);
-
-        this.resultConsumer = this
-            .resultConsumer
             .andThen(consumer);
     }
 
