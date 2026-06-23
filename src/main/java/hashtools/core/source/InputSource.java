@@ -73,6 +73,10 @@ public class InputSource {
         messageDigestUpdate.update(messageDigest);
     }
 
+    public String identify() {
+        return inputIdentification.identify();
+    }
+
     public Optional<String> detectProblem() {
         return problemDetection.detect();
     }
