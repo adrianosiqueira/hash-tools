@@ -20,6 +20,7 @@ module hash.tools {
     exports hashtools.module.comparator.controller;
     exports hashtools.module.comparator.domain;
     exports hashtools.module.comparator.service;
+    exports hashtools.module.generator.controller;
     exports hashtools.module.generator.domain;
     exports hashtools.module.generator.service;
     exports hashtools.view.util;
@@ -42,6 +43,7 @@ module hash.tools {
     opens hashtools.module.comparator.controller;
     opens hashtools.module.comparator.domain;
     opens hashtools.module.comparator.service;
+    opens hashtools.module.generator.controller;
     opens hashtools.module.generator.domain;
     opens hashtools.module.generator.service;
     opens hashtools.view.util;
