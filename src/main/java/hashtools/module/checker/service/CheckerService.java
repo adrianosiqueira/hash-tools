@@ -45,6 +45,7 @@ public class CheckerService {
             // Progress tracking
             AtomicInteger totalTasks = new AtomicInteger(officialChecksums.size());
             AtomicInteger completedTasks = new AtomicInteger(0);
+            callback.sendProgress(0.0);
 
 
 
@@ -77,6 +78,7 @@ public class CheckerService {
                 result.addChecksum(checksum.get());
             }
 
+            callback.sendProgress(1.0);
             callback.sendResult(result);
         } catch (ExecutionException | InterruptedException e) {
             callback.sendException(e);

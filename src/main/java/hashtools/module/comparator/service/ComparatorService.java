@@ -11,6 +11,7 @@ import hashtools.module.comparator.domain.ComparatorChecksum;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ComparatorService {
 
@@ -38,11 +39,31 @@ public class ComparatorService {
             Algorithm algorithm = parameter.getAlgorithm();
             ChecksumComparisonResult result = new ChecksumComparisonResult();
 
+            // Progress tracking
+            AtomicInteger totalTasks = new AtomicInteger(2);
+            AtomicInteger completedTasks = new AtomicInteger(0);
+            callback.sendProgress(0.0);
+
 
 
             // Parallel checksum generation
-            Future<Checksum> futureChecksum1 = ThreadPool.FIXED_DAEMON.submit(() -> algorithm.generateChecksum(inputSource1::updateMessageDigest));
-            Future<Checksum> futureChecksum2 = ThreadPool.FIXED_DAEMON.submit(() -> algorithm.generateChecksum(inputSource2::updateMessageDigest));
+            Future<Checksum> futureChecksum1 = ThreadPool.FIXED_DAEMON.submit(() -> {
+                Checksum checksum = algorithm.generateChecksum(inputSource1::updateMessageDigest);
+
+                double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
+                callback.sendProgress(progress);
+
+                return checksum;
+            });
+
+            Future<Checksum> futureChecksum2 = ThreadPool.FIXED_DAEMON.submit(() -> {
+                Checksum checksum = algorithm.generateChecksum(inputSource2::updateMessageDigest);
+
+                double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
+                callback.sendProgress(progress);
+
+                return checksum;
+            });
 
 
 
@@ -52,6 +73,8 @@ public class ComparatorService {
             checksum.setChecksum2(futureChecksum2.get());
 
             result.setChecksum(checksum);
+
+            callback.sendProgress(1.0);
             callback.sendResult(result);
         } catch (ExecutionException | InterruptedException e) {
             callback.sendException(e);
