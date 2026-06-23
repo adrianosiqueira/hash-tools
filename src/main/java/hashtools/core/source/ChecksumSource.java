@@ -4,9 +4,9 @@ import hashtools.core.checksum.Checksum;
 import hashtools.core.strategy.extraction.ChecksumExtraction;
 import hashtools.core.strategy.extraction.FileChecksumExtraction;
 import hashtools.core.strategy.extraction.TextChecksumExtraction;
-import hashtools.core.strategy.problem.FileChecksumProblemDetection;
+import hashtools.core.strategy.problem.ChecksumFileProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
-import hashtools.core.strategy.problem.TextChecksumProblemDetection;
+import hashtools.core.strategy.problem.ChecksumTextProblemDetection;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +28,14 @@ public class ChecksumSource {
     public static ChecksumSource fileChecksumSource(String filePath) {
         return new ChecksumSource(
             new FileChecksumExtraction(filePath),
-            new FileChecksumProblemDetection(filePath)
+            new ChecksumFileProblemDetection(filePath)
         );
     }
 
     public static ChecksumSource textChecksumSource(String text) {
         return new ChecksumSource(
             new TextChecksumExtraction(text),
-            new TextChecksumProblemDetection(text)
+            new ChecksumTextProblemDetection(text)
         );
     }
 

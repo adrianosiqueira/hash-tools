@@ -5,13 +5,13 @@ import hashtools.core.file.EnhancedFile;
 import java.util.Objects;
 import java.util.Optional;
 
-public class FileInputProblemDetection implements ProblemDetection {
+public class InputFileProblemDetection implements ProblemDetection {
 
     private EnhancedFile file;
 
 
 
-    public FileInputProblemDetection(String filePath) {
+    public InputFileProblemDetection(String filePath) {
         Objects.requireNonNull(filePath);
         this.file = new EnhancedFile(filePath);
     }

@@ -6,13 +6,13 @@ import hashtools.core.file.FileExtension;
 import java.util.Objects;
 import java.util.Optional;
 
-public class FileChecksumProblemDetection implements ProblemDetection {
+public class ChecksumFileProblemDetection implements ProblemDetection {
 
     private String filePath;
 
 
 
-    public FileChecksumProblemDetection(String filePath) {
+    public ChecksumFileProblemDetection(String filePath) {
         this.filePath = Objects.requireNonNull(filePath);
     }
 

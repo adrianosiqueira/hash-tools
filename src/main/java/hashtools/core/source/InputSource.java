@@ -6,9 +6,9 @@ import hashtools.core.strategy.identification.TextInputIdentification;
 import hashtools.core.strategy.messagedigest.FileMessageDigestUpdate;
 import hashtools.core.strategy.messagedigest.MessageDigestUpdate;
 import hashtools.core.strategy.messagedigest.TextMessageDigestUpdate;
-import hashtools.core.strategy.problem.FileInputProblemDetection;
+import hashtools.core.strategy.problem.InputFileProblemDetection;
 import hashtools.core.strategy.problem.ProblemDetection;
-import hashtools.core.strategy.problem.TextInputProblemDetection;
+import hashtools.core.strategy.problem.InputTextProblemDetection;
 
 import java.security.MessageDigest;
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class InputSource {
         return new InputSource(
             new FileMessageDigestUpdate(filePath),
             new FileInputIdentification(filePath),
-            new FileInputProblemDetection(filePath)
+            new InputFileProblemDetection(filePath)
         );
     }
 
@@ -41,7 +41,7 @@ public class InputSource {
         return new InputSource(
             new TextMessageDigestUpdate(text),
             new TextInputIdentification(text),
-            new TextInputProblemDetection(text)
+            new InputTextProblemDetection(text)
         );
     }
 

@@ -3,13 +3,13 @@ package hashtools.core.strategy.problem;
 import java.util.Objects;
 import java.util.Optional;
 
-public class TextInputProblemDetection implements ProblemDetection {
+public class ChecksumTextProblemDetection implements ProblemDetection {
 
     private String text;
 
 
 
-    public TextInputProblemDetection(String text) {
+    public ChecksumTextProblemDetection(String text) {
         this.text = Objects.requireNonNull(text);
     }
 
