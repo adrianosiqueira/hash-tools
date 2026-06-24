@@ -10,15 +10,21 @@ import hashtools.module.comparator.domain.ChecksumComparisonResult;
 import hashtools.module.comparator.service.ComparatorService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ComparatorController implements Initializable {
+
+    @FXML
+    private Pane pnlRoot;
 
     @FXML
     private TextField txtInput1;
@@ -30,8 +36,6 @@ public class ComparatorController implements Initializable {
     @FXML
     private CheckBox chkInput2;
 
-    @FXML
-    private Button btnExecute;
     @FXML
     private ProgressBar prgEquality;
 
@@ -50,7 +54,7 @@ public class ComparatorController implements Initializable {
     private void performChecksumComparison() {
         ThreadPool.CACHED_DAEMON.execute(() -> {
             // User feedback
-            disableUi();
+            disableUi(pnlRoot);
 
 
 
@@ -127,7 +131,7 @@ public class ComparatorController implements Initializable {
     private void presentResult(ChecksumComparisonResult result) {
         double equality = result.calculateEquality();
         prgEquality.setProgress(equality);
-        enableUi();
+        enableUi(pnlRoot);
 
         IO.println(result.getChecksum());
         IO.println("Equality: " + (equality * 100) + "%");
@@ -135,23 +139,32 @@ public class ComparatorController implements Initializable {
 
     private void showMessageDialog(String message) {
         IO.println(message);
-        enableUi();
+        enableUi(pnlRoot);
     }
 
     private void logException(Exception exception) {
         //noinspection CallToPrintStackTrace
         exception.printStackTrace();
-        enableUi();
+        enableUi(pnlRoot);
     }
 
 
 
-    private void disableUi() {
-        btnExecute.setDisable(true);
-        prgEquality.setProgress(0.0);
+    private void disableUi(Node node) {
+        if (node instanceof Pane pane) {
+            pane.setCursor(Cursor.WAIT);
+            pane.getChildren().forEach(this::disableUi);
+        } else if (node instanceof Control control) {
+            control.setDisable(true);
+        }
     }
 
-    private void enableUi() {
-        btnExecute.setDisable(false);
+    private void enableUi(Node node) {
+        if (node instanceof Pane pane) {
+            pane.setCursor(Cursor.DEFAULT);
+            pane.getChildren().forEach(this::enableUi);
+        } else if (node instanceof Control control) {
+            control.setDisable(false);
+        }
     }
 }

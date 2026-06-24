@@ -12,8 +12,10 @@ import hashtools.module.generator.domain.ChecksumGenerationResult;
 import hashtools.module.generator.service.GeneratorService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -26,6 +28,9 @@ import java.util.stream.Collectors;
 public class GeneratorController implements Initializable {
 
     @FXML
+    private Pane pnlRoot;
+
+    @FXML
     private TextField txtInput;
     @FXML
     private CheckBox chkInput;
@@ -33,8 +38,6 @@ public class GeneratorController implements Initializable {
     @FXML
     private Pane pnlAlgorithm;
 
-    @FXML
-    private Button btnExecute;
     @FXML
     private ProgressBar prgProgress;
 
@@ -53,7 +56,7 @@ public class GeneratorController implements Initializable {
     private void performChecksumGeneration() {
         ThreadPool.CACHED_DAEMON.execute(() -> {
             // User feedback
-            disableUi();
+            disableUi(pnlRoot);
 
 
 
@@ -113,13 +116,15 @@ public class GeneratorController implements Initializable {
     }
 
     private void presentResult(ChecksumGenerationResult result) {
-        enableUi();
+        enableUi(pnlRoot);
 
         IO.println(result.getIdentification());
         result.getChecksums().forEach(IO::println);
     }
 
     private void saveResult(ChecksumGenerationResult result) {
+        enableUi(pnlRoot);
+
         EnhancedFile file = new FileDialog()
             .withTitle("Select where to save the checksums")
             .openForWriting()
@@ -144,22 +149,32 @@ public class GeneratorController implements Initializable {
 
     private void showMessageDialog(String message) {
         IO.println(message);
-        enableUi();
+        enableUi(pnlRoot);
     }
 
     private void logException(Exception exception) {
         //noinspection CallToPrintStackTrace
         exception.printStackTrace();
-        enableUi();
+        enableUi(pnlRoot);
     }
 
 
 
-    private void disableUi() {
-        btnExecute.setDisable(true);
+    private void disableUi(Node node) {
+        if (node instanceof Pane pane) {
+            pane.setCursor(Cursor.WAIT);
+            pane.getChildren().forEach(this::disableUi);
+        } else if (node instanceof Control control) {
+            control.setDisable(true);
+        }
     }
 
-    private void enableUi() {
-        btnExecute.setDisable(false);
+    private void enableUi(Node node) {
+        if (node instanceof Pane pane) {
+            pane.setCursor(Cursor.DEFAULT);
+            pane.getChildren().forEach(this::enableUi);
+        } else if (node instanceof Control control) {
+            control.setDisable(false);
+        }
     }
 }

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<GridPane fx:controller="hashtools.module.checker.controller.CheckerController" hgap="20" vgap="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<GridPane fx:controller="hashtools.module.checker.controller.CheckerController" fx:id="pnlRoot" hgap="20" vgap="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
 
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
@@ -41,7 +41,7 @@
 
 
     <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" alignment="CENTER" spacing="20">
-        <Button HBox.hgrow="NEVER" fx:id="btnExecute" onAction="#performChecksumChecking" text="Execute"/>
+        <Button HBox.hgrow="NEVER" onAction="#performChecksumChecking" text="Execute"/>
         <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgReliability" maxWidth="1E6" progress="0.0"/>
     </HBox>
 </GridPane>
