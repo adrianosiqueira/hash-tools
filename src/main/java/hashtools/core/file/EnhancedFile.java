@@ -8,6 +8,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 public class EnhancedFile {
 
@@ -64,6 +65,10 @@ public class EnhancedFile {
             StandardOpenOption.CREATE,
             StandardOpenOption.TRUNCATE_EXISTING
         );
+    }
+
+    public Stream<String> getLines() throws IOException {
+        return Files.lines(file);
     }
 
     @Override
