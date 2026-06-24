@@ -2,6 +2,7 @@ package hashtools.core.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -69,6 +70,10 @@ public class EnhancedFile {
 
     public Stream<String> getLines() throws IOException {
         return Files.lines(file);
+    }
+
+    public InputStream getInputStream() throws IOException {
+        return Files.newInputStream(file);
     }
 
     @Override
