@@ -2,7 +2,6 @@ package hashtools.core.strategy.problem;
 
 import hashtools.core.file.EnhancedFile;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class InputFileProblemDetection implements ProblemDetection {
@@ -12,8 +11,9 @@ public class InputFileProblemDetection implements ProblemDetection {
 
 
     public InputFileProblemDetection(String filePath) {
-        Objects.requireNonNull(filePath);
-        this.file = new EnhancedFile(filePath);
+        this.file = EnhancedFile
+            .filePath(filePath)
+            .orElseThrow();
     }
 
 

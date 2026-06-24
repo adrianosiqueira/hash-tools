@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EnhancedFile {
 
@@ -13,18 +15,27 @@ public class EnhancedFile {
 
 
 
-    public EnhancedFile(String filePath) {
-        Objects.requireNonNull(filePath);
-        this.file = Path
-            .of(filePath)
+    private EnhancedFile(Path file) {
+        this.file = Objects
+            .requireNonNull(file)
             .toAbsolutePath();
     }
 
-    public EnhancedFile(File file) {
-        Objects.requireNonNull(file);
-        this.file = file
-            .toPath()
-            .toAbsolutePath();
+
+
+    public static Optional<EnhancedFile> filePath(String filePath) {
+        return Optional
+            .ofNullable(filePath)
+            .map(Path::of)
+            .map(EnhancedFile::new);
+    }
+
+    public static Optional<EnhancedFile> fileReference(AtomicReference<File> fileReference) {
+        return Optional
+            .ofNullable(fileReference)
+            .map(AtomicReference::get)
+            .map(File::toPath)
+            .map(EnhancedFile::new);
     }
 
 
@@ -55,11 +66,9 @@ public class EnhancedFile {
         );
     }
 
-
-
     @Override
     public String toString() {
-        return this.getAbsolutePath();
+        return file.toString();
     }
 
 

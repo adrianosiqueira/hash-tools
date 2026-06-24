@@ -101,8 +101,6 @@ public class FileDialog {
 
 
 
-        return Optional
-            .ofNullable(fileReference.get())
-            .map(EnhancedFile::new);
+        return EnhancedFile.fileReference(fileReference);
     }
 }
