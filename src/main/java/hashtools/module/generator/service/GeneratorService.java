@@ -2,10 +2,10 @@ package hashtools.module.generator.service;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.checksum.Checksum;
-import hashtools.core.communication.Callback;
 import hashtools.core.source.AlgorithmSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
+import hashtools.module.generator.domain.ChecksumGenerationContainer;
 import hashtools.module.generator.domain.ChecksumGenerationParameter;
 import hashtools.module.generator.domain.ChecksumGenerationResult;
 
@@ -17,7 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneratorService {
 
-    public void performChecksumGeneration(ChecksumGenerationParameter parameter, Callback<ChecksumGenerationResult> callback) {
+    public ChecksumGenerationContainer performChecksumGeneration(ChecksumGenerationParameter parameter) {
+        // Initial setup
+        parameter.updateProgress(0.0);
+
         InputSource inputSource = parameter.getInputSource();
         AlgorithmSource algorithmSource = parameter.getAlgorithmSource();
 
@@ -30,8 +33,7 @@ public class GeneratorService {
             .orElse(null);
 
         if (problem != null) {
-            callback.sendProblem(problem);
-            return;
+            return ChecksumGenerationContainer.problem(problem);
         }
 
 
@@ -45,7 +47,6 @@ public class GeneratorService {
             // Progress tracking
             AtomicInteger totalTasks = new AtomicInteger(algorithms.size());
             AtomicInteger completedTasks = new AtomicInteger(0);
-            callback.sendProgress(0.0);
 
 
 
@@ -57,7 +58,7 @@ public class GeneratorService {
 
 
                     double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                    callback.sendProgress(progress);
+                    parameter.updateProgress(progress);
 
 
 
@@ -74,10 +75,10 @@ public class GeneratorService {
 
             result.setIdentification(inputSource::identify);
 
-            callback.sendProgress(1.0);
-            callback.sendResult(result);
+            parameter.updateProgress(1.0);
+            return ChecksumGenerationContainer.result(result);
         } catch (ExecutionException | InterruptedException e) {
-            callback.sendException(e);
+            return ChecksumGenerationContainer.exception(e);
         }
     }
 }

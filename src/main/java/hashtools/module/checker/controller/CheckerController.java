@@ -1,12 +1,12 @@
 package hashtools.module.checker.controller;
 
-import hashtools.core.communication.Callback;
 import hashtools.core.file.EnhancedFile;
 import hashtools.core.file.FileDialog;
 import hashtools.core.file.FileExtension;
 import hashtools.core.source.ChecksumSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
+import hashtools.module.checker.domain.ChecksumCheckingContainer;
 import hashtools.module.checker.domain.ChecksumCheckingParameter;
 import hashtools.module.checker.domain.ChecksumCheckingResult;
 import hashtools.module.checker.service.CheckerService;
@@ -66,20 +66,15 @@ public class CheckerController implements Initializable {
             ChecksumCheckingParameter parameter = new ChecksumCheckingParameter();
             parameter.setInputSource(inputSource);
             parameter.setChecksumSource(checksumSource);
-
-            Callback<ChecksumCheckingResult> callback = new Callback<>();
-            callback.addProgressConsumer(this::trackProgress);
-            callback.addResultConsumer(this::presentResult);
-            callback.addProblemConsumer(this::showMessageDialog);
-            callback.addExceptionConsumer(this::logException);
+            parameter.setProgressConsumer(this::trackProgress);
 
 
 
             // Processing
-            checkerService.performChecksumChecking(
-                parameter,
-                callback
-            );
+            ChecksumCheckingContainer container = checkerService.performChecksumChecking(parameter);
+            container.consumeResultIfPresent(this::presentResult);
+            container.consumeProblemIfPresent(this::showMessageDialog);
+            container.consumeExceptionIfPresent(this::logException);
         });
     }
 

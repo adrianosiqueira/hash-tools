@@ -1,10 +1,10 @@
 package hashtools.module.comparator.controller;
 
-import hashtools.core.communication.Callback;
 import hashtools.core.file.EnhancedFile;
 import hashtools.core.file.FileDialog;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
+import hashtools.module.comparator.domain.ChecksumComparisonContainer;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
 import hashtools.module.comparator.domain.ChecksumComparisonResult;
 import hashtools.module.comparator.service.ComparatorService;
@@ -64,19 +64,15 @@ public class ComparatorController implements Initializable {
             ChecksumComparisonParameter parameter = new ChecksumComparisonParameter();
             parameter.setInputSource1(inputSource1);
             parameter.setInputSource2(inputSource2);
-
-            Callback<ChecksumComparisonResult> callback = new Callback<>();
-            callback.addResultConsumer(this::presentResult);
-            callback.addProblemConsumer(this::showMessageDialog);
-            callback.addExceptionConsumer(this::logException);
+            parameter.setProgressConsumer(this::trackProgress);
 
 
 
             // Processing
-            comparatorService.performChecksumComparison(
-                parameter,
-                callback
-            );
+            ChecksumComparisonContainer container = comparatorService.performChecksumComparison(parameter);
+            container.consumeResultIfPresent(this::presentResult);
+            container.consumeProblemIfPresent(this::showMessageDialog);
+            container.consumeExceptionIfPresent(this::logException);
         });
     }
 
@@ -123,6 +119,10 @@ public class ComparatorController implements Initializable {
     }
 
 
+
+    private void trackProgress(double progress) {
+        prgEquality.setProgress(progress);
+    }
 
     private void presentResult(ChecksumComparisonResult result) {
         double equality = result.calculateEquality();

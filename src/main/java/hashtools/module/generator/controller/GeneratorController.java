@@ -1,12 +1,12 @@
 package hashtools.module.generator.controller;
 
 import hashtools.core.checksum.Checksum;
-import hashtools.core.communication.Callback;
 import hashtools.core.file.EnhancedFile;
 import hashtools.core.file.FileDialog;
 import hashtools.core.source.AlgorithmSource;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
+import hashtools.module.generator.domain.ChecksumGenerationContainer;
 import hashtools.module.generator.domain.ChecksumGenerationParameter;
 import hashtools.module.generator.domain.ChecksumGenerationResult;
 import hashtools.module.generator.service.GeneratorService;
@@ -67,21 +67,16 @@ public class GeneratorController implements Initializable {
             ChecksumGenerationParameter parameter = new ChecksumGenerationParameter();
             parameter.setInputSource(inputSource);
             parameter.setAlgorithmSource(algorithmSource);
-
-            Callback<ChecksumGenerationResult> callback = new Callback<>();
-            callback.addProgressConsumer(this::trackProgress);
-            callback.addResultConsumer(this::presentResult);
-            callback.addResultConsumer(this::saveResult);
-            callback.addProblemConsumer(this::showMessageDialog);
-            callback.addExceptionConsumer(this::logException);
+            parameter.setProgressConsumer(this::trackProgress);
 
 
 
             // Processing
-            generatorService.performChecksumGeneration(
-                parameter,
-                callback
-            );
+            ChecksumGenerationContainer container = generatorService.performChecksumGeneration(parameter);
+            container.consumeResultIfPresent(this::presentResult);
+            container.consumeResultIfPresent(this::saveResult);
+            container.consumeProblemIfPresent(this::showMessageDialog);
+            container.consumeExceptionIfPresent(this::logException);
         });
     }
 

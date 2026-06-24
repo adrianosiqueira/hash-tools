@@ -4,12 +4,14 @@ import hashtools.core.checksum.Algorithm;
 import hashtools.core.source.InputSource;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class ChecksumComparisonParameter {
 
     private InputSource inputSource1;
     private InputSource inputSource2;
     private Algorithm algorithm;
+    private Consumer<Double> progressConsumer;
 
 
 
@@ -17,6 +19,7 @@ public class ChecksumComparisonParameter {
         this.inputSource1 = InputSource.nullInputSource();
         this.inputSource2 = InputSource.nullInputSource();
         this.algorithm = Algorithm.MD5;
+        this.progressConsumer = _ -> {};
     }
 
 
@@ -43,5 +46,13 @@ public class ChecksumComparisonParameter {
 
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = Objects.requireNonNull(algorithm);
+    }
+
+    public void updateProgress(double progress) {
+        progressConsumer.accept(progress);
+    }
+
+    public void setProgressConsumer(Consumer<Double> progressConsumer) {
+        this.progressConsumer = Objects.requireNonNull(progressConsumer);
     }
 }

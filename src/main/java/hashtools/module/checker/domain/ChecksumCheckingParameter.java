@@ -4,17 +4,20 @@ import hashtools.core.source.ChecksumSource;
 import hashtools.core.source.InputSource;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class ChecksumCheckingParameter {
 
     private InputSource inputSource;
     private ChecksumSource checksumSource;
+    private Consumer<Double> progressConsumer;
 
 
 
     public ChecksumCheckingParameter() {
         this.inputSource = InputSource.nullInputSource();
         this.checksumSource = ChecksumSource.nullChecksumSource();
+        this.progressConsumer = _ -> {};
     }
 
 
@@ -33,5 +36,13 @@ public class ChecksumCheckingParameter {
 
     public void setChecksumSource(ChecksumSource checksumSource) {
         this.checksumSource = Objects.requireNonNull(checksumSource);
+    }
+
+    public void updateProgress(double progress) {
+        progressConsumer.accept(progress);
+    }
+
+    public void setProgressConsumer(Consumer<Double> progressConsumer) {
+        this.progressConsumer = Objects.requireNonNull(progressConsumer);
     }
 }

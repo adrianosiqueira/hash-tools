@@ -2,9 +2,9 @@ package hashtools.module.comparator.service;
 
 import hashtools.core.checksum.Algorithm;
 import hashtools.core.checksum.Checksum;
-import hashtools.core.communication.Callback;
 import hashtools.core.source.InputSource;
 import hashtools.core.threadpool.ThreadPool;
+import hashtools.module.comparator.domain.ChecksumComparisonContainer;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
 import hashtools.module.comparator.domain.ChecksumComparisonResult;
 import hashtools.module.comparator.domain.ComparatorChecksum;
@@ -15,7 +15,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ComparatorService {
 
-    public void performChecksumComparison(ChecksumComparisonParameter parameter, Callback<ChecksumComparisonResult> callback) {
+    public ChecksumComparisonContainer performChecksumComparison(ChecksumComparisonParameter parameter) {
+        // Initial setup
+        parameter.updateProgress(0.0);
+
         InputSource inputSource1 = parameter.getInputSource1();
         InputSource inputSource2 = parameter.getInputSource2();
 
@@ -28,8 +31,7 @@ public class ComparatorService {
             .orElse(null);
 
         if (problem != null) {
-            callback.sendProblem(problem);
-            return;
+            return ChecksumComparisonContainer.problem(problem);
         }
 
 
@@ -42,7 +44,6 @@ public class ComparatorService {
             // Progress tracking
             AtomicInteger totalTasks = new AtomicInteger(2);
             AtomicInteger completedTasks = new AtomicInteger(0);
-            callback.sendProgress(0.0);
 
 
 
@@ -51,7 +52,7 @@ public class ComparatorService {
                 Checksum checksum = algorithm.generateChecksum(inputSource1::updateMessageDigest);
 
                 double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                callback.sendProgress(progress);
+                parameter.updateProgress(progress);
 
                 return checksum;
             });
@@ -60,7 +61,7 @@ public class ComparatorService {
                 Checksum checksum = algorithm.generateChecksum(inputSource2::updateMessageDigest);
 
                 double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                callback.sendProgress(progress);
+                parameter.updateProgress(progress);
 
                 return checksum;
             });
@@ -74,10 +75,10 @@ public class ComparatorService {
 
             result.setChecksum(checksum);
 
-            callback.sendProgress(1.0);
-            callback.sendResult(result);
+            parameter.updateProgress(1.0);
+            return ChecksumComparisonContainer.result(result);
         } catch (ExecutionException | InterruptedException e) {
-            callback.sendException(e);
+            return ChecksumComparisonContainer.exception(e);
         }
     }
 }
