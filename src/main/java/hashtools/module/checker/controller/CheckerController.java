@@ -10,10 +10,12 @@ import hashtools.module.checker.domain.ChecksumCheckingContainer;
 import hashtools.module.checker.domain.ChecksumCheckingParameter;
 import hashtools.module.checker.domain.ChecksumCheckingResult;
 import hashtools.module.checker.service.CheckerService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
@@ -141,6 +143,14 @@ public class CheckerController implements Initializable {
     }
 
     private void showMessageDialog(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Hash Tools");
+            alert.setHeaderText("Problem");
+            alert.setContentText(message);
+            alert.show();
+        });
+
         IO.println(message);
         enableUi(pnlRoot);
     }

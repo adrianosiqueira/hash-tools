@@ -10,10 +10,12 @@ import hashtools.module.generator.domain.ChecksumGenerationContainer;
 import hashtools.module.generator.domain.ChecksumGenerationParameter;
 import hashtools.module.generator.domain.ChecksumGenerationResult;
 import hashtools.module.generator.service.GeneratorService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
@@ -148,6 +150,14 @@ public class GeneratorController implements Initializable {
     }
 
     private void showMessageDialog(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Hash Tools");
+            alert.setHeaderText("Problem");
+            alert.setContentText(message);
+            alert.show();
+        });
+
         IO.println(message);
         enableUi(pnlRoot);
     }

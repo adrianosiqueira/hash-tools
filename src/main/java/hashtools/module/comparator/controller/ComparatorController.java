@@ -8,10 +8,12 @@ import hashtools.module.comparator.domain.ChecksumComparisonContainer;
 import hashtools.module.comparator.domain.ChecksumComparisonParameter;
 import hashtools.module.comparator.domain.ChecksumComparisonResult;
 import hashtools.module.comparator.service.ComparatorService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
@@ -138,6 +140,14 @@ public class ComparatorController implements Initializable {
     }
 
     private void showMessageDialog(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Hash Tools");
+            alert.setHeaderText("Problem");
+            alert.setContentText(message);
+            alert.show();
+        });
+
         IO.println(message);
         enableUi(pnlRoot);
     }
