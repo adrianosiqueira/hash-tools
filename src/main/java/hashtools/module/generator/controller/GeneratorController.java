@@ -1,6 +1,5 @@
 package hashtools.module.generator.controller;
 
-import hashtools.core.checksum.Checksum;
 import hashtools.core.file.EnhancedFile;
 import hashtools.core.file.FileDialog;
 import hashtools.core.source.AlgorithmSource;
@@ -25,7 +24,6 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class GeneratorController implements Initializable {
 
@@ -123,13 +121,10 @@ public class GeneratorController implements Initializable {
             return;
         }
 
-        String content = result
-            .getChecksums()
-            .stream()
-            .map(Checksum::toString)
-            .collect(Collectors.joining("\n"));
+
 
         try {
+            String content = result.formatForSaving();
             file.replaceContent(content);
         } catch (IOException e) {
             logException(e);

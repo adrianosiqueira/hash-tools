@@ -5,6 +5,7 @@ import hashtools.core.checksum.Checksum;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class ChecksumGenerationResult {
 
@@ -22,6 +23,13 @@ public class ChecksumGenerationResult {
 
     public void addChecksum(Checksum checksum) {
         checksums.add(checksum);
+    }
+
+    public String formatForSaving() {
+        return checksums
+            .stream()
+            .map(checksum -> checksum.getHash() + "  " + identification)
+            .collect(Collectors.joining("\n"));
     }
 
 
