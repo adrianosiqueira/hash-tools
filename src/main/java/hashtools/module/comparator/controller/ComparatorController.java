@@ -84,30 +84,20 @@ public class ComparatorController implements Initializable {
 
     @FXML
     private void openInputFile1() {
-        EnhancedFile file = new FileDialog()
+        new FileDialog()
             .withTitle("Select the first input file")
             .openForReading()
-            .orElse(null);
-
-        if (file == null) {
-            return;
-        }
-
-        txtInput1.setText(file.toString());
+            .map(EnhancedFile::toString)
+            .ifPresent(txtInput1::setText);
     }
 
     @FXML
     private void openInputFile2() {
-        EnhancedFile file = new FileDialog()
+        new FileDialog()
             .withTitle("Select the second input file")
             .openForReading()
-            .orElse(null);
-
-        if (file == null) {
-            return;
-        }
-
-        txtInput2.setText(file.toString());
+            .map(EnhancedFile::toString)
+            .ifPresent(txtInput2::setText);
     }
 
 
@@ -134,9 +124,6 @@ public class ComparatorController implements Initializable {
         double equality = result.calculateEquality();
         prgEquality.setProgress(equality);
         enableUi(pnlRoot);
-
-        IO.println(result.getChecksum());
-        IO.println("Equality: " + (equality * 100) + "%");
     }
 
     private void showMessageDialog(String message) {
@@ -148,7 +135,6 @@ public class ComparatorController implements Initializable {
             alert.show();
         });
 
-        IO.println(message);
         enableUi(pnlRoot);
     }
 

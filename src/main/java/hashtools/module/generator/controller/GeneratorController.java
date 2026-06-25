@@ -78,7 +78,6 @@ public class GeneratorController implements Initializable {
 
             // Processing
             ChecksumGenerationContainer container = generatorService.performChecksumGeneration(parameter);
-            container.consumeResultIfPresent(this::presentResult);
             container.consumeResultIfPresent(this::saveResult);
             container.consumeProblemIfPresent(this::showMessageDialog);
             container.consumeExceptionIfPresent(this::logException);
@@ -87,16 +86,11 @@ public class GeneratorController implements Initializable {
 
     @FXML
     private void openInputFile() {
-        EnhancedFile file = new FileDialog()
+        new FileDialog()
             .withTitle("Select the input file")
             .openForReading()
-            .orElse(null);
-
-        if (file == null) {
-            return;
-        }
-
-        txtInput.setText(file.toString());
+            .map(EnhancedFile::toString)
+            .ifPresent(txtInput::setText);
     }
 
 
@@ -115,13 +109,6 @@ public class GeneratorController implements Initializable {
 
     private void trackProgress(double progress) {
         prgProgress.setProgress(progress);
-    }
-
-    private void presentResult(ChecksumGenerationResult result) {
-        enableUi(pnlRoot);
-
-        IO.println(result.getIdentification());
-        result.getChecksums().forEach(IO::println);
     }
 
     private void saveResult(ChecksumGenerationResult result) {
@@ -158,7 +145,6 @@ public class GeneratorController implements Initializable {
             alert.show();
         });
 
-        IO.println(message);
         enableUi(pnlRoot);
     }
 

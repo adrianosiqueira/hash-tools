@@ -86,31 +86,21 @@ public class CheckerController implements Initializable {
 
     @FXML
     private void openInputFile() {
-        EnhancedFile file = new FileDialog()
+        new FileDialog()
             .withTitle("Select the input file")
             .openForReading()
-            .orElse(null);
-
-        if (file == null) {
-            return;
-        }
-
-        txtInput.setText(file.toString());
+            .map(EnhancedFile::toString)
+            .ifPresent(txtInput::setText);
     }
 
     @FXML
     private void openChecksumFile() {
-        EnhancedFile file = new FileDialog()
+        new FileDialog()
             .withTitle("Select the checksum file")
             .withDefaultExtension(FileExtension.HASH)
             .openForReading()
-            .orElse(null);
-
-        if (file == null) {
-            return;
-        }
-
-        txtChecksum.setText(file.toString());
+            .map(EnhancedFile::toString)
+            .ifPresent(txtChecksum::setText);
     }
 
 
@@ -137,9 +127,6 @@ public class CheckerController implements Initializable {
         double reliability = result.calculateReliability();
         prgReliability.setProgress(reliability);
         enableUi(pnlRoot);
-
-        result.getChecksums().forEach(IO::println);
-        IO.println("Reliability: " + (reliability * 100) + "%");
     }
 
     private void showMessageDialog(String message) {
@@ -151,7 +138,6 @@ public class CheckerController implements Initializable {
             alert.show();
         });
 
-        IO.println(message);
         enableUi(pnlRoot);
     }
 
