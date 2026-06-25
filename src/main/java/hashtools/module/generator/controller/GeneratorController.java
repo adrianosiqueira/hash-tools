@@ -108,7 +108,7 @@ public class GeneratorController implements Initializable {
 
 
     private void trackProgress(double progress) {
-        prgProgress.setProgress(progress);
+        Platform.runLater(() -> prgProgress.setProgress(progress));
     }
 
     private void saveResult(ChecksumGenerationResult result) {

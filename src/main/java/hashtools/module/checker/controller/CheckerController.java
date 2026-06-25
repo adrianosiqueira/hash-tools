@@ -120,7 +120,7 @@ public class CheckerController implements Initializable {
 
 
     private void trackProgress(double progress) {
-        prgReliability.setProgress(progress);
+        Platform.runLater(() -> prgReliability.setProgress(progress));
     }
 
     private void presentResult(ChecksumCheckingResult result) {

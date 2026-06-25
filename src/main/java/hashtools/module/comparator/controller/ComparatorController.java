@@ -117,7 +117,7 @@ public class ComparatorController implements Initializable {
 
 
     private void trackProgress(double progress) {
-        prgEquality.setProgress(progress);
+        Platform.runLater(() -> prgEquality.setProgress(progress));
     }
 
     private void presentResult(ChecksumComparisonResult result) {
