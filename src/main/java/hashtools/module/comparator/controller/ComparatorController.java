@@ -39,6 +39,8 @@ public class ComparatorController implements Initializable {
     private CheckBox chkInput2;
 
     @FXML
+    private ProgressBar prgProgress;
+    @FXML
     private ProgressBar prgEquality;
 
     private ComparatorService comparatorService;
@@ -57,6 +59,7 @@ public class ComparatorController implements Initializable {
         ThreadPool.CACHED_DAEMON.execute(() -> {
             // User feedback
             disableUi(pnlRoot);
+            cleanUi();
 
 
 
@@ -117,7 +120,7 @@ public class ComparatorController implements Initializable {
 
 
     private void trackProgress(double progress) {
-        Platform.runLater(() -> prgEquality.setProgress(progress));
+        prgProgress.setProgress(progress);
     }
 
     private void presentResult(ChecksumComparisonResult result) {
@@ -162,5 +165,9 @@ public class ComparatorController implements Initializable {
         } else if (node instanceof Control control) {
             control.setDisable(false);
         }
+    }
+
+    private void cleanUi() {
+        prgEquality.setProgress(0.0);
     }
 }

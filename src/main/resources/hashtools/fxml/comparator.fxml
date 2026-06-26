@@ -22,6 +22,7 @@
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
+        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
     </rowConstraints>
 
 
@@ -40,8 +41,13 @@
 
 
 
-    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" alignment="CENTER" spacing="20">
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Equality"/>
+    <ProgressBar GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="prgEquality" maxWidth="1E6" progress="0.0"/>
+
+
+
+    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="3" alignment="CENTER" spacing="20">
         <Button HBox.hgrow="NEVER" onAction="#performChecksumComparison" text="Execute"/>
-        <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgEquality" maxWidth="1E6" progress="0.0"/>
+        <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
     </HBox>
 </GridPane>

@@ -41,6 +41,8 @@ public class CheckerController implements Initializable {
     private CheckBox chkChecksum;
 
     @FXML
+    private ProgressBar prgProgress;
+    @FXML
     private ProgressBar prgReliability;
 
     private CheckerService checkerService;
@@ -59,6 +61,7 @@ public class CheckerController implements Initializable {
         ThreadPool.CACHED_DAEMON.execute(() -> {
             // User feedback
             disableUi(pnlRoot);
+            cleanUi();
 
 
 
@@ -120,7 +123,7 @@ public class CheckerController implements Initializable {
 
 
     private void trackProgress(double progress) {
-        Platform.runLater(() -> prgReliability.setProgress(progress));
+        prgProgress.setProgress(progress);
     }
 
     private void presentResult(ChecksumCheckingResult result) {
@@ -165,5 +168,9 @@ public class CheckerController implements Initializable {
         } else if (node instanceof Control control) {
             control.setDisable(false);
         }
+    }
+
+    private void cleanUi() {
+        prgReliability.setProgress(0.0);
     }
 }

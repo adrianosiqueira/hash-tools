@@ -4,6 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -19,6 +20,8 @@
     </columnConstraints>
 
     <rowConstraints>
+        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
+        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
@@ -40,8 +43,17 @@
 
 
 
-    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" alignment="CENTER" spacing="20">
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Reliability"/>
+    <ProgressBar GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="prgReliability" maxWidth="1E6" progress="0.0"/>
+
+
+
+    <Separator GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="3" maxWidth="1E6"/>
+
+
+
+    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="4" alignment="CENTER" spacing="20">
         <Button HBox.hgrow="NEVER" onAction="#performChecksumChecking" text="Execute"/>
-        <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgReliability" maxWidth="1E6" progress="0.0"/>
+        <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
     </HBox>
 </GridPane>
