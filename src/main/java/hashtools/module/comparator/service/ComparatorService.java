@@ -51,8 +51,10 @@ public class ComparatorService {
             Future<Checksum> futureChecksum1 = ThreadPool.FIXED_DAEMON.submit(() -> {
                 Checksum checksum = algorithm.generateChecksum(inputSource1::updateMessageDigest);
 
-                double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                parameter.updateProgress(progress);
+                synchronized (completedTasks) {
+                    double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
+                    parameter.updateProgress(progress);
+                }
 
                 return checksum;
             });
@@ -60,8 +62,10 @@ public class ComparatorService {
             Future<Checksum> futureChecksum2 = ThreadPool.FIXED_DAEMON.submit(() -> {
                 Checksum checksum = algorithm.generateChecksum(inputSource2::updateMessageDigest);
 
-                double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                parameter.updateProgress(progress);
+                synchronized (completedTasks) {
+                    double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
+                    parameter.updateProgress(progress);
+                }
 
                 return checksum;
             });

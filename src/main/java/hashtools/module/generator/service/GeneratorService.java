@@ -57,8 +57,10 @@ public class GeneratorService {
 
 
 
-                    double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                    parameter.updateProgress(progress);
+                    synchronized (completedTasks) {
+                        double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
+                        parameter.updateProgress(progress);
+                    }
 
 
 
