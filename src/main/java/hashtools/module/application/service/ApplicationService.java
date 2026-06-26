@@ -1,5 +1,6 @@
 package hashtools.module.application.service;
 
+import hashtools.core.threadpool.ThreadPool;
 import hashtools.view.util.JavaFxLoader;
 import javafx.scene.layout.Pane;
 
@@ -37,6 +38,8 @@ public class ApplicationService {
             loader.setLocation(location);
             loader.load();
             loader.consumePane(screenConsumer);
+
+            ThreadPool.shutdown();
         } catch (IOException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();

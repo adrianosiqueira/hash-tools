@@ -8,24 +8,42 @@ import java.util.concurrent.Future;
 public enum ThreadPool {
 
     @SuppressWarnings("resource")
-    CACHED_DAEMON(Executors.newCachedThreadPool(
-        Thread.ofPlatform().daemon()::unstarted
-    )),
+    CACHED_DAEMON(createCached()),
 
     @SuppressWarnings("resource")
-    FIXED_DAEMON(Executors.newFixedThreadPool(
-        Runtime.getRuntime().availableProcessors(),
-        Thread.ofPlatform().daemon()::unstarted
-    ));
+    FIXED_DAEMON(createFixed());
 
 
 
-    private final ExecutorService threadPool;
+    private ExecutorService threadPool;
 
 
 
     ThreadPool(ExecutorService threadPool) {
         this.threadPool = threadPool;
+    }
+
+
+
+    private static ExecutorService createCached() {
+        return Executors.newCachedThreadPool(
+            Thread.ofPlatform().daemon()::unstarted
+        );
+    }
+
+    private static ExecutorService createFixed() {
+        return Executors.newFixedThreadPool(
+            Runtime.getRuntime().availableProcessors(),
+            Thread.ofPlatform().daemon()::unstarted
+        );
+    }
+
+    public static void shutdown() {
+        CACHED_DAEMON.threadPool.shutdownNow();
+        FIXED_DAEMON.threadPool.shutdownNow();
+
+        CACHED_DAEMON.threadPool = createCached();
+        FIXED_DAEMON.threadPool = createFixed();
     }
 
 
