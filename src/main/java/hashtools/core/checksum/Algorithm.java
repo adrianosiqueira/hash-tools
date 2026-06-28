@@ -4,6 +4,8 @@ import hashtools.core.strategy.messagedigest.MessageDigestUpdate;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -54,6 +56,13 @@ public enum Algorithm {
             .of(Algorithm.values())
             .filter(algorithm -> algorithm.name.equals(searchName))
             .findFirst();
+    }
+
+    public static List<Algorithm> getAllAscendingSortedByLength() {
+        return Stream
+            .of(Algorithm.values())
+            .sorted(Comparator.comparing(Algorithm::getLength))
+            .toList();
     }
 
 

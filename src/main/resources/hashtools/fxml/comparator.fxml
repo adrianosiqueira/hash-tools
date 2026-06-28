@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
@@ -25,6 +26,7 @@
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
+        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
     </rowConstraints>
 
 
@@ -43,16 +45,21 @@
 
 
 
-    <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Equality"/>
-    <ProgressBar GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="prgEquality" maxWidth="1E6" progress="0.0"/>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Algorithm"/>
+    <ComboBox GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="cmbAlgorithm" maxWidth="1E6"/>
 
 
 
-    <Separator GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="3" maxWidth="1E6"/>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="3" text="Equality"/>
+    <ProgressBar GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" fx:id="prgEquality" maxWidth="1E6" progress="0.0"/>
 
 
 
-    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="4" alignment="CENTER" spacing="20">
+    <Separator GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="4" maxWidth="1E6"/>
+
+
+
+    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="5" alignment="CENTER" spacing="20">
         <Button HBox.hgrow="NEVER" onAction="#performChecksumComparison" text="Execute"/>
         <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
     </HBox>

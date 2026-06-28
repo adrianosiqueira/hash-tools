@@ -1,5 +1,6 @@
 package hashtools.module.comparator.controller;
 
+import hashtools.core.checksum.Algorithm;
 import hashtools.core.file.EnhancedFile;
 import hashtools.core.file.FileDialog;
 import hashtools.core.source.InputSource;
@@ -15,12 +16,15 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.util.StringConverter;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ComparatorController implements Initializable {
@@ -39,6 +43,9 @@ public class ComparatorController implements Initializable {
     private CheckBox chkInput2;
 
     @FXML
+    private ComboBox<Algorithm> cmbAlgorithm;
+
+    @FXML
     private ProgressBar prgProgress;
     @FXML
     private ProgressBar prgEquality;
@@ -50,6 +57,7 @@ public class ComparatorController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.comparatorService = new ComparatorService();
+        this.setupAlgorithms();
     }
 
 
@@ -66,6 +74,7 @@ public class ComparatorController implements Initializable {
             // Data retrieval
             InputSource inputSource1 = this.createInputSource1();
             InputSource inputSource2 = this.createInputSource2();
+            Algorithm algorithm = this.getSelectedAlgorithm();
 
 
 
@@ -73,6 +82,7 @@ public class ComparatorController implements Initializable {
             ChecksumComparisonParameter parameter = new ChecksumComparisonParameter();
             parameter.setInputSource1(inputSource1);
             parameter.setInputSource2(inputSource2);
+            parameter.setAlgorithm(algorithm);
             parameter.setProgressConsumer(this::trackProgress);
 
 
@@ -115,6 +125,10 @@ public class ComparatorController implements Initializable {
         return chkInput2.isSelected()
             ? InputSource.fileInputSource(txtInput2.getText())
             : InputSource.textInputSource(txtInput2.getText());
+    }
+
+    private Algorithm getSelectedAlgorithm() {
+        return cmbAlgorithm.getValue();
     }
 
 
@@ -169,5 +183,29 @@ public class ComparatorController implements Initializable {
 
     private void cleanUi() {
         prgEquality.setProgress(0.0);
+    }
+
+    private void setupAlgorithms() {
+        List<Algorithm> algorithms = Algorithm.getAllAscendingSortedByLength();
+
+        cmbAlgorithm
+            .getItems()
+            .setAll(algorithms);
+
+        cmbAlgorithm
+            .getSelectionModel()
+            .selectFirst();
+
+        cmbAlgorithm.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Algorithm algorithm) {
+                return algorithm.getDisplayName();
+            }
+
+            @Override
+            public Algorithm fromString(String string) {
+                return Algorithm.MD5;
+            }
+        });
     }
 }
