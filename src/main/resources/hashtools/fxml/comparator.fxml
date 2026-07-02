@@ -46,7 +46,7 @@
 
 
     <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Algorithm"/>
-    <ComboBox GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="cmbAlgorithm" maxWidth="1E6"/>
+    <ComboBox GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="cmbAlgorithm" maxWidth="1E6" onScroll="#changeAlgorithm"/>
 
 
 

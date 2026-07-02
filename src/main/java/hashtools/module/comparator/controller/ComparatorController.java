@@ -20,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.StringConverter;
 
@@ -111,6 +112,23 @@ public class ComparatorController implements Initializable {
             .openForReading()
             .map(EnhancedFile::toString)
             .ifPresent(txtInput2::setText);
+    }
+
+    @FXML
+    private void changeAlgorithm(ScrollEvent event) {
+        double delta = event.getDeltaY();
+        boolean isScrollDown = delta < 0;
+        boolean isScrollUp = delta > 0;
+
+        if (isScrollDown) {
+            cmbAlgorithm
+                .getSelectionModel()
+                .selectNext();
+        } else if (isScrollUp) {
+            cmbAlgorithm
+                .getSelectionModel()
+                .selectPrevious();
+        }
     }
 
 
