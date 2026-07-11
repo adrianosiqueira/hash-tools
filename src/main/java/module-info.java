@@ -4,15 +4,6 @@ module hash.tools {
     requires org.slf4j;
 
     exports hashtools;
-    exports hashtools.core.checksum;
-    exports hashtools.core.file;
-    exports hashtools.core.source;
-    exports hashtools.core.strategy.algorithm;
-    exports hashtools.core.strategy.extraction;
-    exports hashtools.core.strategy.identification;
-    exports hashtools.core.strategy.messagedigest;
-    exports hashtools.core.strategy.problem;
-    exports hashtools.core.threadpool;
     exports hashtools.backend.application.controller;
     exports hashtools.backend.application.service;
     exports hashtools.backend.checker.controller;
@@ -21,6 +12,15 @@ module hash.tools {
     exports hashtools.backend.comparator.controller;
     exports hashtools.backend.comparator.domain;
     exports hashtools.backend.comparator.service;
+    exports hashtools.backend.core.checksum;
+    exports hashtools.backend.core.file;
+    exports hashtools.backend.core.source;
+    exports hashtools.backend.core.strategy.algorithm;
+    exports hashtools.backend.core.strategy.extraction;
+    exports hashtools.backend.core.strategy.identification;
+    exports hashtools.backend.core.strategy.messagedigest;
+    exports hashtools.backend.core.strategy.problem;
+    exports hashtools.backend.core.threadpool;
     exports hashtools.backend.generator.controller;
     exports hashtools.backend.generator.domain;
     exports hashtools.backend.generator.service;
@@ -28,15 +28,6 @@ module hash.tools {
     exports hashtools.frontend.window;
 
     opens hashtools;
-    opens hashtools.core.checksum;
-    opens hashtools.core.file;
-    opens hashtools.core.source;
-    opens hashtools.core.strategy.algorithm;
-    opens hashtools.core.strategy.extraction;
-    opens hashtools.core.strategy.identification;
-    opens hashtools.core.strategy.messagedigest;
-    opens hashtools.core.strategy.problem;
-    opens hashtools.core.threadpool;
     opens hashtools.backend.application.controller;
     opens hashtools.backend.application.service;
     opens hashtools.backend.checker.controller;
@@ -45,6 +36,15 @@ module hash.tools {
     opens hashtools.backend.comparator.controller;
     opens hashtools.backend.comparator.domain;
     opens hashtools.backend.comparator.service;
+    opens hashtools.backend.core.checksum;
+    opens hashtools.backend.core.file;
+    opens hashtools.backend.core.source;
+    opens hashtools.backend.core.strategy.algorithm;
+    opens hashtools.backend.core.strategy.extraction;
+    opens hashtools.backend.core.strategy.identification;
+    opens hashtools.backend.core.strategy.messagedigest;
+    opens hashtools.backend.core.strategy.problem;
+    opens hashtools.backend.core.threadpool;
     opens hashtools.backend.generator.controller;
     opens hashtools.backend.generator.domain;
     opens hashtools.backend.generator.service;

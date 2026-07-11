@@ -1,10 +1,10 @@
 package hashtools.backend.generator.controller;
 
-import hashtools.core.file.EnhancedFile;
-import hashtools.core.file.FileDialog;
-import hashtools.core.source.AlgorithmSource;
-import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPool;
+import hashtools.backend.core.file.EnhancedFile;
+import hashtools.backend.core.file.FileDialog;
+import hashtools.backend.core.source.AlgorithmSource;
+import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.generator.domain.ChecksumGenerationContainer;
 import hashtools.backend.generator.domain.ChecksumGenerationParameter;
 import hashtools.backend.generator.domain.ChecksumGenerationResult;

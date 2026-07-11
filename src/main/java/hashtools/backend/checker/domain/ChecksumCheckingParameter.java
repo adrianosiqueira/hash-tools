@@ -1,7 +1,7 @@
 package hashtools.backend.checker.domain;
 
-import hashtools.core.source.ChecksumSource;
-import hashtools.core.source.InputSource;
+import hashtools.backend.core.source.ChecksumSource;
+import hashtools.backend.core.source.InputSource;
 
 import java.util.Objects;
 import java.util.function.Consumer;

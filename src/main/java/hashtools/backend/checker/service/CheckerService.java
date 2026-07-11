@@ -1,9 +1,9 @@
 package hashtools.backend.checker.service;
 
-import hashtools.core.checksum.Checksum;
-import hashtools.core.source.ChecksumSource;
-import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPool;
+import hashtools.backend.core.checksum.Checksum;
+import hashtools.backend.core.source.ChecksumSource;
+import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.checker.domain.CheckerChecksum;
 import hashtools.backend.checker.domain.ChecksumCheckingContainer;
 import hashtools.backend.checker.domain.ChecksumCheckingParameter;

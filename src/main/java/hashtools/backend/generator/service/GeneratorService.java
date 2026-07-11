@@ -1,10 +1,10 @@
 package hashtools.backend.generator.service;
 
-import hashtools.core.checksum.Algorithm;
-import hashtools.core.checksum.Checksum;
-import hashtools.core.source.AlgorithmSource;
-import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPool;
+import hashtools.backend.core.checksum.Algorithm;
+import hashtools.backend.core.checksum.Checksum;
+import hashtools.backend.core.source.AlgorithmSource;
+import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.generator.domain.ChecksumGenerationContainer;
 import hashtools.backend.generator.domain.ChecksumGenerationParameter;
 import hashtools.backend.generator.domain.ChecksumGenerationResult;

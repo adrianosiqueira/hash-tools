@@ -1,7 +1,7 @@
 package hashtools.backend.generator.domain;
 
-import hashtools.core.source.AlgorithmSource;
-import hashtools.core.source.InputSource;
+import hashtools.backend.core.source.AlgorithmSource;
+import hashtools.backend.core.source.InputSource;
 
 import java.util.Objects;
 import java.util.function.Consumer;

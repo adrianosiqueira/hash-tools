@@ -1,9 +1,9 @@
 package hashtools.backend.comparator.service;
 
-import hashtools.core.checksum.Algorithm;
-import hashtools.core.checksum.Checksum;
-import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPool;
+import hashtools.backend.core.checksum.Algorithm;
+import hashtools.backend.core.checksum.Checksum;
+import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.comparator.domain.ChecksumComparisonContainer;
 import hashtools.backend.comparator.domain.ChecksumComparisonParameter;
 import hashtools.backend.comparator.domain.ChecksumComparisonResult;

@@ -1,7 +1,7 @@
 package hashtools.backend.comparator.domain;
 
-import hashtools.core.checksum.Algorithm;
-import hashtools.core.source.InputSource;
+import hashtools.backend.core.checksum.Algorithm;
+import hashtools.backend.core.source.InputSource;
 
 import java.util.Objects;
 import java.util.function.Consumer;

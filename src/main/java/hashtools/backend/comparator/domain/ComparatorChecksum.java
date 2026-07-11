@@ -1,6 +1,6 @@
 package hashtools.backend.comparator.domain;
 
-import hashtools.core.checksum.Checksum;
+import hashtools.backend.core.checksum.Checksum;
 
 import java.util.Objects;
 

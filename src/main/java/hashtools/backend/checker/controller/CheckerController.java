@@ -1,11 +1,11 @@
 package hashtools.backend.checker.controller;
 
-import hashtools.core.file.EnhancedFile;
-import hashtools.core.file.FileDialog;
-import hashtools.core.file.FileExtension;
-import hashtools.core.source.ChecksumSource;
-import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPool;
+import hashtools.backend.core.file.EnhancedFile;
+import hashtools.backend.core.file.FileDialog;
+import hashtools.backend.core.file.FileExtension;
+import hashtools.backend.core.source.ChecksumSource;
+import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.checker.domain.ChecksumCheckingContainer;
 import hashtools.backend.checker.domain.ChecksumCheckingParameter;
 import hashtools.backend.checker.domain.ChecksumCheckingResult;

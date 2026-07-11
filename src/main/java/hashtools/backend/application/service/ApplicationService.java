@@ -1,6 +1,6 @@
 package hashtools.backend.application.service;
 
-import hashtools.core.threadpool.ThreadPool;
+import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.frontend.util.JavaFxLoader;
 import javafx.scene.layout.Pane;
 

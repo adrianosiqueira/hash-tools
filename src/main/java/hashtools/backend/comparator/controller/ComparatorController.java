@@ -1,10 +1,10 @@
 package hashtools.backend.comparator.controller;
 
-import hashtools.core.checksum.Algorithm;
-import hashtools.core.file.EnhancedFile;
-import hashtools.core.file.FileDialog;
-import hashtools.core.source.InputSource;
-import hashtools.core.threadpool.ThreadPool;
+import hashtools.backend.core.checksum.Algorithm;
+import hashtools.backend.core.file.EnhancedFile;
+import hashtools.backend.core.file.FileDialog;
+import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.comparator.domain.ChecksumComparisonContainer;
 import hashtools.backend.comparator.domain.ChecksumComparisonParameter;
 import hashtools.backend.comparator.domain.ChecksumComparisonResult;
