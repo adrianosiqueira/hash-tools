@@ -1,6 +1,6 @@
-package hashtools.view.window;
+package hashtools.frontend.window;
 
-import hashtools.view.util.JavaFxLoader;
+import hashtools.frontend.util.JavaFxLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -24,8 +24,8 @@ module hash.tools {
     exports hashtools.module.generator.controller;
     exports hashtools.module.generator.domain;
     exports hashtools.module.generator.service;
-    exports hashtools.view.util;
-    exports hashtools.view.window;
+    exports hashtools.frontend.util;
+    exports hashtools.frontend.window;
 
     opens hashtools;
     opens hashtools.core.checksum;
@@ -48,6 +48,6 @@ module hash.tools {
     opens hashtools.module.generator.controller;
     opens hashtools.module.generator.domain;
     opens hashtools.module.generator.service;
-    opens hashtools.view.util;
-    opens hashtools.view.window;
+    opens hashtools.frontend.util;
+    opens hashtools.frontend.window;
 }

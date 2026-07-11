@@ -1,7 +1,7 @@
 package hashtools.module.application.service;
 
 import hashtools.core.threadpool.ThreadPool;
-import hashtools.view.util.JavaFxLoader;
+import hashtools.frontend.util.JavaFxLoader;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;

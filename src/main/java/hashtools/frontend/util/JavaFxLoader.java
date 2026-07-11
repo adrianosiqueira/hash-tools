@@ -1,4 +1,4 @@
-package hashtools.view.util;
+package hashtools.frontend.util;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
