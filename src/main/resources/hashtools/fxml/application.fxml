@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<HBox fx:controller="hashtools.module.application.controller.ApplicationController" spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<HBox fx:controller="hashtools.backend.application.controller.ApplicationController" spacing="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
 
     <VBox HBox.hgrow="NEVER">
         <fx:define>
