@@ -1,18 +1,23 @@
 package hashtools.backend.checker.controller;
 
-import hashtools.backend.core.file.EnhancedFile;
-import hashtools.backend.core.file.FileDialog;
-import hashtools.backend.core.file.FileExtension;
-import hashtools.backend.core.source.ChecksumSource;
-import hashtools.backend.core.source.InputSource;
-import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.checker.domain.ChecksumCheckingContainer;
 import hashtools.backend.checker.domain.ChecksumCheckingParameter;
 import hashtools.backend.checker.domain.ChecksumCheckingResult;
 import hashtools.backend.checker.service.CheckerService;
+import hashtools.backend.core.file.EnhancedFile;
+import hashtools.backend.core.file.FileDialog;
+import hashtools.backend.core.file.FileExtension;
+import hashtools.backend.core.interfaces.ChecksumSource;
+import hashtools.backend.core.interfaces.Controller;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.interfaces.ThreadPool;
+import hashtools.backend.core.strategy.checksumsource.FileChecksumSource;
+import hashtools.backend.core.strategy.checksumsource.TextChecksumSource;
+import hashtools.backend.core.strategy.inputsource.FileInputSource;
+import hashtools.backend.core.strategy.inputsource.TextInputSource;
+import hashtools.backend.core.strategy.threadpool.UnlimitedCoreDaemonThreadPool;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -25,7 +30,7 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CheckerController implements Initializable {
+public class CheckerController implements Controller {
 
     @FXML
     private Pane pnlRoot;
@@ -46,19 +51,26 @@ public class CheckerController implements Initializable {
     private ProgressBar prgReliability;
 
     private CheckerService checkerService;
+    private ThreadPool lightTaskThreadPool;
 
 
 
     @Override
+    public void close() {
+        lightTaskThreadPool.close();
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.checkerService = new CheckerService();
+        this.lightTaskThreadPool = new UnlimitedCoreDaemonThreadPool();
     }
 
 
 
     @FXML
     private void performChecksumChecking() {
-        ThreadPool.CACHED_DAEMON.execute(() -> {
+        lightTaskThreadPool.run(() -> {
             // User feedback
             disableUi(pnlRoot);
             cleanUi();
@@ -110,14 +122,14 @@ public class CheckerController implements Initializable {
 
     private InputSource createInputSource() {
         return chkInput.isSelected()
-            ? InputSource.fileInputSource(txtInput.getText())
-            : InputSource.textInputSource(txtInput.getText());
+            ? new FileInputSource(txtInput.getText())
+            : new TextInputSource(txtInput.getText());
     }
 
     private ChecksumSource createChecksumSource() {
         return chkChecksum.isSelected()
-            ? ChecksumSource.fileChecksumSource(txtChecksum.getText())
-            : ChecksumSource.textChecksumSource(txtChecksum.getText());
+            ? new FileChecksumSource(txtChecksum.getText())
+            : new TextChecksumSource(txtChecksum.getText());
     }
 
 

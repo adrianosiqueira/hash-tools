@@ -1,17 +1,20 @@
 package hashtools.backend.comparator.controller;
 
-import hashtools.backend.core.checksum.Algorithm;
-import hashtools.backend.core.file.EnhancedFile;
-import hashtools.backend.core.file.FileDialog;
-import hashtools.backend.core.source.InputSource;
-import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.comparator.domain.ChecksumComparisonContainer;
 import hashtools.backend.comparator.domain.ChecksumComparisonParameter;
 import hashtools.backend.comparator.domain.ChecksumComparisonResult;
 import hashtools.backend.comparator.service.ComparatorService;
+import hashtools.backend.core.checksum.Algorithm;
+import hashtools.backend.core.file.EnhancedFile;
+import hashtools.backend.core.file.FileDialog;
+import hashtools.backend.core.interfaces.Controller;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.interfaces.ThreadPool;
+import hashtools.backend.core.strategy.inputsource.FileInputSource;
+import hashtools.backend.core.strategy.inputsource.TextInputSource;
+import hashtools.backend.core.strategy.threadpool.UnlimitedCoreDaemonThreadPool;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -28,7 +31,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ComparatorController implements Initializable {
+public class ComparatorController implements Controller {
 
     @FXML
     private Pane pnlRoot;
@@ -52,12 +55,19 @@ public class ComparatorController implements Initializable {
     private ProgressBar prgEquality;
 
     private ComparatorService comparatorService;
+    private ThreadPool lightTaskThreadPool;
 
 
 
     @Override
+    public void close() {
+        lightTaskThreadPool.close();
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.comparatorService = new ComparatorService();
+        this.lightTaskThreadPool = new UnlimitedCoreDaemonThreadPool();
         this.setupAlgorithms();
     }
 
@@ -65,7 +75,7 @@ public class ComparatorController implements Initializable {
 
     @FXML
     private void performChecksumComparison() {
-        ThreadPool.CACHED_DAEMON.execute(() -> {
+        lightTaskThreadPool.run(() -> {
             // User feedback
             disableUi(pnlRoot);
             cleanUi();
@@ -135,14 +145,14 @@ public class ComparatorController implements Initializable {
 
     private InputSource createInputSource1() {
         return chkInput1.isSelected()
-            ? InputSource.fileInputSource(txtInput1.getText())
-            : InputSource.textInputSource(txtInput1.getText());
+            ? new FileInputSource(txtInput1.getText())
+            : new TextInputSource(txtInput1.getText());
     }
 
     private InputSource createInputSource2() {
         return chkInput2.isSelected()
-            ? InputSource.fileInputSource(txtInput2.getText())
-            : InputSource.textInputSource(txtInput2.getText());
+            ? new FileInputSource(txtInput2.getText())
+            : new TextInputSource(txtInput2.getText());
     }
 
     private Algorithm getSelectedAlgorithm() {

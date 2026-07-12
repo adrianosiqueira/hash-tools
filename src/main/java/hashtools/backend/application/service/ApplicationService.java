@@ -1,6 +1,7 @@
 package hashtools.backend.application.service;
 
-import hashtools.backend.core.threadpool.ThreadPool;
+import hashtools.backend.core.interfaces.Controller;
+import hashtools.backend.core.strategy.controller.NullController;
 import hashtools.frontend.util.JavaFxLoader;
 import javafx.scene.layout.Pane;
 
@@ -8,6 +9,16 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 public class ApplicationService {
+
+    private Controller activeController;
+
+
+
+    public ApplicationService() {
+        this.activeController = new NullController();
+    }
+
+
 
     public void openCheckerScreen(Consumer<Pane> screenConsumer) {
         this.performScreenOpening(
@@ -38,11 +49,15 @@ public class ApplicationService {
             loader.setLocation(location);
             loader.load();
             loader.consumePane(screenConsumer);
-
-            ThreadPool.shutdown();
+            loader.consumeController(this::swapController);
         } catch (IOException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
+    }
+
+    private void swapController(Controller controller) {
+        activeController.close();
+        activeController = controller;
     }
 }

@@ -1,13 +1,14 @@
 package hashtools.backend.comparator.service;
 
-import hashtools.backend.core.checksum.Algorithm;
-import hashtools.backend.core.checksum.Checksum;
-import hashtools.backend.core.source.InputSource;
-import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.comparator.domain.ChecksumComparisonContainer;
 import hashtools.backend.comparator.domain.ChecksumComparisonParameter;
 import hashtools.backend.comparator.domain.ChecksumComparisonResult;
 import hashtools.backend.comparator.domain.ComparatorChecksum;
+import hashtools.backend.core.checksum.Algorithm;
+import hashtools.backend.core.checksum.Checksum;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.interfaces.ThreadPool;
+import hashtools.backend.core.strategy.threadpool.AllCoreDaemonThreadPool;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -36,7 +37,7 @@ public class ComparatorService {
 
 
 
-        try {
+        try (ThreadPool threadPool = new AllCoreDaemonThreadPool()) {
             // Processing data
             Algorithm algorithm = parameter.getAlgorithm();
             ChecksumComparisonResult result = new ChecksumComparisonResult();
@@ -48,8 +49,8 @@ public class ComparatorService {
 
 
             // Parallel checksum generation
-            Future<Checksum> futureChecksum1 = ThreadPool.FIXED_DAEMON.submit(() -> {
-                Checksum checksum = algorithm.generateChecksum(inputSource1::updateMessageDigest);
+            Future<Checksum> futureChecksum1 = threadPool.run(() -> {
+                Checksum checksum = algorithm.generateChecksum(inputSource1);
 
                 synchronized (completedTasks) {
                     double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
@@ -59,8 +60,8 @@ public class ComparatorService {
                 return checksum;
             });
 
-            Future<Checksum> futureChecksum2 = ThreadPool.FIXED_DAEMON.submit(() -> {
-                Checksum checksum = algorithm.generateChecksum(inputSource2::updateMessageDigest);
+            Future<Checksum> futureChecksum2 = threadPool.run(() -> {
+                Checksum checksum = algorithm.generateChecksum(inputSource2);
 
                 synchronized (completedTasks) {
                     double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();

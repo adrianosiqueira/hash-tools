@@ -2,16 +2,20 @@ package hashtools.backend.generator.controller;
 
 import hashtools.backend.core.file.EnhancedFile;
 import hashtools.backend.core.file.FileDialog;
-import hashtools.backend.core.source.AlgorithmSource;
-import hashtools.backend.core.source.InputSource;
-import hashtools.backend.core.threadpool.ThreadPool;
+import hashtools.backend.core.interfaces.AlgorithmSource;
+import hashtools.backend.core.interfaces.Controller;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.interfaces.ThreadPool;
+import hashtools.backend.core.strategy.algorithmsource.CheckBoxAlgorithmSource;
+import hashtools.backend.core.strategy.inputsource.FileInputSource;
+import hashtools.backend.core.strategy.inputsource.TextInputSource;
+import hashtools.backend.core.strategy.threadpool.UnlimitedCoreDaemonThreadPool;
 import hashtools.backend.generator.domain.ChecksumGenerationContainer;
 import hashtools.backend.generator.domain.ChecksumGenerationParameter;
 import hashtools.backend.generator.domain.ChecksumGenerationResult;
 import hashtools.backend.generator.service.GeneratorService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -25,7 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GeneratorController implements Initializable {
+public class GeneratorController implements Controller {
 
     @FXML
     private Pane pnlRoot;
@@ -42,19 +46,26 @@ public class GeneratorController implements Initializable {
     private ProgressBar prgProgress;
 
     private GeneratorService generatorService;
+    private ThreadPool lightTaskThreadPool;
 
 
 
     @Override
+    public void close() {
+        lightTaskThreadPool.close();
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.generatorService = new GeneratorService();
+        this.lightTaskThreadPool = new UnlimitedCoreDaemonThreadPool();
     }
 
 
 
     @FXML
     private void performChecksumGeneration() {
-        ThreadPool.CACHED_DAEMON.execute(() -> {
+        lightTaskThreadPool.run(() -> {
             // User feedback
             disableUi(pnlRoot);
 
@@ -95,12 +106,12 @@ public class GeneratorController implements Initializable {
 
     private InputSource createInputSource() {
         return chkInput.isSelected()
-            ? InputSource.fileInputSource(txtInput.getText())
-            : InputSource.textInputSource(txtInput.getText());
+            ? new FileInputSource(txtInput.getText())
+            : new TextInputSource(txtInput.getText());
     }
 
     private AlgorithmSource createAlgorithmSource() {
-        return AlgorithmSource.checkBoxAlgorithmSource(pnlAlgorithm);
+        return new CheckBoxAlgorithmSource(pnlAlgorithm);
     }
 
 

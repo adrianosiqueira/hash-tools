@@ -2,9 +2,10 @@ package hashtools.backend.generator.service;
 
 import hashtools.backend.core.checksum.Algorithm;
 import hashtools.backend.core.checksum.Checksum;
-import hashtools.backend.core.source.AlgorithmSource;
-import hashtools.backend.core.source.InputSource;
-import hashtools.backend.core.threadpool.ThreadPool;
+import hashtools.backend.core.interfaces.AlgorithmSource;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.interfaces.ThreadPool;
+import hashtools.backend.core.strategy.threadpool.AllCoreDaemonThreadPool;
 import hashtools.backend.generator.domain.ChecksumGenerationContainer;
 import hashtools.backend.generator.domain.ChecksumGenerationParameter;
 import hashtools.backend.generator.domain.ChecksumGenerationResult;
@@ -38,7 +39,7 @@ public class GeneratorService {
 
 
 
-        try {
+        try (ThreadPool threadPool = new AllCoreDaemonThreadPool()) {
             // Processing data
             List<Algorithm> algorithms = algorithmSource.getAlgorithms();
             List<Future<Checksum>> futureChecksums = new ArrayList<>();
@@ -52,8 +53,8 @@ public class GeneratorService {
 
             // Parallel checksum generation
             for (Algorithm algorithm : algorithms) {
-                futureChecksums.add(ThreadPool.FIXED_DAEMON.submit(() -> {
-                    Checksum checksum = algorithm.generateChecksum(inputSource::updateMessageDigest);
+                futureChecksums.add(threadPool.run(() -> {
+                    Checksum checksum = algorithm.generateChecksum(inputSource);
 
 
 
@@ -75,7 +76,7 @@ public class GeneratorService {
                 result.addChecksum(checksum.get());
             }
 
-            result.setIdentification(inputSource::identify);
+            result.setIdentification(inputSource::getIdentification);
 
             parameter.updateProgress(1.0);
             return ChecksumGenerationContainer.result(result);

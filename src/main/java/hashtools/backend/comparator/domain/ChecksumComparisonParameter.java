@@ -1,7 +1,8 @@
 package hashtools.backend.comparator.domain;
 
 import hashtools.backend.core.checksum.Algorithm;
-import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.strategy.inputsource.NullInputSource;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -16,8 +17,8 @@ public class ChecksumComparisonParameter {
 
 
     public ChecksumComparisonParameter() {
-        this.inputSource1 = InputSource.nullInputSource();
-        this.inputSource2 = InputSource.nullInputSource();
+        this.inputSource1 = new NullInputSource();
+        this.inputSource2 = new NullInputSource();
         this.algorithm = Algorithm.MD5;
         this.progressConsumer = _ -> {};
     }

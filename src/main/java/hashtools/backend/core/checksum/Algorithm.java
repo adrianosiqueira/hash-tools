@@ -1,6 +1,6 @@
 package hashtools.backend.core.checksum;
 
-import hashtools.backend.core.strategy.messagedigest.MessageDigestUpdate;
+import hashtools.backend.core.interfaces.InputSource;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -67,10 +67,10 @@ public enum Algorithm {
 
 
 
-    public Checksum generateChecksum(MessageDigestUpdate update) throws RuntimeException {
+    public Checksum generateChecksum(InputSource inputSource) throws RuntimeException {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(this.name);
-            update.update(messageDigest);
+            inputSource.updateMessageDigest(messageDigest);
 
             byte[] bytes = messageDigest.digest();
             StringBuilder hash = new StringBuilder();

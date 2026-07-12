@@ -1,7 +1,9 @@
 package hashtools.backend.checker.domain;
 
-import hashtools.backend.core.source.ChecksumSource;
-import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.interfaces.ChecksumSource;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.strategy.checksumsource.NullChecksumSource;
+import hashtools.backend.core.strategy.inputsource.NullInputSource;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -15,8 +17,8 @@ public class ChecksumCheckingParameter {
 
 
     public ChecksumCheckingParameter() {
-        this.inputSource = InputSource.nullInputSource();
-        this.checksumSource = ChecksumSource.nullChecksumSource();
+        this.inputSource = new NullInputSource();
+        this.checksumSource = new NullChecksumSource();
         this.progressConsumer = _ -> {};
     }
 

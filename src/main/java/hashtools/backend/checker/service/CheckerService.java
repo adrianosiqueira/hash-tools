@@ -1,13 +1,14 @@
 package hashtools.backend.checker.service;
 
-import hashtools.backend.core.checksum.Checksum;
-import hashtools.backend.core.source.ChecksumSource;
-import hashtools.backend.core.source.InputSource;
-import hashtools.backend.core.threadpool.ThreadPool;
 import hashtools.backend.checker.domain.CheckerChecksum;
 import hashtools.backend.checker.domain.ChecksumCheckingContainer;
 import hashtools.backend.checker.domain.ChecksumCheckingParameter;
 import hashtools.backend.checker.domain.ChecksumCheckingResult;
+import hashtools.backend.core.checksum.Checksum;
+import hashtools.backend.core.interfaces.ChecksumSource;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.interfaces.ThreadPool;
+import hashtools.backend.core.strategy.threadpool.AllCoreDaemonThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class CheckerService {
 
 
 
-        try {
+        try (ThreadPool threadPool = new AllCoreDaemonThreadPool()) {
             // Processing data
             List<Checksum> officialChecksums = checksumSource.extractOfficialChecksums();
             List<Future<CheckerChecksum>> futureChecksums = new ArrayList<>();
@@ -52,10 +53,10 @@ public class CheckerService {
 
             // Parallel checksum generation
             for (Checksum official : officialChecksums) {
-                futureChecksums.add(ThreadPool.FIXED_DAEMON.submit(() -> {
+                futureChecksums.add(threadPool.run(() -> {
                     Checksum generated = official
                         .getAlgorithm()
-                        .generateChecksum(inputSource::updateMessageDigest);
+                        .generateChecksum(inputSource);
 
 
 

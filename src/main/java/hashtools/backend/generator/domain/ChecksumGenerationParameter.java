@@ -1,7 +1,9 @@
 package hashtools.backend.generator.domain;
 
-import hashtools.backend.core.source.AlgorithmSource;
-import hashtools.backend.core.source.InputSource;
+import hashtools.backend.core.interfaces.AlgorithmSource;
+import hashtools.backend.core.interfaces.InputSource;
+import hashtools.backend.core.strategy.algorithmsource.NullAlgorithmSource;
+import hashtools.backend.core.strategy.inputsource.NullInputSource;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -15,8 +17,8 @@ public class ChecksumGenerationParameter {
 
 
     public ChecksumGenerationParameter() {
-        this.inputSource = InputSource.nullInputSource();
-        this.algorithmSource = AlgorithmSource.nullAlgorithmSource();
+        this.inputSource = new NullInputSource();
+        this.algorithmSource = new NullAlgorithmSource();
         this.progressConsumer = _ -> {};
     }
 
