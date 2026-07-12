@@ -1,5 +1,6 @@
 package hashtools.frontend.util;
 
+import hashtools.backend.core.interfaces.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -38,5 +39,10 @@ public class JavaFxLoader extends FXMLLoader {
     public void consumePane(Consumer<Pane> consumer) {
         Pane pane = this.getRoot();
         consumer.accept(pane);
+    }
+
+    public void consumeController(Consumer<Controller> consumer) {
+        Controller controller = this.getController();
+        consumer.accept(controller);
     }
 }
