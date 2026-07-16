@@ -1,6 +1,7 @@
 package hashtools.domain.checksum;
 
 import hashtools.domain.algorithm.Algorithm;
+import hashtools.domain.algorithm.MessageDigestProxy;
 
 import java.util.Objects;
 
@@ -33,6 +34,10 @@ public class Checksum {
         return checksum != null
             && this.hash.equalsIgnoreCase(checksum.hash)
             && this.algorithm == checksum.algorithm;
+    }
+
+    public MessageDigestProxy createMessageDigestProxy() {
+        return algorithm.createMessageDigestProxy();
     }
 
 

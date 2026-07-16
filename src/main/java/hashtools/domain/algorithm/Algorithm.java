@@ -1,9 +1,5 @@
 package hashtools.domain.algorithm;
 
-import hashtools.domain.checksum.Checksum;
-import hashtools.strategy.inputsource.InputSource;
-
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
@@ -69,22 +65,12 @@ public enum Algorithm {
 
 
 
-    @Deprecated(forRemoval = true)
-    public Checksum generateChecksum(InputSource inputSource) throws IOException {
+    public MessageDigestProxy createMessageDigestProxy() {
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance(this.name);
-            inputSource.updateMessageDigest(List.of(messageDigest));
-
-            byte[] bytes = messageDigest.digest();
-            StringBuilder hash = new StringBuilder();
-
-            for (byte b : bytes) {
-                hash.append(String.format("%02x", b));
-            }
-
-            return new Checksum(hash.toString());
+            MessageDigest messageDigest = MessageDigest.getInstance(this.getName());
+            return new MessageDigestProxy(messageDigest);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Internal error regarding to the algorithm name. Report it to the developer.", e);
+            throw new RuntimeException(e);
         }
     }
 

@@ -73,7 +73,7 @@ public class CheckerService {
         public static OfficialChecksum checksum(Checksum checksum) {
             return new OfficialChecksum(
                 checksum,
-                MessageDigestProxy.fromChecksum(checksum)
+                checksum.createMessageDigestProxy()
             );
         }
 

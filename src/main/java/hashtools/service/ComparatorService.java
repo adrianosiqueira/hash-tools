@@ -1,7 +1,7 @@
 package hashtools.service;
 
-import hashtools.domain.algorithm.MessageDigestProxy;
 import hashtools.domain.algorithm.Algorithm;
+import hashtools.domain.algorithm.MessageDigestProxy;
 import hashtools.domain.checksum.ComparatorChecksum;
 import hashtools.domain.container.ChecksumComparisonContainer;
 import hashtools.domain.context.ChecksumComparisonContext;
@@ -26,8 +26,8 @@ public class ComparatorService {
 
         // Processing data
         Algorithm algorithm = context.getAlgorithm();
-        MessageDigestProxy messageDigestProxy1 = MessageDigestProxy.fromAlgorithm(algorithm);
-        MessageDigestProxy messageDigestProxy2 = MessageDigestProxy.fromAlgorithm(algorithm);
+        MessageDigestProxy messageDigestProxy1 = algorithm.createMessageDigestProxy();
+        MessageDigestProxy messageDigestProxy2 = algorithm.createMessageDigestProxy();
 
 
 
