@@ -1,6 +1,6 @@
 package hashtools;
 
-import hashtools.frontend.window.ApplicationWindow;
+import hashtools.window.ApplicationWindow;
 import javafx.application.Application;
 
 public class Main {

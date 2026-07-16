@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<GridPane fx:controller="hashtools.backend.generator.controller.GeneratorController" fx:id="pnlRoot" hgap="20" vgap="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<GridPane fx:controller="hashtools.controller.GeneratorController" fx:id="pnlRoot" hgap="20" vgap="20" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
 
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="NEVER"/>
