@@ -1,34 +1,21 @@
 package hashtools.service;
 
-import hashtools.domain.container.ChecksumComparisonContainer;
-import hashtools.domain.context.ChecksumComparisonParameter;
-import hashtools.domain.result.ChecksumComparisonResult;
+import hashtools.domain.algorithm.MessageDigestProxy;
+import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.checksum.ComparatorChecksum;
-import hashtools.domain.checksum.Algorithm;
-import hashtools.domain.checksum.Checksum;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.backend.core.strategy.threadpool.ThreadPool;
-import hashtools.backend.core.strategy.threadpool.AllCoreDaemonThreadPool;
+import hashtools.domain.container.ChecksumComparisonContainer;
+import hashtools.domain.context.ChecksumComparisonContext;
+import hashtools.domain.result.ChecksumComparisonResult;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.io.IOException;
+import java.util.List;
 
 public class ComparatorService {
 
-    public ChecksumComparisonContainer performChecksumComparison(ChecksumComparisonParameter parameter) {
-        // Initial setup
-        parameter.updateProgress(0.0);
-
-        InputSource inputSource1 = parameter.getInputSource1();
-        InputSource inputSource2 = parameter.getInputSource2();
-
-
-
+    public ChecksumComparisonContainer performChecksumComparison(ChecksumComparisonContext context) {
         // Problem detection
-        String problem = inputSource1
+        String problem = context
             .detectProblem()
-            .or(inputSource2::detectProblem)
             .orElse(null);
 
         if (problem != null) {
@@ -37,52 +24,30 @@ public class ComparatorService {
 
 
 
-        try (ThreadPool threadPool = new AllCoreDaemonThreadPool()) {
-            // Processing data
-            Algorithm algorithm = parameter.getAlgorithm();
-            ChecksumComparisonResult result = new ChecksumComparisonResult();
-
-            // Progress tracking
-            AtomicInteger totalTasks = new AtomicInteger(2);
-            AtomicInteger completedTasks = new AtomicInteger(0);
+        // Processing data
+        Algorithm algorithm = context.getAlgorithm();
+        MessageDigestProxy messageDigestProxy1 = MessageDigestProxy.fromAlgorithm(algorithm);
+        MessageDigestProxy messageDigestProxy2 = MessageDigestProxy.fromAlgorithm(algorithm);
 
 
 
-            // Parallel checksum generation
-            Future<Checksum> futureChecksum1 = threadPool.run(() -> {
-                Checksum checksum = algorithm.generateChecksum(inputSource1);
-
-                synchronized (completedTasks) {
-                    double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                    parameter.updateProgress(progress);
-                }
-
-                return checksum;
-            });
-
-            Future<Checksum> futureChecksum2 = threadPool.run(() -> {
-                Checksum checksum = algorithm.generateChecksum(inputSource2);
-
-                synchronized (completedTasks) {
-                    double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                    parameter.updateProgress(progress);
-                }
-
-                return checksum;
-            });
+        try {
+            // Processing
+            context.updateMessageDigests1(List.of(messageDigestProxy1.messageDigest()));
+            context.updateMessageDigests2(List.of(messageDigestProxy2.messageDigest()));
 
 
 
             // Result collecting
             ComparatorChecksum checksum = new ComparatorChecksum();
-            checksum.setChecksum1(futureChecksum1.get());
-            checksum.setChecksum2(futureChecksum2.get());
+            checksum.setChecksum1(messageDigestProxy1.decodeIntoChecksum());
+            checksum.setChecksum2(messageDigestProxy2.decodeIntoChecksum());
 
+            ChecksumComparisonResult result = new ChecksumComparisonResult();
             result.setChecksum(checksum);
 
-            parameter.updateProgress(1.0);
             return ChecksumComparisonContainer.result(result);
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (IOException e) {
             return ChecksumComparisonContainer.exception(e);
         }
     }

@@ -1,6 +1,6 @@
 package hashtools.strategy.algorithmsource;
 
-import hashtools.domain.checksum.Algorithm;
+import hashtools.domain.algorithm.Algorithm;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
 

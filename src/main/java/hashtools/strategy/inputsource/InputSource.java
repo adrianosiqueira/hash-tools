@@ -1,13 +1,23 @@
 package hashtools.strategy.inputsource;
 
+import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Collection;
 import java.util.Optional;
 
 public interface InputSource {
 
-    void updateMessageDigest(MessageDigest messageDigest) throws RuntimeException;
+    default void updateMessageDigest(Collection<MessageDigest> messageDigests) throws IOException {
+    }
 
-    String getIdentification();
+    default String getIdentification() {
+        return "";
+    }
 
-    Optional<String> detectProblem();
+    default Optional<String> detectProblem() {
+        return Optional.empty();
+    }
+
+    default void cancel() {
+    }
 }

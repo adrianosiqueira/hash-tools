@@ -1,7 +1,9 @@
-package hashtools.domain.checksum;
+package hashtools.domain.algorithm;
 
+import hashtools.domain.checksum.Checksum;
 import hashtools.strategy.inputsource.InputSource;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
@@ -67,10 +69,11 @@ public enum Algorithm {
 
 
 
-    public Checksum generateChecksum(InputSource inputSource) throws RuntimeException {
+    @Deprecated(forRemoval = true)
+    public Checksum generateChecksum(InputSource inputSource) throws IOException {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(this.name);
-            inputSource.updateMessageDigest(messageDigest);
+            inputSource.updateMessageDigest(List.of(messageDigest));
 
             byte[] bytes = messageDigest.digest();
             StringBuilder hash = new StringBuilder();

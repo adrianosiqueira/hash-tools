@@ -3,7 +3,6 @@ package hashtools.strategy.checksumsource;
 import hashtools.domain.checksum.Checksum;
 
 import java.util.List;
-import java.util.Optional;
 
 public class TextChecksumSource implements ChecksumSource {
 
@@ -18,17 +17,12 @@ public class TextChecksumSource implements ChecksumSource {
 
 
     @Override
-    public List<Checksum> extractOfficialChecksums() throws RuntimeException {
+    public List<Checksum> extractOfficialChecksums() {
         return text
             .lines()
             .map(line -> line.split(" ")[0])
             .map(Checksum::new)
             .filter(Checksum::isValid)
             .toList();
-    }
-
-    @Override
-    public Optional<String> detectProblem() {
-        return Optional.empty();
     }
 }

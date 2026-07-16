@@ -1,25 +1,18 @@
 package hashtools.controller;
 
+import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.container.ChecksumComparisonContainer;
-import hashtools.domain.context.ChecksumComparisonParameter;
+import hashtools.domain.context.ChecksumComparisonContext;
+import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumComparisonResult;
 import hashtools.service.ComparatorService;
-import hashtools.domain.checksum.Algorithm;
-import hashtools.domain.file.EnhancedFile;
-import hashtools.domain.file.FileDialog;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.backend.core.strategy.threadpool.ThreadPool;
 import hashtools.strategy.inputsource.FileInputSource;
+import hashtools.strategy.inputsource.InputSource;
 import hashtools.strategy.inputsource.TextInputSource;
-import hashtools.backend.core.strategy.threadpool.UnlimitedCoreDaemonThreadPool;
-import javafx.application.Platform;
+import hashtools.strategy.thread.VirtualThreadFactory;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
@@ -29,8 +22,9 @@ import javafx.util.StringConverter;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadFactory;
 
-public class ComparatorController implements Controller {
+public class ComparatorController extends AbstractController {
 
     @FXML
     private Pane pnlRoot;
@@ -54,19 +48,14 @@ public class ComparatorController implements Controller {
     private ProgressBar prgEquality;
 
     private ComparatorService comparatorService;
-    private ThreadPool lightTaskThreadPool;
+    private ThreadFactory threadFactory;
 
 
-
-    @Override
-    public void close() {
-        lightTaskThreadPool.close();
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.comparatorService = new ComparatorService();
-        this.lightTaskThreadPool = new UnlimitedCoreDaemonThreadPool();
+        this.threadFactory = new VirtualThreadFactory();
         this.setupAlgorithms();
     }
 
@@ -74,10 +63,10 @@ public class ComparatorController implements Controller {
 
     @FXML
     private void performChecksumComparison() {
-        lightTaskThreadPool.run(() -> {
+        threadFactory.newThread(() -> {
             // User feedback
-            disableUi(pnlRoot);
-            cleanUi();
+            super.disableUi(pnlRoot);
+            super.cleanUi();
 
 
 
@@ -89,7 +78,7 @@ public class ComparatorController implements Controller {
 
 
             // Communication setup
-            ChecksumComparisonParameter parameter = new ChecksumComparisonParameter();
+            ChecksumComparisonContext parameter = new ChecksumComparisonContext();
             parameter.setInputSource1(inputSource1);
             parameter.setInputSource2(inputSource2);
             parameter.setAlgorithm(algorithm);
@@ -102,25 +91,25 @@ public class ComparatorController implements Controller {
             container.consumeResultIfPresent(this::presentResult);
             container.consumeProblemIfPresent(this::showMessageDialog);
             container.consumeExceptionIfPresent(this::logException);
-        });
+        }).start();
     }
 
     @FXML
     private void openInputFile1() {
-        new FileDialog()
-            .withTitle("Select the first input file")
-            .openForReading()
-            .map(EnhancedFile::toString)
-            .ifPresent(txtInput1::setText);
+        super.openFile(
+            "Select the first input file",
+            FileDialog::openForReading,
+            file -> txtInput1.setText(file.toString())
+        );
     }
 
     @FXML
     private void openInputFile2() {
-        new FileDialog()
-            .withTitle("Select the second input file")
-            .openForReading()
-            .map(EnhancedFile::toString)
-            .ifPresent(txtInput2::setText);
+        super.openFile(
+            "Select the second input file",
+            FileDialog::openForReading,
+            file -> txtInput2.setText(file.toString())
+        );
     }
 
     @FXML
@@ -158,60 +147,6 @@ public class ComparatorController implements Controller {
         return cmbAlgorithm.getValue();
     }
 
-
-
-    private void trackProgress(double progress) {
-        prgProgress.setProgress(progress);
-    }
-
-    private void presentResult(ChecksumComparisonResult result) {
-        double equality = result.calculateEquality();
-        prgEquality.setProgress(equality);
-        enableUi(pnlRoot);
-    }
-
-    private void showMessageDialog(String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Hash Tools");
-            alert.setHeaderText("Problem");
-            alert.setContentText(message);
-            alert.show();
-        });
-
-        enableUi(pnlRoot);
-    }
-
-    private void logException(Exception exception) {
-        //noinspection CallToPrintStackTrace
-        exception.printStackTrace();
-        enableUi(pnlRoot);
-    }
-
-
-
-    private void disableUi(Node node) {
-        if (node instanceof Pane pane) {
-            pane.setCursor(Cursor.WAIT);
-            pane.getChildren().forEach(this::disableUi);
-        } else if (node instanceof Control control) {
-            control.setDisable(true);
-        }
-    }
-
-    private void enableUi(Node node) {
-        if (node instanceof Pane pane) {
-            pane.setCursor(Cursor.DEFAULT);
-            pane.getChildren().forEach(this::enableUi);
-        } else if (node instanceof Control control) {
-            control.setDisable(false);
-        }
-    }
-
-    private void cleanUi() {
-        prgEquality.setProgress(0.0);
-    }
-
     private void setupAlgorithms() {
         List<Algorithm> algorithms = Algorithm.getAllAscendingSortedByLength();
 
@@ -234,5 +169,34 @@ public class ComparatorController implements Controller {
                 return Algorithm.MD5;
             }
         });
+    }
+
+    private void presentResult(ChecksumComparisonResult result) {
+        double equality = result.calculateEquality();
+        prgEquality.setProgress(equality);
+        enableUi(pnlRoot);
+    }
+
+    private void showMessageDialog(String message) {
+        super.showMessageDialog("Hash Tools", "Problem", message);
+        super.enableUi(pnlRoot);
+    }
+
+
+
+    @Override
+    protected void trackProgress(double progress) {
+        prgProgress.setProgress(progress);
+    }
+
+    @Override
+    protected void logException(Exception exception) {
+        super.logException(exception);
+        super.enableUi(pnlRoot);
+    }
+
+    @Override
+    protected void cleanUi() {
+        prgEquality.setProgress(0.0);
     }
 }

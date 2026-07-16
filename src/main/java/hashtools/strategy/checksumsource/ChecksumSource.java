@@ -2,12 +2,17 @@ package hashtools.strategy.checksumsource;
 
 import hashtools.domain.checksum.Checksum;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface ChecksumSource {
 
-    List<Checksum> extractOfficialChecksums() throws RuntimeException;
+    default List<Checksum> extractOfficialChecksums() throws IOException {
+        return List.of();
+    }
 
-    Optional<String> detectProblem();
+    default Optional<String> detectProblem() {
+        return Optional.empty();
+    }
 }

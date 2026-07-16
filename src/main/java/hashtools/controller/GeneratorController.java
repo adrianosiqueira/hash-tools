@@ -1,25 +1,18 @@
 package hashtools.controller;
 
-import hashtools.domain.file.EnhancedFile;
-import hashtools.domain.file.FileDialog;
-import hashtools.strategy.algorithmsource.AlgorithmSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.backend.core.strategy.threadpool.ThreadPool;
-import hashtools.strategy.algorithmsource.CheckBoxAlgorithmSource;
-import hashtools.strategy.inputsource.FileInputSource;
-import hashtools.strategy.inputsource.TextInputSource;
-import hashtools.backend.core.strategy.threadpool.UnlimitedCoreDaemonThreadPool;
 import hashtools.domain.container.ChecksumGenerationContainer;
-import hashtools.domain.context.ChecksumGenerationParameter;
+import hashtools.domain.context.ChecksumGenerationContext;
+import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.service.GeneratorService;
-import javafx.application.Platform;
+import hashtools.strategy.algorithmsource.AlgorithmSource;
+import hashtools.strategy.algorithmsource.CheckBoxAlgorithmSource;
+import hashtools.strategy.inputsource.FileInputSource;
+import hashtools.strategy.inputsource.InputSource;
+import hashtools.strategy.inputsource.TextInputSource;
+import hashtools.strategy.thread.VirtualThreadFactory;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -27,8 +20,9 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadFactory;
 
-public class GeneratorController implements Controller {
+public class GeneratorController extends AbstractController {
 
     @FXML
     private Pane pnlRoot;
@@ -45,26 +39,21 @@ public class GeneratorController implements Controller {
     private ProgressBar prgProgress;
 
     private GeneratorService generatorService;
-    private ThreadPool lightTaskThreadPool;
+    private ThreadFactory threadFactory;
 
 
-
-    @Override
-    public void close() {
-        lightTaskThreadPool.close();
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.generatorService = new GeneratorService();
-        this.lightTaskThreadPool = new UnlimitedCoreDaemonThreadPool();
+        this.threadFactory = new VirtualThreadFactory();
     }
 
 
 
     @FXML
     private void performChecksumGeneration() {
-        lightTaskThreadPool.run(() -> {
+        threadFactory.newThread(() -> {
             // User feedback
             disableUi(pnlRoot);
 
@@ -77,7 +66,7 @@ public class GeneratorController implements Controller {
 
 
             // Communication setup
-            ChecksumGenerationParameter parameter = new ChecksumGenerationParameter();
+            ChecksumGenerationContext parameter = new ChecksumGenerationContext();
             parameter.setInputSource(inputSource);
             parameter.setAlgorithmSource(algorithmSource);
             parameter.setProgressConsumer(this::trackProgress);
@@ -89,16 +78,16 @@ public class GeneratorController implements Controller {
             container.consumeResultIfPresent(this::saveResult);
             container.consumeProblemIfPresent(this::showMessageDialog);
             container.consumeExceptionIfPresent(this::logException);
-        });
+        }).start();
     }
 
     @FXML
     private void openInputFile() {
-        new FileDialog()
-            .withTitle("Select the input file")
-            .openForReading()
-            .map(EnhancedFile::toString)
-            .ifPresent(txtInput::setText);
+        super.openFile(
+            "Select the input file",
+            FileDialog::openForReading,
+            file -> txtInput.setText(file.toString())
+        );
     }
 
 
@@ -113,69 +102,38 @@ public class GeneratorController implements Controller {
         return new CheckBoxAlgorithmSource(pnlAlgorithm);
     }
 
-
-
-    private void trackProgress(double progress) {
-        prgProgress.setProgress(progress);
-    }
-
     private void saveResult(ChecksumGenerationResult result) {
-        enableUi(pnlRoot);
+        super.openFile(
+            "Select where to save the checksums",
+            FileDialog::openForWriting,
+            file -> {
+                try {
+                    String content = result.formatForSaving();
+                    file.replaceContent(content);
+                } catch (IOException e) {
+                    super.logException(e);
+                }
+            }
+        );
 
-        EnhancedFile file = new FileDialog()
-            .withTitle("Select where to save the checksums")
-            .openForWriting()
-            .orElse(null);
-
-        if (file == null) {
-            return;
-        }
-
-
-
-        try {
-            String content = result.formatForSaving();
-            file.replaceContent(content);
-        } catch (IOException e) {
-            logException(e);
-        }
+        super.enableUi(pnlRoot);
     }
 
     private void showMessageDialog(String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Hash Tools");
-            alert.setHeaderText("Problem");
-            alert.setContentText(message);
-            alert.show();
-        });
-
-        enableUi(pnlRoot);
-    }
-
-    private void logException(Exception exception) {
-        //noinspection CallToPrintStackTrace
-        exception.printStackTrace();
-        enableUi(pnlRoot);
+        super.showMessageDialog("Hash Tools", "Problem", message);
+        super.enableUi(pnlRoot);
     }
 
 
 
-    private void disableUi(Node node) {
-        if (node instanceof Pane pane) {
-            pane.setCursor(Cursor.WAIT);
-            pane.getChildren().forEach(this::disableUi);
-        } else if (node instanceof Control control) {
-            control.setDisable(true);
-        }
+    @Override
+    protected void trackProgress(double progress) {
+        prgProgress.setProgress(progress);
     }
 
-    private void enableUi(Node node) {
-        if (node instanceof Pane pane) {
-            pane.setCursor(Cursor.DEFAULT);
-            pane.getChildren().forEach(this::enableUi);
-        } else if (node instanceof Control control) {
-            control.setDisable(false);
-        }
+    @Override
+    protected void logException(Exception exception) {
+        super.logException(exception);
+        super.enableUi(pnlRoot);
     }
 }

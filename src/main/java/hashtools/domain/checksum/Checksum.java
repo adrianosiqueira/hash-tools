@@ -1,5 +1,7 @@
 package hashtools.domain.checksum;
 
+import hashtools.domain.algorithm.Algorithm;
+
 import java.util.Objects;
 
 public class Checksum {

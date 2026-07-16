@@ -1,36 +1,21 @@
 package hashtools.service;
 
-import hashtools.domain.checksum.Algorithm;
-import hashtools.domain.checksum.Checksum;
-import hashtools.strategy.algorithmsource.AlgorithmSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.backend.core.strategy.threadpool.ThreadPool;
-import hashtools.backend.core.strategy.threadpool.AllCoreDaemonThreadPool;
+import hashtools.domain.algorithm.MessageDigestProxy;
 import hashtools.domain.container.ChecksumGenerationContainer;
-import hashtools.domain.context.ChecksumGenerationParameter;
+import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.result.ChecksumGenerationResult;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneratorService {
 
-    public ChecksumGenerationContainer performChecksumGeneration(ChecksumGenerationParameter parameter) {
-        // Initial setup
-        parameter.updateProgress(0.0);
-
-        InputSource inputSource = parameter.getInputSource();
-        AlgorithmSource algorithmSource = parameter.getAlgorithmSource();
-
-
-
+    public ChecksumGenerationContainer performChecksumGeneration(ChecksumGenerationContext context) {
         // Problem detection
-        String problem = inputSource
+        String problem = context
             .detectProblem()
-            .or(algorithmSource::detectProblem)
             .orElse(null);
 
         if (problem != null) {
@@ -39,48 +24,37 @@ public class GeneratorService {
 
 
 
-        try (ThreadPool threadPool = new AllCoreDaemonThreadPool()) {
-            // Processing data
-            List<Algorithm> algorithms = algorithmSource.getAlgorithms();
-            List<Future<Checksum>> futureChecksums = new ArrayList<>();
-            ChecksumGenerationResult result = new ChecksumGenerationResult();
+        // Processing data
+        List<MessageDigestProxy> messageDigestProxies = context
+            .getAlgorithms()
+            .stream()
+            .map(MessageDigestProxy::fromAlgorithm)
+            .toList();
 
-            // Progress tracking
-            AtomicInteger totalTasks = new AtomicInteger(algorithms.size());
-            AtomicInteger completedTasks = new AtomicInteger(0);
-
-
-
-            // Parallel checksum generation
-            for (Algorithm algorithm : algorithms) {
-                futureChecksums.add(threadPool.run(() -> {
-                    Checksum checksum = algorithm.generateChecksum(inputSource);
+        Collection<MessageDigest> messageDigests = messageDigestProxies
+            .stream()
+            .map(MessageDigestProxy::messageDigest)
+            .toList();
 
 
 
-                    synchronized (completedTasks) {
-                        double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                        parameter.updateProgress(progress);
-                    }
-
-
-
-                    return checksum;
-                }));
-            }
+        try {
+            // Processing
+            context.updateMessageDigests(messageDigests);
 
 
 
             // Result collecting
-            for (Future<Checksum> checksum : futureChecksums) {
-                result.addChecksum(checksum.get());
-            }
+            ChecksumGenerationResult result = new ChecksumGenerationResult();
+            result.setIdentification(context::getIdentification);
 
-            result.setIdentification(inputSource::getIdentification);
+            messageDigestProxies
+                .stream()
+                .map(MessageDigestProxy::decodeIntoChecksum)
+                .forEach(result::addChecksum);
 
-            parameter.updateProgress(1.0);
             return ChecksumGenerationContainer.result(result);
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (IOException e) {
             return ChecksumGenerationContainer.exception(e);
         }
     }

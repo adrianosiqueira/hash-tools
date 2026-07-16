@@ -1,13 +1,16 @@
 package hashtools.domain.context;
 
-import hashtools.domain.checksum.Algorithm;
+import hashtools.domain.algorithm.Algorithm;
 import hashtools.strategy.inputsource.InputSource;
-import hashtools.strategy.inputsource.NullInputSource;
 
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
-public class ChecksumComparisonParameter {
+public class ChecksumComparisonContext {
 
     private InputSource inputSource1;
     private InputSource inputSource2;
@@ -16,11 +19,39 @@ public class ChecksumComparisonParameter {
 
 
 
-    public ChecksumComparisonParameter() {
-        this.inputSource1 = new NullInputSource();
-        this.inputSource2 = new NullInputSource();
+    public ChecksumComparisonContext() {
+        this.inputSource1 = new InputSource() {};
+        this.inputSource2 = new InputSource() {};
         this.algorithm = Algorithm.MD5;
         this.progressConsumer = _ -> {};
+    }
+
+
+
+    public Optional<String> detectProblem() {
+        return inputSource1
+            .detectProblem()
+            .or(inputSource2::detectProblem);
+    }
+
+    public String getIdentification1() {
+        return inputSource1.getIdentification();
+    }
+
+    public void updateMessageDigests1(Collection<MessageDigest> messageDigests) throws IOException {
+        inputSource1.updateMessageDigest(messageDigests);
+    }
+
+    public String getIdentification2() {
+        return inputSource2.getIdentification();
+    }
+
+    public void updateMessageDigests2(Collection<MessageDigest> messageDigests) throws IOException {
+        inputSource2.updateMessageDigest(messageDigests);
+    }
+
+    public void updateProgress(double progress) {
+        progressConsumer.accept(progress);
     }
 
 
@@ -47,10 +78,6 @@ public class ChecksumComparisonParameter {
 
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = Objects.requireNonNull(algorithm);
-    }
-
-    public void updateProgress(double progress) {
-        progressConsumer.accept(progress);
     }
 
     public void setProgressConsumer(Consumer<Double> progressConsumer) {

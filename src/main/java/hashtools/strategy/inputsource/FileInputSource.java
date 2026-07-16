@@ -5,11 +5,23 @@ import hashtools.domain.file.EnhancedFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.util.Collection;
 import java.util.Optional;
 
 public class FileInputSource implements InputSource {
 
+    public static final int ONE_MEBIBYTE = 1024 * 1024;
+    public static final int END_OF_FILE = -1;
+    public static final int BUFFER_OFFSET = 0;
+
+
+
+    private Collection<MessageDigest> messageDigests;
+    private byte[] buffer;
+    private int bytesRead;
+
     private EnhancedFile file;
+    private boolean canceled;
 
 
 
@@ -17,25 +29,20 @@ public class FileInputSource implements InputSource {
         this.file = EnhancedFile
             .filePath(filePath)
             .orElse(null);
+        this.canceled = false;
     }
 
 
 
     @Override
-    public void updateMessageDigest(MessageDigest messageDigest) throws RuntimeException {
+    public void updateMessageDigest(Collection<MessageDigest> messageDigests) throws IOException {
+        this.messageDigests = messageDigests;
+        this.buffer = new byte[ONE_MEBIBYTE];
+
         try (InputStream stream = file.getInputStream()) {
-            int oneMebibyte = 1024 * 1024;
-            int endOfFile = -1;
-            int bufferOffset = 0;
-
-            byte[] buffer = new byte[oneMebibyte];
-            int read;
-
-            while ((read = stream.read(buffer)) != endOfFile) {
-                messageDigest.update(buffer, bufferOffset, read);
+            while (!this.isCanceled() && this.readFile(stream)) {
+                this.updateAllAlgorithms();
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to obtain the bytes from the file. Try again or report it to the developer.", e);
         }
     }
 
@@ -53,5 +60,29 @@ public class FileInputSource implements InputSource {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public void cancel() {
+        canceled = true;
+    }
+
+
+
+    private boolean readFile(InputStream stream) throws IOException {
+        bytesRead = stream.read(buffer);
+        return bytesRead != END_OF_FILE;
+    }
+
+    private boolean isCanceled() {
+        return canceled;
+    }
+
+    private void updateAllAlgorithms() {
+        messageDigests.forEach(messageDigest -> messageDigest.update(
+            buffer,
+            BUFFER_OFFSET,
+            bytesRead
+        ));
     }
 }

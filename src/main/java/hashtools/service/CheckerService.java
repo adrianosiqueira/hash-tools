@@ -1,36 +1,26 @@
 package hashtools.service;
 
+import hashtools.domain.algorithm.MessageDigestProxy;
 import hashtools.domain.checksum.CheckerChecksum;
-import hashtools.domain.container.ChecksumCheckingContainer;
-import hashtools.domain.context.ChecksumCheckingParameter;
-import hashtools.domain.result.ChecksumCheckingResult;
 import hashtools.domain.checksum.Checksum;
-import hashtools.strategy.checksumsource.ChecksumSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.backend.core.strategy.threadpool.ThreadPool;
-import hashtools.backend.core.strategy.threadpool.AllCoreDaemonThreadPool;
+import hashtools.domain.container.ChecksumCheckingContainer;
+import hashtools.domain.context.ChecksumCheckingContext;
+import hashtools.domain.result.ChecksumCheckingResult;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Collection;
 
 public class CheckerService {
 
-    public ChecksumCheckingContainer performChecksumChecking(ChecksumCheckingParameter parameter) {
+    public ChecksumCheckingContainer performChecksumChecking(ChecksumCheckingContext context) {
         // Initial setup
-        parameter.updateProgress(0.0);
-
-        InputSource inputSource = parameter.getInputSource();
-        ChecksumSource checksumSource = parameter.getChecksumSource();
-
+        context.updateProgress(0.0);
 
 
         // Problem detection
-        String problem = inputSource
+        String problem = context
             .detectProblem()
-            .or(checksumSource::detectProblem)
             .orElse(null);
 
         if (problem != null) {
@@ -39,53 +29,66 @@ public class CheckerService {
 
 
 
-        try (ThreadPool threadPool = new AllCoreDaemonThreadPool()) {
+        try {
             // Processing data
-            List<Checksum> officialChecksums = checksumSource.extractOfficialChecksums();
-            List<Future<CheckerChecksum>> futureChecksums = new ArrayList<>();
-            ChecksumCheckingResult result = new ChecksumCheckingResult();
-
-            // Progress tracking
-            AtomicInteger totalTasks = new AtomicInteger(officialChecksums.size());
-            AtomicInteger completedTasks = new AtomicInteger(0);
+            Collection<OfficialChecksum> officialChecksums = context
+                .extractOfficialChecksums()
+                .stream()
+                .map(OfficialChecksum::checksum)
+                .toList();
 
 
 
-            // Parallel checksum generation
-            for (Checksum official : officialChecksums) {
-                futureChecksums.add(threadPool.run(() -> {
-                    Checksum generated = official
-                        .getAlgorithm()
-                        .generateChecksum(inputSource);
+            // Processing
+            Collection<MessageDigest> messageDigests = officialChecksums
+                .stream()
+                .map(OfficialChecksum::getMessageDigest)
+                .toList();
 
-
-
-                    synchronized (completedTasks) {
-                        double progress = completedTasks.incrementAndGet() / totalTasks.doubleValue();
-                        parameter.updateProgress(progress);
-                    }
-
-
-
-                    CheckerChecksum checksum = new CheckerChecksum();
-                    checksum.setOfficial(official);
-                    checksum.setGenerated(generated);
-
-                    return checksum;
-                }));
-            }
+            context.updateMessageDigests(messageDigests);
 
 
 
             // Result collecting
-            for (Future<CheckerChecksum> checksum : futureChecksums) {
-                result.addChecksum(checksum.get());
-            }
+            ChecksumCheckingResult result = new ChecksumCheckingResult();
 
-            parameter.updateProgress(1.0);
+            officialChecksums
+                .stream()
+                .map(OfficialChecksum::toCheckerChecksum)
+                .forEach(result::addChecksum);
+
             return ChecksumCheckingContainer.result(result);
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (IOException e) {
             return ChecksumCheckingContainer.exception(e);
+        }
+    }
+
+
+
+    private record OfficialChecksum(
+        Checksum checksum,
+        MessageDigestProxy messageDigestProxy
+    ) {
+
+        public static OfficialChecksum checksum(Checksum checksum) {
+            return new OfficialChecksum(
+                checksum,
+                MessageDigestProxy.fromChecksum(checksum)
+            );
+        }
+
+
+
+        public MessageDigest getMessageDigest() {
+            return messageDigestProxy.messageDigest();
+        }
+
+        public CheckerChecksum toCheckerChecksum() {
+            CheckerChecksum checkerChecksum = new CheckerChecksum();
+            checkerChecksum.setOfficial(checksum);
+            checkerChecksum.setGenerated(messageDigestProxy.decodeIntoChecksum());
+
+            return checkerChecksum;
         }
     }
 }

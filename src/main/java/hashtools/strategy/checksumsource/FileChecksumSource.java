@@ -24,15 +24,13 @@ public class FileChecksumSource implements ChecksumSource {
 
 
     @Override
-    public List<Checksum> extractOfficialChecksums() throws RuntimeException {
+    public List<Checksum> extractOfficialChecksums() throws IOException {
         try (Stream<String> lines = file.getLines()) {
             return lines
                 .map(line -> line.split(" ")[0])
                 .map(Checksum::new)
                 .filter(Checksum::isValid)
                 .toList();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to extract the official checksums. Check if the file is valid.", e);
         }
     }
 

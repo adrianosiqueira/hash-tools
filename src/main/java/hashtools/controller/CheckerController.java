@@ -1,35 +1,28 @@
 package hashtools.controller;
 
 import hashtools.domain.container.ChecksumCheckingContainer;
-import hashtools.domain.context.ChecksumCheckingParameter;
+import hashtools.domain.context.ChecksumCheckingContext;
+import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumCheckingResult;
 import hashtools.service.CheckerService;
-import hashtools.domain.file.EnhancedFile;
-import hashtools.domain.file.FileDialog;
-import hashtools.domain.file.FileExtension;
 import hashtools.strategy.checksumsource.ChecksumSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.backend.core.strategy.threadpool.ThreadPool;
 import hashtools.strategy.checksumsource.FileChecksumSource;
 import hashtools.strategy.checksumsource.TextChecksumSource;
 import hashtools.strategy.inputsource.FileInputSource;
+import hashtools.strategy.inputsource.InputSource;
 import hashtools.strategy.inputsource.TextInputSource;
-import hashtools.backend.core.strategy.threadpool.UnlimitedCoreDaemonThreadPool;
-import javafx.application.Platform;
+import hashtools.strategy.thread.VirtualThreadFactory;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ThreadFactory;
 
-public class CheckerController implements Controller {
+public class CheckerController extends AbstractController {
 
     @FXML
     private Pane pnlRoot;
@@ -50,29 +43,24 @@ public class CheckerController implements Controller {
     private ProgressBar prgReliability;
 
     private CheckerService checkerService;
-    private ThreadPool lightTaskThreadPool;
+    private ThreadFactory threadFactory;
 
 
-
-    @Override
-    public void close() {
-        lightTaskThreadPool.close();
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.checkerService = new CheckerService();
-        this.lightTaskThreadPool = new UnlimitedCoreDaemonThreadPool();
+        this.threadFactory = new VirtualThreadFactory();
     }
 
 
 
     @FXML
     private void performChecksumChecking() {
-        lightTaskThreadPool.run(() -> {
+        threadFactory.newThread(() -> {
             // User feedback
-            disableUi(pnlRoot);
-            cleanUi();
+            super.disableUi(pnlRoot);
+            super.cleanUi();
 
 
 
@@ -83,7 +71,7 @@ public class CheckerController implements Controller {
 
 
             // Communication setup
-            ChecksumCheckingParameter parameter = new ChecksumCheckingParameter();
+            ChecksumCheckingContext parameter = new ChecksumCheckingContext();
             parameter.setInputSource(inputSource);
             parameter.setChecksumSource(checksumSource);
             parameter.setProgressConsumer(this::trackProgress);
@@ -95,26 +83,25 @@ public class CheckerController implements Controller {
             container.consumeResultIfPresent(this::presentResult);
             container.consumeProblemIfPresent(this::showMessageDialog);
             container.consumeExceptionIfPresent(this::logException);
-        });
+        }).start();
     }
 
     @FXML
     private void openInputFile() {
-        new FileDialog()
-            .withTitle("Select the input file")
-            .openForReading()
-            .map(EnhancedFile::toString)
-            .ifPresent(txtInput::setText);
+        super.openFile(
+            "Select the input file",
+            FileDialog::openForReading,
+            file -> txtInput.setText(file.toString())
+        );
     }
 
     @FXML
     private void openChecksumFile() {
-        new FileDialog()
-            .withTitle("Select the checksum file")
-            .withDefaultExtension(FileExtension.HASH)
-            .openForReading()
-            .map(EnhancedFile::toString)
-            .ifPresent(txtChecksum::setText);
+        super.openFile(
+            "Select the checksum file",
+            FileDialog::openForReading,
+            file -> txtChecksum.setText(file.toString())
+        );
     }
 
 
@@ -131,57 +118,32 @@ public class CheckerController implements Controller {
             : new TextChecksumSource(txtChecksum.getText());
     }
 
-
-
-    private void trackProgress(double progress) {
-        prgProgress.setProgress(progress);
-    }
-
     private void presentResult(ChecksumCheckingResult result) {
         double reliability = result.calculateReliability();
         prgReliability.setProgress(reliability);
-        enableUi(pnlRoot);
+        super.enableUi(pnlRoot);
     }
 
     private void showMessageDialog(String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Hash Tools");
-            alert.setHeaderText("Problem");
-            alert.setContentText(message);
-            alert.show();
-        });
+        super.showMessageDialog("Hash Tools", "Problem", message);
+        super.enableUi(pnlRoot);
+    }
 
+
+
+    @Override
+    protected void trackProgress(double progress) {
+        prgProgress.setProgress(progress);
+    }
+
+    @Override
+    protected void logException(Exception exception) {
+        super.logException(exception);
         enableUi(pnlRoot);
     }
 
-    private void logException(Exception exception) {
-        //noinspection CallToPrintStackTrace
-        exception.printStackTrace();
-        enableUi(pnlRoot);
-    }
-
-
-
-    private void disableUi(Node node) {
-        if (node instanceof Pane pane) {
-            pane.setCursor(Cursor.WAIT);
-            pane.getChildren().forEach(this::disableUi);
-        } else if (node instanceof Control control) {
-            control.setDisable(true);
-        }
-    }
-
-    private void enableUi(Node node) {
-        if (node instanceof Pane pane) {
-            pane.setCursor(Cursor.DEFAULT);
-            pane.getChildren().forEach(this::enableUi);
-        } else if (node instanceof Control control) {
-            control.setDisable(false);
-        }
-    }
-
-    private void cleanUi() {
+    @Override
+    protected void cleanUi() {
         prgReliability.setProgress(0.0);
     }
 }

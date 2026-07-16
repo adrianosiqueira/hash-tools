@@ -1,6 +1,8 @@
 package hashtools.strategy.inputsource;
 
+import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Collection;
 import java.util.Optional;
 
 public class TextInputSource implements InputSource {
@@ -16,8 +18,9 @@ public class TextInputSource implements InputSource {
 
 
     @Override
-    public void updateMessageDigest(MessageDigest messageDigest) throws RuntimeException {
-        messageDigest.update(text.getBytes());
+    public void updateMessageDigest(Collection<MessageDigest> messageDigests) throws IOException {
+        byte[] bytes = text.getBytes();
+        messageDigests.forEach(messageDigest -> messageDigest.update(bytes));
     }
 
     @Override
@@ -27,6 +30,10 @@ public class TextInputSource implements InputSource {
 
     @Override
     public Optional<String> detectProblem() {
+        if (text == null) {
+            return Optional.of("The text is null");
+        }
+
         return Optional.empty();
     }
 }

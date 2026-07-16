@@ -1,7 +1,6 @@
 package hashtools.service;
 
-import hashtools.controller.Controller;
-import hashtools.controller.NullController;
+import hashtools.controller.AbstractController;
 import hashtools.window.JavaFxLoader;
 import javafx.scene.layout.Pane;
 
@@ -10,12 +9,12 @@ import java.util.function.Consumer;
 
 public class ApplicationService {
 
-    private Controller activeController;
+    private AbstractController activeController;
 
 
 
     public ApplicationService() {
-        this.activeController = new NullController();
+        this.activeController = new AbstractController() {};
     }
 
 
@@ -56,7 +55,7 @@ public class ApplicationService {
         }
     }
 
-    private void swapController(Controller controller) {
+    private void swapController(AbstractController controller) {
         activeController.close();
         activeController = controller;
     }
