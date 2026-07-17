@@ -1,6 +1,7 @@
 package hashtools.domain.context;
 
 import hashtools.domain.algorithm.Algorithm;
+import hashtools.strategy.algorithmsource.AlgorithmSource;
 import hashtools.strategy.inputsource.InputSource;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class ChecksumComparisonContext {
 
     private InputSource inputSource1;
     private InputSource inputSource2;
-    private Algorithm algorithm;
+    private AlgorithmSource algorithmSource;
     private Consumer<Double> progressConsumer;
 
 
@@ -22,7 +23,7 @@ public class ChecksumComparisonContext {
     public ChecksumComparisonContext() {
         this.inputSource1 = new InputSource() {};
         this.inputSource2 = new InputSource() {};
-        this.algorithm = Algorithm.MD5;
+        this.algorithmSource = new AlgorithmSource() {};
         this.progressConsumer = _ -> {};
     }
 
@@ -50,34 +51,26 @@ public class ChecksumComparisonContext {
         inputSource2.updateMessageDigest(messageDigests);
     }
 
+    public Collection<Algorithm> getAlgorithms() {
+        return algorithmSource.getAlgorithms();
+    }
+
     public void updateProgress(double progress) {
         progressConsumer.accept(progress);
     }
 
 
 
-    public InputSource getInputSource1() {
-        return inputSource1;
-    }
-
     public void setInputSource1(InputSource inputSource1) {
         this.inputSource1 = Objects.requireNonNull(inputSource1);
-    }
-
-    public InputSource getInputSource2() {
-        return inputSource2;
     }
 
     public void setInputSource2(InputSource inputSource2) {
         this.inputSource2 = Objects.requireNonNull(inputSource2);
     }
 
-    public Algorithm getAlgorithm() {
-        return algorithm;
-    }
-
-    public void setAlgorithm(Algorithm algorithm) {
-        this.algorithm = Objects.requireNonNull(algorithm);
+    public void setAlgorithmSource(AlgorithmSource algorithmSource) {
+        this.algorithmSource = algorithmSource;
     }
 
     public void setProgressConsumer(Consumer<Double> progressConsumer) {

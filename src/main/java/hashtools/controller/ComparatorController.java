@@ -6,6 +6,8 @@ import hashtools.domain.context.ChecksumComparisonContext;
 import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumComparisonResult;
 import hashtools.service.ComparatorService;
+import hashtools.strategy.algorithmsource.AlgorithmSource;
+import hashtools.strategy.algorithmsource.ComboBoxAlgorithmSource;
 import hashtools.strategy.inputsource.FileInputSource;
 import hashtools.strategy.inputsource.InputSource;
 import hashtools.strategy.inputsource.TextInputSource;
@@ -73,7 +75,7 @@ public class ComparatorController extends AbstractController {
             // Data retrieval
             InputSource inputSource1 = this.createInputSource1();
             InputSource inputSource2 = this.createInputSource2();
-            Algorithm algorithm = this.getSelectedAlgorithm();
+            AlgorithmSource algorithmSource = this.createAlgorithmSource();
 
 
 
@@ -81,7 +83,7 @@ public class ComparatorController extends AbstractController {
             ChecksumComparisonContext parameter = new ChecksumComparisonContext();
             parameter.setInputSource1(inputSource1);
             parameter.setInputSource2(inputSource2);
-            parameter.setAlgorithm(algorithm);
+            parameter.setAlgorithmSource(algorithmSource);
             parameter.setProgressConsumer(this::trackProgress);
 
 
@@ -143,8 +145,8 @@ public class ComparatorController extends AbstractController {
             : new TextInputSource(txtInput2.getText());
     }
 
-    private Algorithm getSelectedAlgorithm() {
-        return cmbAlgorithm.getValue();
+    private AlgorithmSource createAlgorithmSource() {
+        return new ComboBoxAlgorithmSource(cmbAlgorithm);
     }
 
     private void setupAlgorithms() {
