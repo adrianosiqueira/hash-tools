@@ -1,7 +1,7 @@
 package hashtools.service;
 
 import hashtools.domain.algorithm.Algorithm;
-import hashtools.domain.algorithm.MessageDigestProxy;
+import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.container.ChecksumGenerationContainer;
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.result.ChecksumGenerationResult;
@@ -26,7 +26,7 @@ public class GeneratorService {
 
 
         // Processing data
-        List<MessageDigestProxy> messageDigestProxies = context
+        List<ChecksumGenerator> messageDigestProxies = context
             .getAlgorithms()
             .stream()
             .map(Algorithm::createMessageDigestProxy)
@@ -34,7 +34,7 @@ public class GeneratorService {
 
         Collection<MessageDigest> messageDigests = messageDigestProxies
             .stream()
-            .map(MessageDigestProxy::messageDigest)
+            .map(ChecksumGenerator::messageDigest)
             .toList();
 
 
@@ -51,7 +51,7 @@ public class GeneratorService {
 
             messageDigestProxies
                 .stream()
-                .map(MessageDigestProxy::decodeIntoChecksum)
+                .map(ChecksumGenerator::decodeIntoChecksum)
                 .forEach(result::addChecksum);
 
             return ChecksumGenerationContainer.result(result);

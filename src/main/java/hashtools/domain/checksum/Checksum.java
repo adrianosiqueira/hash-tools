@@ -1,7 +1,7 @@
 package hashtools.domain.checksum;
 
 import hashtools.domain.algorithm.Algorithm;
-import hashtools.domain.algorithm.MessageDigestProxy;
+import hashtools.domain.algorithm.ChecksumGenerator;
 
 import java.util.Objects;
 
@@ -36,7 +36,7 @@ public class Checksum {
             && this.algorithm == checksum.algorithm;
     }
 
-    public MessageDigestProxy createMessageDigestProxy() {
+    public ChecksumGenerator createMessageDigestProxy() {
         return algorithm.createMessageDigestProxy();
     }
 

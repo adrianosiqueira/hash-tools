@@ -65,10 +65,10 @@ public enum Algorithm {
 
 
 
-    public MessageDigestProxy createMessageDigestProxy() {
+    public ChecksumGenerator createMessageDigestProxy() {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(this.getName());
-            return new MessageDigestProxy(messageDigest);
+            return new ChecksumGenerator(messageDigest);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

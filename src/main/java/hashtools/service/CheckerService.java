@@ -1,6 +1,6 @@
 package hashtools.service;
 
-import hashtools.domain.algorithm.MessageDigestProxy;
+import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.checksum.CheckerChecksum;
 import hashtools.domain.checksum.Checksum;
 import hashtools.domain.container.ChecksumCheckingContainer;
@@ -67,7 +67,7 @@ public class CheckerService {
 
     private record OfficialChecksum(
         Checksum checksum,
-        MessageDigestProxy messageDigestProxy
+        ChecksumGenerator messageDigestProxy
     ) {
 
         public static OfficialChecksum checksum(Checksum checksum) {

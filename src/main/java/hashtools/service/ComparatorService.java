@@ -1,7 +1,7 @@
 package hashtools.service;
 
 import hashtools.domain.algorithm.Algorithm;
-import hashtools.domain.algorithm.MessageDigestProxy;
+import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.checksum.Checksum;
 import hashtools.domain.checksum.ComparatorChecksum;
 import hashtools.domain.container.ChecksumComparisonContainer;
@@ -74,7 +74,7 @@ public class ComparatorService {
 
 
     private void generateChecksum1(CompletableFuture<Checksum> checksum1) {
-        Collection<MessageDigestProxy> messageDigestProxies = context
+        Collection<ChecksumGenerator> messageDigestProxies = context
             .getAlgorithms()
             .stream()
             .map(Algorithm::createMessageDigestProxy)
@@ -82,7 +82,7 @@ public class ComparatorService {
 
         List<MessageDigest> messageDigests = messageDigestProxies
             .stream()
-            .map(MessageDigestProxy::messageDigest)
+            .map(ChecksumGenerator::messageDigest)
             .toList();
 
         try {
@@ -90,7 +90,7 @@ public class ComparatorService {
 
             Checksum checksum = messageDigestProxies
                 .stream()
-                .map(MessageDigestProxy::decodeIntoChecksum)
+                .map(ChecksumGenerator::decodeIntoChecksum)
                 .toList()
                 .getFirst();
 
@@ -101,7 +101,7 @@ public class ComparatorService {
     }
 
     private void generateChecksum2(CompletableFuture<Checksum> checksum2) {
-        Collection<MessageDigestProxy> messageDigestProxies = context
+        Collection<ChecksumGenerator> messageDigestProxies = context
             .getAlgorithms()
             .stream()
             .map(Algorithm::createMessageDigestProxy)
@@ -109,7 +109,7 @@ public class ComparatorService {
 
         List<MessageDigest> messageDigests = messageDigestProxies
             .stream()
-            .map(MessageDigestProxy::messageDigest)
+            .map(ChecksumGenerator::messageDigest)
             .toList();
 
         try {
@@ -117,7 +117,7 @@ public class ComparatorService {
 
             Checksum checksum = messageDigestProxies
                 .stream()
-                .map(MessageDigestProxy::decodeIntoChecksum)
+                .map(ChecksumGenerator::decodeIntoChecksum)
                 .toList()
                 .getFirst();
 
