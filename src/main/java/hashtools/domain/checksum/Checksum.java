@@ -26,6 +26,16 @@ public class Checksum {
 
 
 
+    public static Checksum createEmpty() {
+        return new Checksum("");
+    }
+
+    public static Checksum createFromHash(String hash) {
+        return new Checksum(hash);
+    }
+
+
+
     public boolean isValid() {
         return algorithm != null;
     }
@@ -55,6 +65,7 @@ public class Checksum {
         return "Checksum{" +
             "hash='" + hash + '\'' +
             ", algorithm=" + algorithm +
+            ", valid=" + this.isValid() +
             '}';
     }
 }

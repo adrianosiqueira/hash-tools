@@ -13,6 +13,7 @@ module hash.tools {
     exports hashtools.domain.result;
     exports hashtools.service;
     exports hashtools.strategy.algorithmsource;
+    exports hashtools.strategy.checksumextraction;
     exports hashtools.strategy.checksumgeneratorupdater;
     exports hashtools.strategy.checksumsource;
     exports hashtools.strategy.inputidentification;
@@ -31,6 +32,7 @@ module hash.tools {
     opens hashtools.domain.result;
     opens hashtools.service;
     opens hashtools.strategy.algorithmsource;
+    opens hashtools.strategy.checksumextraction;
     opens hashtools.strategy.checksumgeneratorupdater;
     opens hashtools.strategy.checksumsource;
     opens hashtools.strategy.inputidentification;
