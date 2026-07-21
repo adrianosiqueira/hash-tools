@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
-public class FileChecksumGeneratorUpdater implements ChecksumGeneratorUpdater {
+public class FileChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
 
     private static final int ONE_MEBIBYTE = 1024 * 1024;
     private static final int END_OF_FILE = -1;
@@ -23,7 +23,7 @@ public class FileChecksumGeneratorUpdater implements ChecksumGeneratorUpdater {
 
 
 
-    public FileChecksumGeneratorUpdater(String filePath) {
+    public FileChecksumGeneratorUpdate(String filePath) {
         this.file = EnhancedFile
             .filePath(filePath)
             .orElse(null);

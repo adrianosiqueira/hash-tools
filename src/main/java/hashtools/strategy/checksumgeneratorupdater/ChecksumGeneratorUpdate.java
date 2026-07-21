@@ -4,7 +4,7 @@ import hashtools.domain.algorithm.ChecksumGenerator;
 
 import java.util.Collection;
 
-public interface ChecksumGeneratorUpdater {
+public interface ChecksumGeneratorUpdate {
 
     Result updateChecksumGenerators(Collection<ChecksumGenerator> generators);
 

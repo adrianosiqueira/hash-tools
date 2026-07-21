@@ -4,13 +4,13 @@ import hashtools.domain.algorithm.ChecksumGenerator;
 
 import java.util.Collection;
 
-public class TextChecksumGeneratorUpdater implements ChecksumGeneratorUpdater {
+public class TextChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
 
     private String text;
 
 
 
-    public TextChecksumGeneratorUpdater(String text) {
+    public TextChecksumGeneratorUpdate(String text) {
         this.text = text;
     }
 
