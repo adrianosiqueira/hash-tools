@@ -15,6 +15,7 @@ module hash.tools {
     exports hashtools.strategy.algorithmsource;
     exports hashtools.strategy.checksumgeneratorupdater;
     exports hashtools.strategy.checksumsource;
+    exports hashtools.strategy.inputidentification;
     exports hashtools.strategy.inputsource;
     exports hashtools.strategy.problemdetection;
     exports hashtools.strategy.thread;
@@ -32,6 +33,7 @@ module hash.tools {
     opens hashtools.strategy.algorithmsource;
     opens hashtools.strategy.checksumgeneratorupdater;
     opens hashtools.strategy.checksumsource;
+    opens hashtools.strategy.inputidentification;
     opens hashtools.strategy.inputsource;
     opens hashtools.strategy.problemdetection;
     opens hashtools.strategy.thread;
