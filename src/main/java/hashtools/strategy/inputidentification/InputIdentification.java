@@ -2,5 +2,7 @@ package hashtools.strategy.inputidentification;
 
 public interface InputIdentification {
 
-    String getIdentification();
+    default String getIdentification() {
+        return "";
+    }
 }

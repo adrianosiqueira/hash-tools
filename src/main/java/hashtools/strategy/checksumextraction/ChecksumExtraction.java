@@ -6,7 +6,9 @@ import java.util.Collection;
 
 public interface ChecksumExtraction {
 
-    Result extractOfficialChecksums();
+    default Result extractOfficialChecksums() {
+        return new Result.Failure(new IllegalStateException("There is no implementation set"));
+    }
 
 
 

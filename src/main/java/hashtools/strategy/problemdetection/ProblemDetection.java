@@ -4,5 +4,7 @@ import java.util.Optional;
 
 public interface ProblemDetection {
 
-    Optional<String> detectProblem();
+    default Optional<String> detectProblem() {
+        return Optional.empty();
+    }
 }

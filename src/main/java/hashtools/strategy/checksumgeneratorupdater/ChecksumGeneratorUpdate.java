@@ -6,9 +6,12 @@ import java.util.Collection;
 
 public interface ChecksumGeneratorUpdate {
 
-    Result updateChecksumGenerators(Collection<ChecksumGenerator> generators);
+    default Result updateChecksumGenerators(Collection<ChecksumGenerator> generators) {
+        return new Result.Failure(new IllegalStateException("There is no implementation set"));
+    }
 
-    void cancelChecksumGeneratorsUpdate();
+    default void cancelChecksumGeneratorsUpdate() {
+    }
 
 
 
