@@ -11,6 +11,7 @@ public interface AlgorithmSource {
         return List.of();
     }
 
+    @Deprecated(forRemoval = true)
     default Optional<String> detectProblem() {
         return Optional.empty();
     }
