@@ -5,15 +5,11 @@ import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.strategy.algorithmsource.AlgorithmSource;
 import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
 import hashtools.strategy.inputidentification.InputIdentification;
-import hashtools.strategy.inputsource.InputSource;
 import hashtools.strategy.problemdetection.ProblemDetection;
 
-import java.io.IOException;
-import java.security.MessageDigest;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class ChecksumGenerationContext {
 
@@ -69,19 +65,5 @@ public class ChecksumGenerationContext {
 
     public void setAlgorithmSource(AlgorithmSource algorithmSource) {
         this.algorithmSource = Objects.requireNonNull(algorithmSource);
-    }
-
-
-
-    @Deprecated(forRemoval = true)
-    public void updateMessageDigests(Collection<MessageDigest> messageDigests) throws IOException {
-    }
-
-    @Deprecated(forRemoval = true)
-    public void setInputSource(InputSource inputSource) {
-    }
-
-    @Deprecated(forRemoval = true)
-    public void setProgressConsumer(Consumer<Double> progressConsumer) {
     }
 }
