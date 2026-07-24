@@ -4,12 +4,14 @@ import hashtools.domain.container.ChecksumGenerationContainer;
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumGenerationResult;
-import hashtools.service.GeneratorService;
-import hashtools.strategy.algorithmsource.AlgorithmSource;
+import hashtools.service.ChecksumGenerationService;
 import hashtools.strategy.algorithmsource.CheckBoxAlgorithmSource;
-import hashtools.strategy.inputsource.FileInputSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.strategy.inputsource.TextInputSource;
+import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
+import hashtools.strategy.checksumgeneratorupdater.TextChecksumGeneratorUpdate;
+import hashtools.strategy.inputidentification.InputFileIdentification;
+import hashtools.strategy.inputidentification.InputTextIdentification;
+import hashtools.strategy.problemdetection.InputFileProblemDetection;
+import hashtools.strategy.problemdetection.InputTextProblemDetection;
 import hashtools.strategy.thread.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -38,14 +40,14 @@ public class GeneratorController extends AbstractController {
     @FXML
     private ProgressBar prgProgress;
 
-    private GeneratorService generatorService;
+    private ChecksumGenerationService generationService;
     private ThreadFactory threadFactory;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.generatorService = new GeneratorService();
+        this.generationService = new ChecksumGenerationService();
         this.threadFactory = new VirtualThreadFactory();
     }
 
@@ -60,21 +62,12 @@ public class GeneratorController extends AbstractController {
 
 
             // Data retrieval
-            InputSource inputSource = this.createInputSource();
-            AlgorithmSource algorithmSource = this.createAlgorithmSource();
-
-
-
-            // Communication setup
-            ChecksumGenerationContext parameter = new ChecksumGenerationContext();
-            parameter.setInputSource(inputSource);
-            parameter.setAlgorithmSource(algorithmSource);
-            parameter.setProgressConsumer(this::trackProgress);
+            ChecksumGenerationContext context = this.createGenerationContext();
 
 
 
             // Processing
-            ChecksumGenerationContainer container = generatorService.performChecksumGeneration(parameter);
+            ChecksumGenerationContainer container = generationService.generateChecksums(context);
             container.consumeResultIfPresent(this::saveResult);
             container.consumeProblemIfPresent(this::showMessageDialog);
             container.consumeExceptionIfPresent(this::logException);
@@ -92,14 +85,21 @@ public class GeneratorController extends AbstractController {
 
 
 
-    private InputSource createInputSource() {
-        return chkInput.isSelected()
-            ? new FileInputSource(txtInput.getText())
-            : new TextInputSource(txtInput.getText());
-    }
+    private ChecksumGenerationContext createGenerationContext() {
+        ChecksumGenerationContext context = new ChecksumGenerationContext();
+        context.setAlgorithmSource(new CheckBoxAlgorithmSource(pnlAlgorithm));
 
-    private AlgorithmSource createAlgorithmSource() {
-        return new CheckBoxAlgorithmSource(pnlAlgorithm);
+        if (chkInput.isSelected()) {
+            context.setInputIdentification(new InputFileIdentification(txtInput.getText()));
+            context.setChecksumGeneratorUpdate(new FileChecksumGeneratorUpdate(txtInput.getText()));
+            context.setProblemDetection(new InputFileProblemDetection(txtInput.getText()));
+        } else {
+            context.setInputIdentification(new InputTextIdentification(txtInput.getText()));
+            context.setChecksumGeneratorUpdate(new TextChecksumGeneratorUpdate(txtInput.getText()));
+            context.setProblemDetection(new InputTextProblemDetection(txtInput.getText()));
+        }
+
+        return context;
     }
 
     private void saveResult(ChecksumGenerationResult result) {
@@ -125,11 +125,6 @@ public class GeneratorController extends AbstractController {
     }
 
 
-
-    @Override
-    protected void trackProgress(double progress) {
-        prgProgress.setProgress(progress);
-    }
 
     @Override
     protected void logException(Exception exception) {
