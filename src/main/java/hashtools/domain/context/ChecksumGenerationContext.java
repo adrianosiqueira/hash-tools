@@ -1,8 +1,12 @@
 package hashtools.domain.context;
 
 import hashtools.domain.algorithm.Algorithm;
+import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.strategy.algorithmsource.AlgorithmSource;
+import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
+import hashtools.strategy.inputidentification.InputIdentification;
 import hashtools.strategy.inputsource.InputSource;
+import hashtools.strategy.problemdetection.ProblemDetection;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -13,53 +17,71 @@ import java.util.function.Consumer;
 
 public class ChecksumGenerationContext {
 
-    private InputSource inputSource;
+    private InputIdentification inputIdentification;
+    private ChecksumGeneratorUpdate checksumGeneratorUpdate;
+    private ProblemDetection problemDetection;
     private AlgorithmSource algorithmSource;
-    private Consumer<Double> progressConsumer;
 
 
 
     public ChecksumGenerationContext() {
-        this.inputSource = new InputSource() {};
+        this.inputIdentification = new InputIdentification() {};
+        this.checksumGeneratorUpdate = new ChecksumGeneratorUpdate() {};
+        this.problemDetection = new ProblemDetection() {};
         this.algorithmSource = new AlgorithmSource() {};
-        this.progressConsumer = _ -> {};
     }
 
 
-
-    public Optional<String> detectProblem() {
-        return inputSource
-            .detectProblem()
-            .or(algorithmSource::detectProblem);
-    }
 
     public String getIdentification() {
-        return inputSource.getIdentification();
+        return inputIdentification.getIdentification();
     }
 
-    public void updateMessageDigests(Collection<MessageDigest> messageDigests) throws IOException {
-        inputSource.updateMessageDigest(messageDigests);
+    public ChecksumGeneratorUpdate.Result updateChecksumGenerators(Collection<ChecksumGenerator> checksumGenerators) {
+        return checksumGeneratorUpdate.updateChecksumGenerators(checksumGenerators);
+    }
+
+    public void cancelChecksumGeneratorsUpdate() {
+        checksumGeneratorUpdate.cancelChecksumGeneratorsUpdate();
+    }
+
+    public Optional<String> detectProblem() {
+        return problemDetection.detectProblem();
     }
 
     public Collection<Algorithm> getAlgorithms() {
         return algorithmSource.getAlgorithms();
     }
 
-    public void updateProgress(double progress) {
-        progressConsumer.accept(progress);
+
+
+    public void setInputIdentification(InputIdentification inputIdentification) {
+        this.inputIdentification = Objects.requireNonNull(inputIdentification);
     }
 
+    public void setChecksumGeneratorUpdate(ChecksumGeneratorUpdate checksumGeneratorUpdate) {
+        this.checksumGeneratorUpdate = Objects.requireNonNull(checksumGeneratorUpdate);
+    }
 
-
-    public void setInputSource(InputSource inputSource) {
-        this.inputSource = Objects.requireNonNull(inputSource);
+    public void setProblemDetection(ProblemDetection problemDetection) {
+        this.problemDetection = Objects.requireNonNull(problemDetection);
     }
 
     public void setAlgorithmSource(AlgorithmSource algorithmSource) {
-        this.algorithmSource = algorithmSource;
+        this.algorithmSource = Objects.requireNonNull(algorithmSource);
     }
 
+
+
+    @Deprecated(forRemoval = true)
+    public void updateMessageDigests(Collection<MessageDigest> messageDigests) throws IOException {
+    }
+
+    @Deprecated(forRemoval = true)
+    public void setInputSource(InputSource inputSource) {
+    }
+
+    @Deprecated(forRemoval = true)
     public void setProgressConsumer(Consumer<Double> progressConsumer) {
-        this.progressConsumer = Objects.requireNonNull(progressConsumer);
     }
 }
