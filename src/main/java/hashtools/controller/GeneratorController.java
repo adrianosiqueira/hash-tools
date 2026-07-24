@@ -1,6 +1,5 @@
 package hashtools.controller;
 
-import hashtools.domain.container.ChecksumGenerationContainer;
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumGenerationResult;
@@ -67,10 +66,11 @@ public class GeneratorController extends AbstractController {
 
 
             // Processing
-            ChecksumGenerationContainer container = generationService.generateChecksums(context);
-            container.consumeResultIfPresent(this::saveResult);
-            container.consumeProblemIfPresent(this::showMessageDialog);
-            container.consumeExceptionIfPresent(this::logException);
+            switch (generationService.generateChecksums(context)) {
+                case ChecksumGenerationService.Result.Exception(Throwable throwable) -> this.logException(throwable);
+                case ChecksumGenerationService.Result.Problem(String problem) -> this.showMessageDialog(problem);
+                case ChecksumGenerationService.Result.Success(ChecksumGenerationResult result) -> this.saveResult(result);
+            }
         }).start();
     }
 
@@ -127,8 +127,8 @@ public class GeneratorController extends AbstractController {
 
 
     @Override
-    protected void logException(Exception exception) {
-        super.logException(exception);
+    protected void logException(Throwable throwable) {
+        super.logException(throwable);
         super.enableUi(pnlRoot);
     }
 }

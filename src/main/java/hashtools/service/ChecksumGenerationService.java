@@ -1,7 +1,6 @@
 package hashtools.service;
 
 import hashtools.domain.algorithm.ChecksumGenerator;
-import hashtools.domain.container.ChecksumGenerationContainer;
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
@@ -14,7 +13,7 @@ public class ChecksumGenerationService {
 
 
 
-    public ChecksumGenerationContainer generateChecksums(ChecksumGenerationContext context) {
+    public Result generateChecksums(ChecksumGenerationContext context) {
         this.context = context;
 
 
@@ -25,7 +24,7 @@ public class ChecksumGenerationService {
             .orElse(null);
 
         if (problem != null) {
-            return ChecksumGenerationContainer.problem(problem);
+            return new Result.Problem(problem);
         }
 
 
@@ -43,7 +42,7 @@ public class ChecksumGenerationService {
         ChecksumGeneratorUpdate.Result updateResult = context.updateChecksumGenerators(generators);
 
         if (updateResult instanceof ChecksumGeneratorUpdate.Result.Failure(Exception exception)) {
-            return ChecksumGenerationContainer.exception(exception);
+            return new Result.Exception(exception);
         }
 
 
@@ -57,10 +56,21 @@ public class ChecksumGenerationService {
             .map(ChecksumGenerator::decodeIntoChecksum)
             .forEach(result::addChecksum);
 
-        return ChecksumGenerationContainer.result(result);
+        return new Result.Success(result);
     }
 
     public void cancelChecksumGeneration() {
         context.cancelChecksumGeneratorsUpdate();
+    }
+
+
+
+    public sealed interface Result {
+
+        record Exception(Throwable throwable) implements Result {}
+
+        record Problem(String problem) implements Result {}
+
+        record Success(ChecksumGenerationResult result) implements Result {}
     }
 }

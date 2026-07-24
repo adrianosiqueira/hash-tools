@@ -61,7 +61,7 @@ public abstract class AbstractController implements AutoCloseable, Initializable
         });
     }
 
-    protected void logException(Exception exception) {
+    protected void logException(Throwable throwable) {
     }
 
     protected void trackProgress(double progress) {
