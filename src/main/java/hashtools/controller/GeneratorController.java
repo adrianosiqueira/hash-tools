@@ -78,7 +78,7 @@ public class GeneratorController extends AbstractController {
         super.openFile(
             "Select the input file",
             FileDialog::openForReading,
-            file -> txtInput.setText(file.toString())
+            file -> txtInput.setText(file.getAbsolutePath())
         );
     }
 
@@ -112,12 +112,14 @@ public class GeneratorController extends AbstractController {
     }
 
     private void processResult(ChecksumGenerationService.Result.Success result) {
-        String content = result.result().formatForSaving();
-
         super.openFile(
             "Select where to save the checksums",
             FileDialog::openForWriting,
             file -> {
+                String content = result
+                    .result()
+                    .formatForSaving();
+
                 try {
                     file.replaceContent(content);
                 } catch (IOException e) {

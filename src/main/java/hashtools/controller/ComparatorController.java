@@ -101,7 +101,7 @@ public class ComparatorController extends AbstractController {
         super.openFile(
             "Select the first input file",
             FileDialog::openForReading,
-            file -> txtInput1.setText(file.toString())
+            file -> txtInput1.setText(file.getAbsolutePath())
         );
     }
 
@@ -110,7 +110,7 @@ public class ComparatorController extends AbstractController {
         super.openFile(
             "Select the second input file",
             FileDialog::openForReading,
-            file -> txtInput2.setText(file.toString())
+            file -> txtInput2.setText(file.getAbsolutePath())
         );
     }
 
@@ -192,7 +192,7 @@ public class ComparatorController extends AbstractController {
     }
 
     @Override
-    protected void logException(Exception exception) {
+    protected void logException(Throwable exception) {
         super.logException(exception);
         super.enableUi(pnlRoot);
     }

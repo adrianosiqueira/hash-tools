@@ -56,7 +56,9 @@ public class EnhancedFile {
     }
 
     public String getAbsolutePath() {
-        return file.toString();
+        return file
+            .toAbsolutePath()
+            .toString();
     }
 
     public void replaceContent(String content) throws IOException {
@@ -74,11 +76,6 @@ public class EnhancedFile {
 
     public InputStream getInputStream() throws IOException {
         return Files.newInputStream(file);
-    }
-
-    @Override
-    public String toString() {
-        return file.toString();
     }
 
 

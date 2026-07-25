@@ -91,7 +91,7 @@ public class CheckerController extends AbstractController {
         super.openFile(
             "Select the input file",
             FileDialog::openForReading,
-            file -> txtInput.setText(file.toString())
+            file -> txtInput.setText(file.getAbsolutePath())
         );
     }
 
@@ -100,7 +100,7 @@ public class CheckerController extends AbstractController {
         super.openFile(
             "Select the checksum file",
             FileDialog::openForReading,
-            file -> txtChecksum.setText(file.toString())
+            file -> txtChecksum.setText(file.getAbsolutePath())
         );
     }
 
@@ -137,7 +137,7 @@ public class CheckerController extends AbstractController {
     }
 
     @Override
-    protected void logException(Exception exception) {
+    protected void logException(Throwable exception) {
         super.logException(exception);
         enableUi(pnlRoot);
     }
