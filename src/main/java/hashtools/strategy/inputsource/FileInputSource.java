@@ -26,9 +26,7 @@ public class FileInputSource implements InputSource {
 
 
     public FileInputSource(String filePath) {
-        this.file = EnhancedFile
-            .filePath(filePath)
-            .orElse(null);
+        this.file = EnhancedFile.filePath(filePath);
         this.canceled = false;
     }
 

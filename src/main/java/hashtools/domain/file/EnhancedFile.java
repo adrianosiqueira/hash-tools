@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
@@ -25,19 +25,22 @@ public class EnhancedFile {
 
 
 
-    public static Optional<EnhancedFile> filePath(String filePath) {
-        return Optional
-            .ofNullable(filePath)
-            .map(Path::of)
-            .map(EnhancedFile::new);
+    public static EnhancedFile filePath(String filePath) {
+        Path path = Paths.get(filePath);
+        return new EnhancedFile(path);
     }
 
-    public static Optional<EnhancedFile> fileReference(AtomicReference<File> fileReference) {
-        return Optional
-            .ofNullable(fileReference)
-            .map(AtomicReference::get)
-            .map(File::toPath)
-            .map(EnhancedFile::new);
+    public static EnhancedFile fileReference(AtomicReference<File> fileReference) {
+        Path path = fileReference
+            .get()
+            .toPath();
+
+        return new EnhancedFile(path);
+    }
+
+    public static EnhancedFile file(File file) {
+        Path path = file.toPath();
+        return new EnhancedFile(path);
     }
 
 

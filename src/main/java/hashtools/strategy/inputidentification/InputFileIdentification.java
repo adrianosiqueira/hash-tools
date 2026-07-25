@@ -9,9 +9,7 @@ public class InputFileIdentification implements InputIdentification {
 
 
     public InputFileIdentification(String filePath) {
-        this.file = EnhancedFile
-            .filePath(filePath)
-            .orElse(null);
+        this.file = EnhancedFile.filePath(filePath);
     }
 
 

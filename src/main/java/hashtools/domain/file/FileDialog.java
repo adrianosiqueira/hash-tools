@@ -7,8 +7,7 @@ import javafx.stage.Window;
 import java.io.File;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class FileDialog {
@@ -76,13 +75,11 @@ public class FileDialog {
     }
 
     private Optional<EnhancedFile> openDialog(Function<Window, File> openFunction, Window owner) {
-        AtomicReference<File> fileReference = new AtomicReference<>();
-        CountDownLatch latch = new CountDownLatch(1);
+        CompletableFuture<File> futureFile = new CompletableFuture<>();
 
         Runnable selectFile = () -> {
             File file = openFunction.apply(owner);
-            fileReference.set(file);
-            latch.countDown();
+            futureFile.complete(file);
         };
 
 
@@ -93,14 +90,18 @@ public class FileDialog {
             Platform.runLater(selectFile);
         }
 
+
+
         try {
-            latch.await();
-        } catch (InterruptedException e) {
+            File file = futureFile.get();
+
+            return Optional
+                .ofNullable(file)
+                .map(EnhancedFile::file);
+        } catch (Exception e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
+            return Optional.empty();
         }
-
-
-
-        return EnhancedFile.fileReference(fileReference);
     }
 }

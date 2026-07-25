@@ -13,9 +13,7 @@ public class FileChecksumExtraction implements ChecksumExtraction {
 
 
     public FileChecksumExtraction(String filePath) {
-        this.file = EnhancedFile
-            .filePath(filePath)
-            .orElse(null);
+        this.file = EnhancedFile.filePath(filePath);
     }
 
 

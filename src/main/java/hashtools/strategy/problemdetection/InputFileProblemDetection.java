@@ -11,9 +11,7 @@ public class InputFileProblemDetection implements ProblemDetection {
 
 
     public InputFileProblemDetection(String filePath) {
-        this.file = EnhancedFile
-            .filePath(filePath)
-            .orElse(null);
+        this.file = EnhancedFile.filePath(filePath);
     }
 
 

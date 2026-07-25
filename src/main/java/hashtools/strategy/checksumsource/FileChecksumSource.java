@@ -16,9 +16,7 @@ public class FileChecksumSource implements ChecksumSource {
 
 
     public FileChecksumSource(String filePath) {
-        this.file = EnhancedFile
-            .filePath(filePath)
-            .orElse(null);
+        this.file = EnhancedFile.filePath(filePath);
     }
 
 

@@ -12,9 +12,7 @@ public class ChecksumFileProblemDetection implements ProblemDetection {
 
 
     public ChecksumFileProblemDetection(String filePath) {
-        this.file = EnhancedFile
-            .filePath(filePath)
-            .orElse(null);
+        this.file = EnhancedFile.filePath(filePath);
     }
 
 
