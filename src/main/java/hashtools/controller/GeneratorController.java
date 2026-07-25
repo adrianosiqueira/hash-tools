@@ -2,7 +2,6 @@ package hashtools.controller;
 
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.file.FileDialog;
-import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.service.ChecksumGenerationService;
 import hashtools.strategy.algorithmsource.CheckBoxAlgorithmSource;
 import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
@@ -67,9 +66,9 @@ public class GeneratorController extends AbstractController {
 
             // Processing
             switch (generationService.generateChecksums(context)) {
-                case ChecksumGenerationService.Result.Exception(Throwable throwable) -> this.logException(throwable);
-                case ChecksumGenerationService.Result.Problem(String problem) -> this.showMessageDialog(problem);
-                case ChecksumGenerationService.Result.Success(ChecksumGenerationResult result) -> this.saveResult(result);
+                case ChecksumGenerationService.Result.Exception exception -> this.processResult(exception);
+                case ChecksumGenerationService.Result.Problem problem -> this.processResult(problem);
+                case ChecksumGenerationService.Result.Success success -> this.processResult(success);
             }
         }).start();
     }
@@ -102,13 +101,24 @@ public class GeneratorController extends AbstractController {
         return context;
     }
 
-    private void saveResult(ChecksumGenerationResult result) {
+    private void processResult(ChecksumGenerationService.Result.Exception result) {
+        super.logException(result.throwable());
+        super.enableUi(pnlRoot);
+    }
+
+    private void processResult(ChecksumGenerationService.Result.Problem result) {
+        super.showMessageDialog("Hash Tools", "Problem", result.problem());
+        super.enableUi(pnlRoot);
+    }
+
+    private void processResult(ChecksumGenerationService.Result.Success result) {
+        String content = result.result().formatForSaving();
+
         super.openFile(
             "Select where to save the checksums",
             FileDialog::openForWriting,
             file -> {
                 try {
-                    String content = result.formatForSaving();
                     file.replaceContent(content);
                 } catch (IOException e) {
                     super.logException(e);
@@ -116,19 +126,6 @@ public class GeneratorController extends AbstractController {
             }
         );
 
-        super.enableUi(pnlRoot);
-    }
-
-    private void showMessageDialog(String message) {
-        super.showMessageDialog("Hash Tools", "Problem", message);
-        super.enableUi(pnlRoot);
-    }
-
-
-
-    @Override
-    protected void logException(Throwable throwable) {
-        super.logException(throwable);
         super.enableUi(pnlRoot);
     }
 }
