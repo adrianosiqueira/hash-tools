@@ -16,7 +16,7 @@ public class FileChecksumSource implements ChecksumSource {
 
 
     public FileChecksumSource(String filePath) {
-        this.file = EnhancedFile.filePath(filePath);
+        this.file = EnhancedFile.createFromFilePath(filePath);
     }
 
 

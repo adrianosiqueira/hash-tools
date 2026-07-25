@@ -2,14 +2,12 @@ package hashtools.strategy.inputidentification;
 
 import hashtools.domain.file.EnhancedFile;
 
-public class InputFileIdentification implements InputIdentification {
-
-    private EnhancedFile file;
-
-
+public record InputFileIdentification(
+    EnhancedFile file
+) implements InputIdentification {
 
     public InputFileIdentification(String filePath) {
-        this.file = EnhancedFile.filePath(filePath);
+        this(EnhancedFile.createFromFilePath(filePath));
     }
 
 

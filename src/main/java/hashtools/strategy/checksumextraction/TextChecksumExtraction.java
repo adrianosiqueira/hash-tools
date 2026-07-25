@@ -5,17 +5,9 @@ import hashtools.domain.checksum.Checksum;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-public class TextChecksumExtraction implements ChecksumExtraction {
-
-    private String text;
-
-
-
-    public TextChecksumExtraction(String text) {
-        this.text = text;
-    }
-
-
+public record TextChecksumExtraction(
+    String text
+) implements ChecksumExtraction {
 
     @Override
     public Result extractOfficialChecksums() {

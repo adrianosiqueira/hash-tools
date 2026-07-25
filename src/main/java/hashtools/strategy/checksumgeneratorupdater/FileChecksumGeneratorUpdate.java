@@ -24,7 +24,7 @@ public class FileChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
 
 
     public FileChecksumGeneratorUpdate(String filePath) {
-        this.file = EnhancedFile.filePath(filePath);
+        this.file = EnhancedFile.createFromFilePath(filePath);
         this.canceled = false;
     }
 

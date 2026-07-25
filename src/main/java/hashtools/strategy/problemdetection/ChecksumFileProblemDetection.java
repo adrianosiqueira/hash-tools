@@ -5,14 +5,12 @@ import hashtools.domain.file.FileExtension;
 
 import java.util.Optional;
 
-public class ChecksumFileProblemDetection implements ProblemDetection {
-
-    private EnhancedFile file;
-
-
+public record ChecksumFileProblemDetection(
+    EnhancedFile file
+) implements ProblemDetection {
 
     public ChecksumFileProblemDetection(String filePath) {
-        this.file = EnhancedFile.filePath(filePath);
+        this(EnhancedFile.createFromFilePath(filePath));
     }
 
 

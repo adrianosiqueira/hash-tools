@@ -97,7 +97,7 @@ public class FileDialog {
 
             return Optional
                 .ofNullable(file)
-                .map(EnhancedFile::file);
+                .map(EnhancedFile::createFromFile);
         } catch (Exception e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();

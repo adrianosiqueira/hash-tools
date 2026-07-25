@@ -26,7 +26,7 @@ public class FileInputSource implements InputSource {
 
 
     public FileInputSource(String filePath) {
-        this.file = EnhancedFile.filePath(filePath);
+        this.file = EnhancedFile.createFromFilePath(filePath);
         this.canceled = false;
     }
 

@@ -6,17 +6,9 @@ import hashtools.domain.file.EnhancedFile;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-public class FileChecksumExtraction implements ChecksumExtraction {
-
-    private EnhancedFile file;
-
-
-
-    public FileChecksumExtraction(String filePath) {
-        this.file = EnhancedFile.filePath(filePath);
-    }
-
-
+public record FileChecksumExtraction(
+    EnhancedFile file
+) implements ChecksumExtraction {
 
     @Override
     public Result extractOfficialChecksums() {
