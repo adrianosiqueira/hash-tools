@@ -30,11 +30,7 @@ public class ChecksumGenerationService {
 
 
         // Data getting
-        Collection<ChecksumGenerator> generators = context
-            .getAlgorithms()
-            .stream()
-            .map(ChecksumGenerator::createFromAlgorithm)
-            .toList();
+        Collection<ChecksumGenerator> generators = context.createChecksumGenerators();
 
 
 

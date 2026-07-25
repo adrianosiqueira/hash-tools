@@ -1,6 +1,5 @@
 package hashtools.domain.context;
 
-import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.strategy.algorithmsource.AlgorithmSource;
 import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
@@ -45,8 +44,12 @@ public class ChecksumGenerationContext {
         return problemDetection.detectProblem();
     }
 
-    public Collection<Algorithm> getAlgorithms() {
-        return algorithmSource.getAlgorithms();
+    public Collection<ChecksumGenerator> createChecksumGenerators() {
+        return algorithmSource
+            .getAlgorithms()
+            .stream()
+            .map(ChecksumGenerator::createFromAlgorithm)
+            .toList();
     }
 
 
