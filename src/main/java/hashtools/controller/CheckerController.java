@@ -1,16 +1,18 @@
 package hashtools.controller;
 
-import hashtools.domain.container.ChecksumCheckingContainer;
 import hashtools.domain.context.ChecksumCheckingContext;
 import hashtools.domain.file.FileDialog;
-import hashtools.domain.result.ChecksumCheckingResult;
-import hashtools.service.CheckerService;
-import hashtools.strategy.checksumsource.ChecksumSource;
-import hashtools.strategy.checksumsource.FileChecksumSource;
-import hashtools.strategy.checksumsource.TextChecksumSource;
-import hashtools.strategy.inputsource.FileInputSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.strategy.inputsource.TextInputSource;
+import hashtools.service.ChecksumCheckingService;
+import hashtools.strategy.checksumextraction.FileChecksumExtraction;
+import hashtools.strategy.checksumextraction.TextChecksumExtraction;
+import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
+import hashtools.strategy.checksumgeneratorupdater.TextChecksumGeneratorUpdate;
+import hashtools.strategy.inputidentification.InputFileIdentification;
+import hashtools.strategy.inputidentification.InputTextIdentification;
+import hashtools.strategy.problemdetection.ChecksumFileProblemDetection;
+import hashtools.strategy.problemdetection.ChecksumTextProblemDetection;
+import hashtools.strategy.problemdetection.InputFileProblemDetection;
+import hashtools.strategy.problemdetection.InputTextProblemDetection;
 import hashtools.strategy.thread.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -42,14 +44,14 @@ public class CheckerController extends AbstractController {
     @FXML
     private ProgressBar prgReliability;
 
-    private CheckerService checkerService;
+    private ChecksumCheckingService checksumCheckingService;
     private ThreadFactory threadFactory;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.checkerService = new CheckerService();
+        this.checksumCheckingService = new ChecksumCheckingService();
         this.threadFactory = new VirtualThreadFactory();
     }
 
@@ -65,24 +67,16 @@ public class CheckerController extends AbstractController {
 
 
             // Data retrieval
-            InputSource inputSource = this.createInputSource();
-            ChecksumSource checksumSource = this.createChecksumSource();
-
-
-
-            // Communication setup
-            ChecksumCheckingContext parameter = new ChecksumCheckingContext();
-            parameter.setInputSource(inputSource);
-            parameter.setChecksumSource(checksumSource);
-            parameter.setProgressConsumer(this::trackProgress);
+            ChecksumCheckingContext context = this.createCheckingContext();
 
 
 
             // Processing
-            ChecksumCheckingContainer container = checkerService.performChecksumChecking(parameter);
-            container.consumeResultIfPresent(this::presentResult);
-            container.consumeProblemIfPresent(this::showMessageDialog);
-            container.consumeExceptionIfPresent(this::logException);
+            switch (checksumCheckingService.checkChecksums(context)) {
+                case ChecksumCheckingService.Result.Exception exception -> this.processResult(exception);
+                case ChecksumCheckingService.Result.Problem problem -> this.processResult(problem);
+                case ChecksumCheckingService.Result.Success success -> this.processResult(success);
+            }
         }).start();
     }
 
@@ -106,41 +100,50 @@ public class CheckerController extends AbstractController {
 
 
 
-    private InputSource createInputSource() {
-        return chkInput.isSelected()
-            ? new FileInputSource(txtInput.getText())
-            : new TextInputSource(txtInput.getText());
+    private ChecksumCheckingContext createCheckingContext() {
+        ChecksumCheckingContext context = new ChecksumCheckingContext();
+
+        if (chkInput.isSelected()) {
+            context.setInputIdentification(new InputFileIdentification(txtInput.getText()));
+            context.setChecksumGeneratorUpdate(new FileChecksumGeneratorUpdate(txtInput.getText()));
+            context.setInputProblemDetection(new InputFileProblemDetection(txtInput.getText()));
+        } else {
+            context.setInputIdentification(new InputTextIdentification(txtInput.getText()));
+            context.setChecksumGeneratorUpdate(new TextChecksumGeneratorUpdate(txtInput.getText()));
+            context.setInputProblemDetection(new InputTextProblemDetection(txtInput.getText()));
+        }
+
+        if (chkChecksum.isSelected()) {
+            context.setChecksumProblemDetection(new ChecksumFileProblemDetection(txtChecksum.getText()));
+            context.setChecksumExtraction(new FileChecksumExtraction(txtChecksum.getText()));
+        } else {
+            context.setChecksumProblemDetection(new ChecksumTextProblemDetection(txtChecksum.getText()));
+            context.setChecksumExtraction(new TextChecksumExtraction(txtChecksum.getText()));
+        }
+
+        return context;
     }
 
-    private ChecksumSource createChecksumSource() {
-        return chkChecksum.isSelected()
-            ? new FileChecksumSource(txtChecksum.getText())
-            : new TextChecksumSource(txtChecksum.getText());
+    private void processResult(ChecksumCheckingService.Result.Exception result) {
+        super.logException(result.throwable());
+        super.enableUi(pnlRoot);
     }
 
-    private void presentResult(ChecksumCheckingResult result) {
-        double reliability = result.calculateReliability();
+    private void processResult(ChecksumCheckingService.Result.Problem result) {
+        super.showMessageDialog("Hash Tools", "Problem", result.problem());
+        super.enableUi(pnlRoot);
+    }
+
+    private void processResult(ChecksumCheckingService.Result.Success result) {
+        double reliability = result
+            .result()
+            .calculateReliability();
+
         prgReliability.setProgress(reliability);
         super.enableUi(pnlRoot);
     }
 
-    private void showMessageDialog(String message) {
-        super.showMessageDialog("Hash Tools", "Problem", message);
-        super.enableUi(pnlRoot);
-    }
 
-
-
-    @Override
-    protected void trackProgress(double progress) {
-        prgProgress.setProgress(progress);
-    }
-
-    @Override
-    protected void logException(Throwable exception) {
-        super.logException(exception);
-        enableUi(pnlRoot);
-    }
 
     @Override
     protected void cleanUi() {

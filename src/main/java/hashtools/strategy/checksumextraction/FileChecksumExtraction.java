@@ -10,6 +10,12 @@ public record FileChecksumExtraction(
     EnhancedFile file
 ) implements ChecksumExtraction {
 
+    public FileChecksumExtraction(String filePath) {
+        this(EnhancedFile.createFromFilePath(filePath));
+    }
+
+
+
     @Override
     public Result extractOfficialChecksums() {
         try (Stream<String> lines = file.getLines()) {

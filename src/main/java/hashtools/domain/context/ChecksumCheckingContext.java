@@ -1,61 +1,78 @@
 package hashtools.domain.context;
 
-import hashtools.domain.checksum.Checksum;
-import hashtools.strategy.checksumsource.ChecksumSource;
-import hashtools.strategy.inputsource.InputSource;
+import hashtools.domain.algorithm.ChecksumGenerator;
+import hashtools.strategy.checksumextraction.ChecksumExtraction;
+import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
+import hashtools.strategy.inputidentification.InputIdentification;
+import hashtools.strategy.problemdetection.ProblemDetection;
 
-import java.io.IOException;
-import java.security.MessageDigest;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class ChecksumCheckingContext {
 
-    private InputSource inputSource;
-    private ChecksumSource checksumSource;
-    private Consumer<Double> progressConsumer;
+    private InputIdentification inputIdentification;
+    private ChecksumGeneratorUpdate checksumGeneratorUpdate;
+    private ProblemDetection inputProblemDetection;
+
+    private ChecksumExtraction checksumExtraction;
+    private ProblemDetection checksumProblemDetection;
 
 
 
     public ChecksumCheckingContext() {
-        this.inputSource = new InputSource() {};
-        this.checksumSource = new ChecksumSource() {};
-        this.progressConsumer = _ -> {};
+        this.inputIdentification = new InputIdentification() {};
+        this.checksumGeneratorUpdate = new ChecksumGeneratorUpdate() {};
+        this.inputProblemDetection = new ProblemDetection() {};
+
+        this.checksumExtraction = new ChecksumExtraction() {};
+        this.checksumProblemDetection = new ProblemDetection() {};
     }
 
 
+
+    public String getIdentification() {
+        return inputIdentification.getIdentification();
+    }
+
+    public ChecksumGeneratorUpdate.Result updateChecksumGenerators(Collection<ChecksumGenerator> generators) {
+        return checksumGeneratorUpdate.updateChecksumGenerators(generators);
+    }
+
+    public void cancelChecksumGeneratorsUpdate() {
+        checksumGeneratorUpdate.cancelChecksumGeneratorsUpdate();
+    }
 
     public Optional<String> detectProblem() {
-        return inputSource
+        return inputProblemDetection
             .detectProblem()
-            .or(checksumSource::detectProblem);
+            .or(checksumProblemDetection::detectProblem);
     }
 
-    public void updateMessageDigests(Collection<MessageDigest> messageDigests) throws IOException {
-        inputSource.updateMessageDigest(messageDigests);
-    }
-
-    public Collection<Checksum> extractOfficialChecksums() throws IOException {
-        return checksumSource.extractOfficialChecksums();
-    }
-
-    public void updateProgress(double progress) {
-        progressConsumer.accept(progress);
+    public ChecksumExtraction.Result extractOfficialChecksums() {
+        return checksumExtraction.extractOfficialChecksums();
     }
 
 
 
-    public void setInputSource(InputSource inputSource) {
-        this.inputSource = Objects.requireNonNull(inputSource);
+    public void setInputIdentification(InputIdentification inputIdentification) {
+        this.inputIdentification = Objects.requireNonNull(inputIdentification);
     }
 
-    public void setChecksumSource(ChecksumSource checksumSource) {
-        this.checksumSource = Objects.requireNonNull(checksumSource);
+    public void setChecksumGeneratorUpdate(ChecksumGeneratorUpdate checksumGeneratorUpdate) {
+        this.checksumGeneratorUpdate = Objects.requireNonNull(checksumGeneratorUpdate);
     }
 
-    public void setProgressConsumer(Consumer<Double> progressConsumer) {
-        this.progressConsumer = Objects.requireNonNull(progressConsumer);
+    public void setInputProblemDetection(ProblemDetection inputProblemDetection) {
+        this.inputProblemDetection = Objects.requireNonNull(inputProblemDetection);
+    }
+
+    public void setChecksumExtraction(ChecksumExtraction checksumExtraction) {
+        this.checksumExtraction = Objects.requireNonNull(checksumExtraction);
+    }
+
+    public void setChecksumProblemDetection(ProblemDetection checksumProblemDetection) {
+        this.checksumProblemDetection = checksumProblemDetection;
     }
 }
