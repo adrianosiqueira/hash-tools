@@ -1,16 +1,16 @@
 package hashtools.controller;
 
 import hashtools.domain.algorithm.Algorithm;
-import hashtools.domain.container.ChecksumComparisonContainer;
 import hashtools.domain.context.ChecksumComparisonContext;
 import hashtools.domain.file.FileDialog;
-import hashtools.domain.result.ChecksumComparisonResult;
-import hashtools.service.ComparatorService;
-import hashtools.strategy.algorithmsource.AlgorithmSource;
+import hashtools.service.ChecksumComparisonService;
 import hashtools.strategy.algorithmsource.ComboBoxAlgorithmSource;
-import hashtools.strategy.inputsource.FileInputSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.strategy.inputsource.TextInputSource;
+import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
+import hashtools.strategy.checksumgeneratorupdater.TextChecksumGeneratorUpdate;
+import hashtools.strategy.inputidentification.InputFileIdentification;
+import hashtools.strategy.inputidentification.InputTextIdentification;
+import hashtools.strategy.problemdetection.InputFileProblemDetection;
+import hashtools.strategy.problemdetection.InputTextProblemDetection;
 import hashtools.strategy.thread.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -49,14 +49,14 @@ public class ComparatorController extends AbstractController {
     @FXML
     private ProgressBar prgEquality;
 
-    private ComparatorService comparatorService;
+    private ChecksumComparisonService comparisonService;
     private ThreadFactory threadFactory;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.comparatorService = new ComparatorService();
+        this.comparisonService = new ChecksumComparisonService();
         this.threadFactory = new VirtualThreadFactory();
         this.setupAlgorithms();
     }
@@ -73,26 +73,16 @@ public class ComparatorController extends AbstractController {
 
 
             // Data retrieval
-            InputSource inputSource1 = this.createInputSource1();
-            InputSource inputSource2 = this.createInputSource2();
-            AlgorithmSource algorithmSource = this.createAlgorithmSource();
-
-
-
-            // Communication setup
-            ChecksumComparisonContext parameter = new ChecksumComparisonContext();
-            parameter.setInputSource1(inputSource1);
-            parameter.setInputSource2(inputSource2);
-            parameter.setAlgorithmSource(algorithmSource);
-            parameter.setProgressConsumer(this::trackProgress);
+            ChecksumComparisonContext context = this.createComparisonContext();
 
 
 
             // Processing
-            ChecksumComparisonContainer container = comparatorService.performChecksumComparison(parameter);
-            container.consumeResultIfPresent(this::presentResult);
-            container.consumeProblemIfPresent(this::showMessageDialog);
-            container.consumeExceptionIfPresent(this::logException);
+            switch (comparisonService.compareChecksums(context)) {
+                case ChecksumComparisonService.Result.Exception exception -> this.processResult(exception);
+                case ChecksumComparisonService.Result.Problem problem -> this.processResult(problem);
+                case ChecksumComparisonService.Result.Success success -> this.processResult(success);
+            }
         }).start();
     }
 
@@ -133,22 +123,6 @@ public class ComparatorController extends AbstractController {
 
 
 
-    private InputSource createInputSource1() {
-        return chkInput1.isSelected()
-            ? new FileInputSource(txtInput1.getText())
-            : new TextInputSource(txtInput1.getText());
-    }
-
-    private InputSource createInputSource2() {
-        return chkInput2.isSelected()
-            ? new FileInputSource(txtInput2.getText())
-            : new TextInputSource(txtInput2.getText());
-    }
-
-    private AlgorithmSource createAlgorithmSource() {
-        return new ComboBoxAlgorithmSource(cmbAlgorithm);
-    }
-
     private void setupAlgorithms() {
         List<Algorithm> algorithms = Algorithm.getAllAscendingSortedByLength();
 
@@ -173,29 +147,53 @@ public class ComparatorController extends AbstractController {
         });
     }
 
-    private void presentResult(ChecksumComparisonResult result) {
-        double equality = result.calculateEquality();
+    private ChecksumComparisonContext createComparisonContext() {
+        ChecksumComparisonContext context = new ChecksumComparisonContext();
+        context.setAlgorithmSource(new ComboBoxAlgorithmSource(cmbAlgorithm));
+
+        if (chkInput1.isSelected()) {
+            context.setInputIdentification1(new InputFileIdentification(txtInput1.getText()));
+            context.setChecksumGeneratorUpdate1(new FileChecksumGeneratorUpdate(txtInput1.getText()));
+            context.setProblemDetection1(new InputFileProblemDetection(txtInput1.getText()));
+        } else {
+            context.setInputIdentification1(new InputTextIdentification(txtInput1.getText()));
+            context.setChecksumGeneratorUpdate1(new TextChecksumGeneratorUpdate(txtInput1.getText()));
+            context.setProblemDetection1(new InputTextProblemDetection(txtInput1.getText()));
+        }
+
+        if (chkInput2.isSelected()) {
+            context.setInputIdentification2(new InputFileIdentification(txtInput2.getText()));
+            context.setChecksumGeneratorUpdate2(new FileChecksumGeneratorUpdate(txtInput2.getText()));
+            context.setProblemDetection2(new InputFileProblemDetection(txtInput2.getText()));
+        } else {
+            context.setInputIdentification2(new InputTextIdentification(txtInput2.getText()));
+            context.setChecksumGeneratorUpdate2(new TextChecksumGeneratorUpdate(txtInput2.getText()));
+            context.setProblemDetection2(new InputTextProblemDetection(txtInput2.getText()));
+        }
+
+        return context;
+    }
+
+    private void processResult(ChecksumComparisonService.Result.Exception result) {
+        super.logException(result.throwable());
+        super.enableUi(pnlRoot);
+    }
+
+    private void processResult(ChecksumComparisonService.Result.Problem result) {
+        super.showMessageDialog("Hash Tools", "Problem", result.problem());
+        super.enableUi(pnlRoot);
+    }
+
+    private void processResult(ChecksumComparisonService.Result.Success result) {
+        double equality = result
+            .result()
+            .calculateEquality();
+
         prgEquality.setProgress(equality);
         enableUi(pnlRoot);
     }
 
-    private void showMessageDialog(String message) {
-        super.showMessageDialog("Hash Tools", "Problem", message);
-        super.enableUi(pnlRoot);
-    }
 
-
-
-    @Override
-    protected void trackProgress(double progress) {
-        prgProgress.setProgress(progress);
-    }
-
-    @Override
-    protected void logException(Throwable exception) {
-        super.logException(exception);
-        super.enableUi(pnlRoot);
-    }
 
     @Override
     protected void cleanUi() {
