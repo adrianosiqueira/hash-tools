@@ -11,7 +11,7 @@ import hashtools.strategy.inputidentification.InputFileIdentification;
 import hashtools.strategy.inputidentification.InputTextIdentification;
 import hashtools.strategy.problemdetection.InputFileProblemDetection;
 import hashtools.strategy.problemdetection.InputTextProblemDetection;
-import hashtools.strategy.thread.VirtualThreadFactory;
+import hashtools.strategy.threadfactory.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;

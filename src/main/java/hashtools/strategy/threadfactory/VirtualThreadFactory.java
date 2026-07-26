@@ -1,4 +1,4 @@
-package hashtools.strategy.thread;
+package hashtools.strategy.threadfactory;
 
 import java.util.concurrent.ThreadFactory;
 
