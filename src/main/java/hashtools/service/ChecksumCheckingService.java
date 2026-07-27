@@ -5,6 +5,8 @@ import hashtools.domain.checksum.CheckerChecksum;
 import hashtools.domain.checksum.Checksum;
 import hashtools.domain.context.ChecksumCheckingContext;
 import hashtools.domain.result.ChecksumCheckingResult;
+import hashtools.domain.result.ExceptionResult;
+import hashtools.domain.result.ProblemResult;
 import hashtools.strategy.checksumextraction.ChecksumExtraction;
 import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
 
@@ -27,7 +29,7 @@ public class ChecksumCheckingService {
             .orElse(null);
 
         if (problem != null) {
-            return new Result.Problem(problem);
+            return new ProblemResult(problem);
         }
 
 
@@ -36,7 +38,7 @@ public class ChecksumCheckingService {
         ChecksumExtraction.Result extractionResult = context.extractOfficialChecksums();
 
         if (extractionResult instanceof ChecksumExtraction.Result.Failure(Exception exception)) {
-            return new Result.Exception(exception);
+            return new ExceptionResult(exception);
         }
 
         Collection<ChecksumWithGeneratorMap> checksumsMap = ((ChecksumExtraction.Result.Success) extractionResult)
@@ -56,7 +58,7 @@ public class ChecksumCheckingService {
         ChecksumGeneratorUpdate.Result updateResult = context.updateChecksumGenerators(generators);
 
         if (updateResult instanceof ChecksumGeneratorUpdate.Result.Failure(Exception exception)) {
-            return new Result.Exception(exception);
+            return new ExceptionResult(exception);
         }
 
 
@@ -69,7 +71,7 @@ public class ChecksumCheckingService {
             .map(ChecksumWithGeneratorMap::decodeIntoCheckerChecksum)
             .forEach(result::addChecksum);
 
-        return new Result.Success(result);
+        return result;
     }
 
     public void cancelChecksumChecking() {
@@ -78,14 +80,7 @@ public class ChecksumCheckingService {
 
 
 
-    public sealed interface Result {
-
-        record Exception(Throwable throwable) implements Result {}
-
-        record Problem(String problem) implements Result {}
-
-        record Success(ChecksumCheckingResult result) implements Result {}
-    }
+    public sealed interface Result permits ExceptionResult, ProblemResult, ChecksumCheckingResult {}
 
 
 

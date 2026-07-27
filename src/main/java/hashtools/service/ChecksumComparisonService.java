@@ -5,6 +5,8 @@ import hashtools.domain.checksum.Checksum;
 import hashtools.domain.checksum.ComparatorChecksum;
 import hashtools.domain.context.ChecksumComparisonContext;
 import hashtools.domain.result.ChecksumComparisonResult;
+import hashtools.domain.result.ExceptionResult;
+import hashtools.domain.result.ProblemResult;
 import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
 
 import java.util.Collection;
@@ -30,7 +32,7 @@ public class ChecksumComparisonService {
             .orElse(null);
 
         if (problem != null) {
-            return new Result.Problem(problem);
+            return new ProblemResult(problem);
         }
 
 
@@ -50,9 +52,9 @@ public class ChecksumComparisonService {
             ChecksumComparisonResult result = new ChecksumComparisonResult();
             result.setChecksum(checksum);
 
-            return new Result.Success(result);
+            return result;
         } catch (Exception e) {
-            return new Result.Exception(e);
+            return new ExceptionResult(e);
         }
     }
 
@@ -85,12 +87,5 @@ public class ChecksumComparisonService {
 
 
 
-    public sealed interface Result {
-
-        record Exception(Throwable throwable) implements Result {}
-
-        record Problem(String problem) implements Result {}
-
-        record Success(ChecksumComparisonResult result) implements Result {}
-    }
+    public sealed interface Result permits ExceptionResult, ProblemResult, ChecksumComparisonResult {}
 }

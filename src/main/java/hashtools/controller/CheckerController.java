@@ -2,6 +2,9 @@ package hashtools.controller;
 
 import hashtools.domain.context.ChecksumCheckingContext;
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.result.ChecksumCheckingResult;
+import hashtools.domain.result.ExceptionResult;
+import hashtools.domain.result.ProblemResult;
 import hashtools.service.ChecksumCheckingService;
 import hashtools.strategy.checksumextraction.FileChecksumExtraction;
 import hashtools.strategy.checksumextraction.TextChecksumExtraction;
@@ -73,9 +76,9 @@ public class CheckerController extends AbstractController {
 
             // Processing
             switch (checksumCheckingService.checkChecksums(context)) {
-                case ChecksumCheckingService.Result.Exception exception -> this.processResult(exception);
-                case ChecksumCheckingService.Result.Problem problem -> this.processResult(problem);
-                case ChecksumCheckingService.Result.Success success -> this.processResult(success);
+                case ExceptionResult result -> this.processResult(result);
+                case ProblemResult result -> this.processResult(result);
+                case ChecksumCheckingResult result -> this.processResult(result);
             }
         }).start();
     }
@@ -124,21 +127,18 @@ public class CheckerController extends AbstractController {
         return context;
     }
 
-    private void processResult(ChecksumCheckingService.Result.Exception result) {
-        super.logException(result.throwable());
+    private void processResult(ExceptionResult result) {
+        super.logException(result.exception());
         super.enableUi(pnlRoot);
     }
 
-    private void processResult(ChecksumCheckingService.Result.Problem result) {
-        super.showMessageDialog("Hash Tools", "Problem", result.problem());
+    private void processResult(ProblemResult result) {
+        super.showMessageDialog("Hash Tools", "Problem", result.description());
         super.enableUi(pnlRoot);
     }
 
-    private void processResult(ChecksumCheckingService.Result.Success result) {
-        double reliability = result
-            .result()
-            .calculateReliability();
-
+    private void processResult(ChecksumCheckingResult result) {
+        double reliability = result.calculateReliability();
         prgReliability.setProgress(reliability);
         super.enableUi(pnlRoot);
     }

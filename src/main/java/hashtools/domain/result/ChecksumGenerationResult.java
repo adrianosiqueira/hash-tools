@@ -1,13 +1,14 @@
 package hashtools.domain.result;
 
 import hashtools.domain.checksum.Checksum;
+import hashtools.service.ChecksumGenerationService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class ChecksumGenerationResult {
+public final class ChecksumGenerationResult implements ChecksumGenerationService.Result {
 
     private List<Checksum> checksums;
     private String identification;
@@ -30,16 +31,6 @@ public class ChecksumGenerationResult {
             .stream()
             .map(checksum -> checksum.getHash() + "  " + identification)
             .collect(Collectors.joining("\n"));
-    }
-
-
-
-    public List<Checksum> getChecksums() {
-        return checksums;
-    }
-
-    public String getIdentification() {
-        return identification;
     }
 
     public void setIdentification(Supplier<String> identification) {

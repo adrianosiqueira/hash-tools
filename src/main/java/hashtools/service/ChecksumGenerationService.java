@@ -3,6 +3,8 @@ package hashtools.service;
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.result.ChecksumGenerationResult;
+import hashtools.domain.result.ExceptionResult;
+import hashtools.domain.result.ProblemResult;
 import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
 
 import java.util.Collection;
@@ -24,7 +26,7 @@ public class ChecksumGenerationService {
             .orElse(null);
 
         if (problem != null) {
-            return new Result.Problem(problem);
+            return new ProblemResult(problem);
         }
 
 
@@ -38,7 +40,7 @@ public class ChecksumGenerationService {
         ChecksumGeneratorUpdate.Result updateResult = context.updateChecksumGenerators(generators);
 
         if (updateResult instanceof ChecksumGeneratorUpdate.Result.Failure(Exception exception)) {
-            return new Result.Exception(exception);
+            return new ExceptionResult(exception);
         }
 
 
@@ -52,7 +54,7 @@ public class ChecksumGenerationService {
             .map(ChecksumGenerator::decodeIntoChecksum)
             .forEach(result::addChecksum);
 
-        return new Result.Success(result);
+        return result;
     }
 
     public void cancelChecksumGeneration() {
@@ -61,12 +63,5 @@ public class ChecksumGenerationService {
 
 
 
-    public sealed interface Result {
-
-        record Exception(Throwable throwable) implements Result {}
-
-        record Problem(String problem) implements Result {}
-
-        record Success(ChecksumGenerationResult result) implements Result {}
-    }
+    public sealed interface Result permits ExceptionResult, ProblemResult, ChecksumGenerationResult {}
 }

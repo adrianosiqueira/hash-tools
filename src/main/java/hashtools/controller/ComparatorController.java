@@ -3,6 +3,9 @@ package hashtools.controller;
 import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.context.ChecksumComparisonContext;
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.result.ChecksumComparisonResult;
+import hashtools.domain.result.ExceptionResult;
+import hashtools.domain.result.ProblemResult;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.strategy.algorithmsource.ComboBoxAlgorithmSource;
 import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
@@ -79,9 +82,9 @@ public class ComparatorController extends AbstractController {
 
             // Processing
             switch (comparisonService.compareChecksums(context)) {
-                case ChecksumComparisonService.Result.Exception exception -> this.processResult(exception);
-                case ChecksumComparisonService.Result.Problem problem -> this.processResult(problem);
-                case ChecksumComparisonService.Result.Success success -> this.processResult(success);
+                case ExceptionResult result -> this.processResult(result);
+                case ProblemResult result -> this.processResult(result);
+                case ChecksumComparisonResult result -> this.processResult(result);
             }
         }).start();
     }
@@ -174,21 +177,18 @@ public class ComparatorController extends AbstractController {
         return context;
     }
 
-    private void processResult(ChecksumComparisonService.Result.Exception result) {
-        super.logException(result.throwable());
+    private void processResult(ExceptionResult result) {
+        super.logException(result.exception());
         super.enableUi(pnlRoot);
     }
 
-    private void processResult(ChecksumComparisonService.Result.Problem result) {
-        super.showMessageDialog("Hash Tools", "Problem", result.problem());
+    private void processResult(ProblemResult result) {
+        super.showMessageDialog("Hash Tools", "Problem", result.description());
         super.enableUi(pnlRoot);
     }
 
-    private void processResult(ChecksumComparisonService.Result.Success result) {
-        double equality = result
-            .result()
-            .calculateEquality();
-
+    private void processResult(ChecksumComparisonResult result) {
+        double equality = result.calculateEquality();
         prgEquality.setProgress(equality);
         enableUi(pnlRoot);
     }

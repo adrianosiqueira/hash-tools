@@ -2,6 +2,9 @@ package hashtools.controller;
 
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.result.ChecksumGenerationResult;
+import hashtools.domain.result.ExceptionResult;
+import hashtools.domain.result.ProblemResult;
 import hashtools.service.ChecksumGenerationService;
 import hashtools.strategy.algorithmsource.CheckBoxAlgorithmSource;
 import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
@@ -66,9 +69,9 @@ public class GeneratorController extends AbstractController {
 
             // Processing
             switch (generationService.generateChecksums(context)) {
-                case ChecksumGenerationService.Result.Exception exception -> this.processResult(exception);
-                case ChecksumGenerationService.Result.Problem problem -> this.processResult(problem);
-                case ChecksumGenerationService.Result.Success success -> this.processResult(success);
+                case ChecksumGenerationResult result -> this.processResult(result);
+                case ExceptionResult result -> this.processResult(result);
+                case ProblemResult result -> this.processResult(result);
             }
         }).start();
     }
@@ -101,26 +104,23 @@ public class GeneratorController extends AbstractController {
         return context;
     }
 
-    private void processResult(ChecksumGenerationService.Result.Exception result) {
-        super.logException(result.throwable());
+    private void processResult(ExceptionResult result) {
+        super.logException(result.exception());
         super.enableUi(pnlRoot);
     }
 
-    private void processResult(ChecksumGenerationService.Result.Problem result) {
-        super.showMessageDialog("Hash Tools", "Problem", result.problem());
+    private void processResult(ProblemResult result) {
+        super.showMessageDialog("Hash Tools", "Problem", result.description());
         super.enableUi(pnlRoot);
     }
 
-    private void processResult(ChecksumGenerationService.Result.Success result) {
+    private void processResult(ChecksumGenerationResult result) {
         super.openFile(
             "Select where to save the checksums",
             FileDialog::openForWriting,
             file -> {
-                String content = result
-                    .result()
-                    .formatForSaving();
-
                 try {
+                    String content = result.formatForSaving();
                     file.replaceContent(content);
                 } catch (IOException e) {
                     super.logException(e);

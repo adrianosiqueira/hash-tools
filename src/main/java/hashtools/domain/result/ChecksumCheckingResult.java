@@ -1,11 +1,12 @@
 package hashtools.domain.result;
 
 import hashtools.domain.checksum.CheckerChecksum;
+import hashtools.service.ChecksumCheckingService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChecksumCheckingResult {
+public final class ChecksumCheckingResult implements ChecksumCheckingService.Result {
 
     private List<CheckerChecksum> checksums;
 
@@ -31,11 +32,5 @@ public class ChecksumCheckingResult {
             .filter(CheckerChecksum::matches)
             .count()
             / checksums.size();
-    }
-
-
-
-    public List<CheckerChecksum> getChecksums() {
-        return checksums;
     }
 }
