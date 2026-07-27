@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 public record EnhancedFile(
@@ -16,14 +15,6 @@ public record EnhancedFile(
 
     public static EnhancedFile createFromFilePath(String filePath) {
         Path path = Paths.get(filePath);
-        return new EnhancedFile(path);
-    }
-
-    public static EnhancedFile createFromFileReference(AtomicReference<File> fileReference) {
-        Path path = fileReference
-            .get()
-            .toPath();
-
         return new EnhancedFile(path);
     }
 
