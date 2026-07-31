@@ -10,8 +10,8 @@ public class ComparatorChecksum {
 
 
     public ComparatorChecksum() {
-        this.checksum1 = new Checksum();
-        this.checksum2 = new Checksum();
+        this.checksum1 = Checksum.createEmpty();
+        this.checksum2 = Checksum.createEmpty();
     }
 
 

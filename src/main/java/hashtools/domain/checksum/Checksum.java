@@ -11,26 +11,24 @@ public class Checksum {
 
 
 
-    public Checksum() {
-        this("");
-    }
-
-    public Checksum(String hash) {
-        this.hash = Objects.requireNonNull(hash);
-
-        this.algorithm = Algorithm
-            .getByLength(hash)
-            .orElse(null);
+    private Checksum() {
     }
 
 
 
     public static Checksum createEmpty() {
-        return new Checksum("");
+        return Checksum.createFromHash("");
     }
 
     public static Checksum createFromHash(String hash) {
-        return new Checksum(hash);
+        Checksum checksum = new Checksum();
+        checksum.hash = Objects.requireNonNull(hash);
+
+        checksum.algorithm = Algorithm
+            .getByLength(hash)
+            .orElse(null);
+
+        return checksum;
     }
 
 

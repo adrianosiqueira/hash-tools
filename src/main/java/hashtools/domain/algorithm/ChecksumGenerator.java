@@ -51,6 +51,6 @@ public record ChecksumGenerator(
             .map("%02x"::formatted)
             .collect(Collectors.joining());
 
-        return new Checksum(hash);
+        return Checksum.createFromHash(hash);
     }
 }

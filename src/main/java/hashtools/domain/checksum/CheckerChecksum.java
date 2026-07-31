@@ -10,8 +10,8 @@ public class CheckerChecksum {
 
 
     public CheckerChecksum() {
-        this.official = new Checksum();
-        this.generated = new Checksum();
+        this.official = Checksum.createEmpty();
+        this.generated = Checksum.createEmpty();
     }
 
 
