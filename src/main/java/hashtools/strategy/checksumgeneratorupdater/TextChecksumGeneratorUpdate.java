@@ -26,8 +26,4 @@ public class TextChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
 
         return new Result.Success();
     }
-
-    @Override
-    public void cancelChecksumGeneratorsUpdate() {
-    }
 }
