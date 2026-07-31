@@ -21,8 +21,7 @@ public class TextChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
         byte[] bytes = text.getBytes();
 
         generators.forEach(generator -> generator.receiveBytes(
-            bytes,
-            bytes.length
+            bytes
         ));
 
         return new Result.Success();

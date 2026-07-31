@@ -34,6 +34,10 @@ public record ChecksumGenerator(
 
 
 
+    public void receiveBytes(byte[] buffer) {
+        this.receiveBytes(buffer, buffer.length);
+    }
+
     public void receiveBytes(byte[] buffer, int length) {
         messageDigest.update(buffer, BUFFER_OFFSET, length);
     }
