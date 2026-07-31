@@ -53,7 +53,7 @@ public record EnhancedFile(
         );
     }
 
-    public Stream<String> getLines() throws IOException {
+    public Stream<String> getLinesStream() throws IOException {
         return Files.lines(file);
     }
 

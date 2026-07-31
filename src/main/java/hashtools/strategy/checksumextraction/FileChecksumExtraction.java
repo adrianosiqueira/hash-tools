@@ -18,7 +18,7 @@ public record FileChecksumExtraction(
 
     @Override
     public Result extractOfficialChecksums() {
-        try (Stream<String> lines = file.getLines()) {
+        try (Stream<String> lines = file.getLinesStream()) {
             Collection<Checksum> checksums = lines
                 .map(line -> line.split(" ")[0])
                 .map(Checksum::createFromHash)
