@@ -1,8 +1,16 @@
 package hashtools.strategy.inputidentification;
 
-public record InputTextIdentification(
-    String text
-) implements InputIdentification {
+public class InputTextIdentification implements InputIdentification {
+
+    private String text;
+
+
+
+    public InputTextIdentification(String text) {
+        this.text = text;
+    }
+
+
 
     @Override
     public String getIdentification() {

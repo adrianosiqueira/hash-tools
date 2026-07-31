@@ -9,28 +9,39 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.stream.Stream;
 
-public record EnhancedFile(
-    Path file
-) {
+public class EnhancedFile {
+
+    private Path path;
+
+
+
+    private EnhancedFile() {
+    }
+
+
 
     public static EnhancedFile createFromFilePath(String filePath) {
-        Path path = Paths.get(filePath);
-        return new EnhancedFile(path);
+        EnhancedFile enhancedFile = new EnhancedFile();
+        enhancedFile.path = Paths.get(filePath);
+
+        return enhancedFile;
     }
 
     public static EnhancedFile createFromFile(File file) {
-        Path path = file.toPath();
-        return new EnhancedFile(path);
+        EnhancedFile enhancedFile = new EnhancedFile();
+        enhancedFile.path = file.toPath();
+
+        return enhancedFile;
     }
 
 
 
     public boolean exists() {
-        return Files.exists(file);
+        return Files.exists(path);
     }
 
     public boolean isRegularFile() {
-        return Files.isRegularFile(file);
+        return Files.isRegularFile(path);
     }
 
     public boolean hasFileExtension(FileExtension extension) {
@@ -39,14 +50,14 @@ public record EnhancedFile(
     }
 
     public String getAbsolutePath() {
-        return file
+        return path
             .toAbsolutePath()
             .toString();
     }
 
     public void replaceContent(String content) throws IOException {
         Files.writeString(
-            file,
+            path,
             content,
             StandardOpenOption.CREATE,
             StandardOpenOption.TRUNCATE_EXISTING
@@ -54,17 +65,17 @@ public record EnhancedFile(
     }
 
     public Stream<String> getLinesStream() throws IOException {
-        return Files.lines(file);
+        return Files.lines(path);
     }
 
     public InputStream getInputStream() throws IOException {
-        return Files.newInputStream(file);
+        return Files.newInputStream(path);
     }
 
 
 
     private String getFileExtension() {
-        String filePath = file
+        String filePath = path
             .getFileName()
             .toString();
 

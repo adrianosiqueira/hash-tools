@@ -2,7 +2,7 @@ package hashtools.strategy.threadfactory;
 
 import java.util.concurrent.ThreadFactory;
 
-public record VirtualThreadFactory() implements ThreadFactory {
+public class VirtualThreadFactory implements ThreadFactory {
 
     @Override
     public Thread newThread(Runnable runnable) {

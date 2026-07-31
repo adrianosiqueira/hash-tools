@@ -4,12 +4,14 @@ import hashtools.domain.file.EnhancedFile;
 
 import java.util.Optional;
 
-public record InputFileProblemDetection(
-    EnhancedFile file
-) implements ProblemDetection {
+public class InputFileProblemDetection implements ProblemDetection {
+
+    private EnhancedFile file;
+
+
 
     public InputFileProblemDetection(String filePath) {
-        this(EnhancedFile.createFromFilePath(filePath));
+        this.file = EnhancedFile.createFromFilePath(filePath);
     }
 
 

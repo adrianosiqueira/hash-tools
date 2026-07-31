@@ -1,6 +1,12 @@
 package hashtools.strategy.problemdetection;
 
-public record InputTextProblemDetection(
-    String text
-) implements ProblemDetection {
+public class InputTextProblemDetection implements ProblemDetection {
+
+    private String text;
+
+
+
+    public InputTextProblemDetection(String text) {
+        this.text = text;
+    }
 }

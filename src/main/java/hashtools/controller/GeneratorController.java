@@ -105,12 +105,12 @@ public class GeneratorController extends AbstractController {
     }
 
     private void processResult(ExceptionResult result) {
-        super.logException(result.exception());
+        result.consumeException(super::logException);
         super.enableUi(pnlRoot);
     }
 
     private void processResult(ProblemResult result) {
-        super.showMessageDialog("Hash Tools", "Problem", result.description());
+        super.showMessageDialog("Hash Tools", "Problem", result.getDescription());
         super.enableUi(pnlRoot);
     }
 

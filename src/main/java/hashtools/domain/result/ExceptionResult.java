@@ -4,12 +4,24 @@ import hashtools.service.ChecksumCheckingService;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.service.ChecksumGenerationService;
 
-public record ExceptionResult(
-    Exception exception
-) implements ChecksumCheckingService.Result, ChecksumComparisonService.Result, ChecksumGenerationService.Result {
+import java.util.Objects;
+import java.util.function.Consumer;
 
-    @SuppressWarnings("CallToPrintStackTrace")
-    public void printStackTrace() {
-        exception.printStackTrace();
+public final class ExceptionResult implements ChecksumCheckingService.Result, ChecksumComparisonService.Result, ChecksumGenerationService.Result {
+
+    private Exception exception;
+
+
+
+    public ExceptionResult(Exception exception) {
+        this.exception = exception;
+    }
+
+
+
+    public void consumeException(Consumer<Exception> consumer) {
+        Objects
+            .requireNonNull(consumer)
+            .accept(exception);
     }
 }

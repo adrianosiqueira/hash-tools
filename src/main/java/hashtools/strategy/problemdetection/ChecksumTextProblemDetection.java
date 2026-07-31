@@ -1,6 +1,12 @@
 package hashtools.strategy.problemdetection;
 
-public record ChecksumTextProblemDetection(
-    String text
-) implements ProblemDetection {
+public class ChecksumTextProblemDetection implements ProblemDetection {
+
+    private String text;
+
+
+
+    public ChecksumTextProblemDetection(String text) {
+        this.text = text;
+    }
 }

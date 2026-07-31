@@ -7,20 +7,29 @@ import java.security.NoSuchAlgorithmException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public record ChecksumGenerator(
-    MessageDigest messageDigest
-) {
+public class ChecksumGenerator {
 
     private static final int BUFFER_OFFSET = 0;
+
+
+
+    private MessageDigest messageDigest;
+
+
+
+    private ChecksumGenerator() {
+    }
 
 
 
     public static ChecksumGenerator createFromAlgorithm(Algorithm algorithm) {
         try {
             String name = algorithm.name();
-            MessageDigest messageDigest = MessageDigest.getInstance(name);
 
-            return new ChecksumGenerator(messageDigest);
+            ChecksumGenerator generator = new ChecksumGenerator();
+            generator.messageDigest = MessageDigest.getInstance(name);
+
+            return generator;
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -35,11 +44,18 @@ public record ChecksumGenerator(
 
 
     public void receiveBytes(byte[] buffer) {
-        this.receiveBytes(buffer, buffer.length);
+        this.receiveBytes(
+            buffer,
+            buffer.length
+        );
     }
 
     public void receiveBytes(byte[] buffer, int length) {
-        messageDigest.update(buffer, BUFFER_OFFSET, length);
+        messageDigest.update(
+            buffer,
+            BUFFER_OFFSET,
+            length
+        );
     }
 
     public Checksum decodeIntoChecksum() {
