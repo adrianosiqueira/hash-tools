@@ -1,7 +1,5 @@
 package hashtools.domain.algorithm;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -61,17 +59,6 @@ public enum Algorithm {
             .of(Algorithm.values())
             .sorted(Comparator.comparing(Algorithm::getLength))
             .toList();
-    }
-
-
-
-    public ChecksumGenerator createMessageDigestProxy() {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance(this.getName());
-            return new ChecksumGenerator(messageDigest);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

@@ -1,7 +1,6 @@
 package hashtools.domain.checksum;
 
 import hashtools.domain.algorithm.Algorithm;
-import hashtools.domain.algorithm.ChecksumGenerator;
 
 import java.util.Objects;
 
@@ -45,12 +44,6 @@ public class Checksum {
             && this.hash.equalsIgnoreCase(checksum.hash)
             && this.algorithm == checksum.algorithm;
     }
-
-    public ChecksumGenerator createMessageDigestProxy() {
-        return algorithm.createMessageDigestProxy();
-    }
-
-
 
     public String getHash() {
         return hash;
