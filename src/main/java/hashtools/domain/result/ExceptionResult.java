@@ -3,11 +3,12 @@ package hashtools.domain.result;
 import hashtools.service.ChecksumCheckingService;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.service.ChecksumGenerationService;
+import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public final class ExceptionResult implements ChecksumCheckingService.Result, ChecksumComparisonService.Result, ChecksumGenerationService.Result {
+public final class ExceptionResult implements ChecksumCheckingService.Result, ChecksumComparisonService.Result, ChecksumGenerationService.Result, ChecksumGeneratorUpdate.Result {
 
     private Exception exception;
 

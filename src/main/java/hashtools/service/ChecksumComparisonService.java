@@ -11,7 +11,6 @@ import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
@@ -72,8 +71,8 @@ public class ChecksumComparisonService {
 
             ChecksumGeneratorUpdate.Result updateResult = updater.apply(generators);
 
-            if (updateResult instanceof ChecksumGeneratorUpdate.Result.Failure(Exception exception)) {
-                throw new CompletionException(exception);
+            if (updateResult instanceof ExceptionResult result) {
+                result.throwAsRuntimeException();
             }
 
 

@@ -2,6 +2,7 @@ package hashtools.service;
 
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.context.ChecksumGenerationContext;
+import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.domain.result.ExceptionResult;
 import hashtools.domain.result.ProblemResult;
@@ -39,8 +40,14 @@ public class ChecksumGenerationService {
         // Processing
         ChecksumGeneratorUpdate.Result updateResult = context.updateChecksumGenerators(generators);
 
-        if (updateResult instanceof ChecksumGeneratorUpdate.Result.Failure(Exception exception)) {
-            return new ExceptionResult(exception);
+        switch (updateResult) {
+            case CanceledResult result -> {
+                return result;
+            }
+            case ExceptionResult result -> {
+                return result;
+            }
+            default -> {}
         }
 
 
@@ -63,5 +70,5 @@ public class ChecksumGenerationService {
 
 
 
-    public sealed interface Result permits ExceptionResult, ProblemResult, ChecksumGenerationResult {}
+    public sealed interface Result permits CanceledResult, ExceptionResult, ProblemResult, ChecksumGenerationResult {}
 }

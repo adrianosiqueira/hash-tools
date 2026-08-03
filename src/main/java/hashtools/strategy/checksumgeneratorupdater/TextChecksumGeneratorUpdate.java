@@ -24,6 +24,6 @@ public class TextChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
             bytes
         ));
 
-        return new Result.Success();
+        return new SuccessResult();
     }
 }

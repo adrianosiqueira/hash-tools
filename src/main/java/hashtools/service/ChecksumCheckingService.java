@@ -57,8 +57,8 @@ public class ChecksumCheckingService {
         // Processing
         ChecksumGeneratorUpdate.Result updateResult = context.updateChecksumGenerators(generators);
 
-        if (updateResult instanceof ChecksumGeneratorUpdate.Result.Failure(Exception exception)) {
-            return new ExceptionResult(exception);
+        if (updateResult instanceof ExceptionResult result) {
+            return result;
         }
 
 

@@ -2,6 +2,8 @@ package hashtools.strategy.checksumgeneratorupdater;
 
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.file.EnhancedFile;
+import hashtools.domain.result.CanceledResult;
+import hashtools.domain.result.ExceptionResult;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,13 +38,15 @@ public class FileChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
         this.buffer = new byte[ONE_MEBIBYTE];
 
         try (InputStream stream = file.getInputStream()) {
-            while (!this.isCanceled() && this.readFile(stream)) {
+            while (this.isNotCanceled() && this.readFile(stream)) {
                 this.updateAllGenerators();
             }
 
-            return new Result.Success();
+            return this.isCanceled()
+                ? new CanceledResult()
+                : new SuccessResult();
         } catch (IOException e) {
-            return new Result.Failure(e);
+            return new ExceptionResult(e);
         }
     }
 
@@ -60,6 +64,10 @@ public class FileChecksumGeneratorUpdate implements ChecksumGeneratorUpdate {
 
     private boolean isCanceled() {
         return canceled;
+    }
+
+    private boolean isNotCanceled() {
+        return !canceled;
     }
 
     private void updateAllGenerators() {
