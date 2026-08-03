@@ -25,4 +25,8 @@ public final class ExceptionResult implements ChecksumCheckingService.Result, Ch
             .requireNonNull(consumer)
             .accept(exception);
     }
+
+    public void throwAsRuntimeException() throws RuntimeException {
+        throw new RuntimeException(exception);
+    }
 }
