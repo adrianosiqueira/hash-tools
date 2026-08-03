@@ -48,6 +48,11 @@ public class GeneratorController extends AbstractController {
 
 
     @Override
+    public void close() {
+        generationService.cancelChecksumGeneration();
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.generationService = new ChecksumGenerationService();
         this.threadFactory = new VirtualThreadFactory();
