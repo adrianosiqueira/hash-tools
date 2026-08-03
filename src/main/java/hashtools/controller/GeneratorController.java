@@ -2,6 +2,7 @@ package hashtools.controller;
 
 import hashtools.domain.context.ChecksumGenerationContext;
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.domain.result.ExceptionResult;
 import hashtools.domain.result.ProblemResult;
@@ -69,6 +70,7 @@ public class GeneratorController extends AbstractController {
 
             // Processing
             switch (generationService.generateChecksums(context)) {
+                case CanceledResult _ -> {}
                 case ChecksumGenerationResult result -> this.processResult(result);
                 case ExceptionResult result -> this.processResult(result);
                 case ProblemResult result -> this.processResult(result);
