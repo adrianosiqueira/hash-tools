@@ -6,9 +6,10 @@ import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.domain.result.ExceptionResult;
 import hashtools.domain.result.ProblemResult;
-import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
+import hashtools.strategy.inputsource.InputSource;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class ChecksumGenerationService {
 
@@ -38,7 +39,7 @@ public class ChecksumGenerationService {
 
 
         // Processing
-        ChecksumGeneratorUpdate.Result updateResult = context.updateChecksumGenerators(generators);
+        InputSource.Result updateResult = context.updateChecksumGenerators(generators);
 
         switch (updateResult) {
             case CanceledResult result -> {
@@ -65,7 +66,9 @@ public class ChecksumGenerationService {
     }
 
     public void cancelChecksumGeneration() {
-        context.cancelChecksumGeneratorsUpdate();
+        Optional
+            .ofNullable(context)
+            .ifPresent(ChecksumGenerationContext::cancelChecksumGeneratorsUpdate);
     }
 
 

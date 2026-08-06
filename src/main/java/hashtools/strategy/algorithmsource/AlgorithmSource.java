@@ -2,16 +2,16 @@ package hashtools.strategy.algorithmsource;
 
 import hashtools.domain.algorithm.Algorithm;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface AlgorithmSource {
 
-    default List<Algorithm> getAlgorithms() {
+    default Collection<Algorithm> getAlgorithms() {
         return List.of();
     }
 
-    @Deprecated(forRemoval = true)
     default Optional<String> detectProblem() {
         return Optional.empty();
     }

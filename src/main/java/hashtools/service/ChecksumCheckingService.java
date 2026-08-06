@@ -4,11 +4,12 @@ import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.checksum.CheckerChecksum;
 import hashtools.domain.checksum.Checksum;
 import hashtools.domain.context.ChecksumCheckingContext;
+import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumCheckingResult;
 import hashtools.domain.result.ExceptionResult;
 import hashtools.domain.result.ProblemResult;
-import hashtools.strategy.checksumextraction.ChecksumExtraction;
-import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
+import hashtools.strategy.checksumsource.ChecksumSource;
+import hashtools.strategy.inputsource.InputSource;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,30 +36,43 @@ public class ChecksumCheckingService {
 
 
         // Data getting
-        ChecksumExtraction.Result extractionResult = context.extractOfficialChecksums();
+        ChecksumSource.Result extractionResult = context.extractOfficialChecksums();
 
-        if (extractionResult instanceof ChecksumExtraction.Result.Failure(Exception exception)) {
-            return new ExceptionResult(exception);
+        switch (extractionResult) {
+            case CanceledResult result -> {
+                return result;
+            }
+            case ExceptionResult result -> {
+                return result;
+            }
+            default -> {}
         }
 
-        Collection<ChecksumWithGeneratorMap> checksumsMap = ((ChecksumExtraction.Result.Success) extractionResult)
-            .checksums()
-            .stream()
+
+
+        Collection<ChecksumWithGeneratorMap> checksumsMap = ((ChecksumSource.SuccessResult) extractionResult)
+            .getChecksumsStream()
             .map(ChecksumWithGeneratorMap::createFromChecksum)
             .toList();
 
         List<ChecksumGenerator> generators = checksumsMap
             .stream()
-            .map(ChecksumWithGeneratorMap::generator)
+            .map(ChecksumWithGeneratorMap::getChecksumGenerator)
             .toList();
 
 
 
         // Processing
-        ChecksumGeneratorUpdate.Result updateResult = context.updateChecksumGenerators(generators);
+        InputSource.Result updateResult = context.updateChecksumGenerators(generators);
 
-        if (updateResult instanceof ExceptionResult result) {
-            return result;
+        switch (updateResult) {
+            case CanceledResult result -> {
+                return result;
+            }
+            case ExceptionResult result -> {
+                return result;
+            }
+            default -> {}
         }
 
 
@@ -76,24 +90,33 @@ public class ChecksumCheckingService {
 
     public void cancelChecksumChecking() {
         context.cancelChecksumGeneratorsUpdate();
+        context.cancelChecksumExtraction();
     }
 
 
 
-    public sealed interface Result permits ExceptionResult, ProblemResult, ChecksumCheckingResult {}
+    public sealed interface Result permits CanceledResult, ExceptionResult, ProblemResult, ChecksumCheckingResult {}
 
 
 
-    public record ChecksumWithGeneratorMap(
-        Checksum checksum,
-        ChecksumGenerator generator
-    ) {
+    private static class ChecksumWithGeneratorMap {
+
+        private Checksum checksum;
+        private ChecksumGenerator generator;
+
+
+
+        private ChecksumWithGeneratorMap() {
+        }
+
+
 
         public static ChecksumWithGeneratorMap createFromChecksum(Checksum checksum) {
-            return new ChecksumWithGeneratorMap(
-                checksum,
-                ChecksumGenerator.createFromChecksum(checksum)
-            );
+            ChecksumWithGeneratorMap map = new ChecksumWithGeneratorMap();
+            map.checksum = checksum;
+            map.generator = ChecksumGenerator.createFromChecksum(checksum);
+
+            return map;
         }
 
 
@@ -103,6 +126,10 @@ public class ChecksumCheckingService {
             checkerChecksum.setOfficial(checksum);
             checkerChecksum.setGenerated(generator.decodeIntoChecksum());
             return checkerChecksum;
+        }
+
+        public ChecksumGenerator getChecksumGenerator() {
+            return generator;
         }
     }
 }

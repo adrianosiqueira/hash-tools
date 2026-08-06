@@ -3,7 +3,9 @@ package hashtools.strategy.algorithmsource;
 import hashtools.domain.algorithm.Algorithm;
 import javafx.scene.control.ComboBox;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class ComboBoxAlgorithmSource implements AlgorithmSource {
 
@@ -18,7 +20,16 @@ public class ComboBoxAlgorithmSource implements AlgorithmSource {
 
 
     @Override
-    public List<Algorithm> getAlgorithms() {
+    public Collection<Algorithm> getAlgorithms() {
         return List.of(comboBox.getValue());
+    }
+
+    @Override
+    public Optional<String> detectProblem() {
+        if (comboBox == null) {
+            return Optional.of("The combobox is null");
+        } else {
+            return Optional.empty();
+        }
     }
 }

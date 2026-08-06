@@ -4,7 +4,7 @@ import hashtools.domain.algorithm.Algorithm;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 public class CheckBoxAlgorithmSource implements AlgorithmSource {
@@ -20,7 +20,7 @@ public class CheckBoxAlgorithmSource implements AlgorithmSource {
 
 
     @Override
-    public List<Algorithm> getAlgorithms() {
+    public Collection<Algorithm> getAlgorithms() {
         return pane
             .getChildren()
             .stream()
@@ -36,12 +36,10 @@ public class CheckBoxAlgorithmSource implements AlgorithmSource {
 
     @Override
     public Optional<String> detectProblem() {
-        List<Algorithm> algorithms = this.getAlgorithms();
-
-        if (algorithms.isEmpty()) {
-            return Optional.of("There is no algorithms selected");
+        if (pane == null) {
+            return Optional.of("The pane is null");
+        } else {
+            return Optional.empty();
         }
-
-        return Optional.empty();
     }
 }

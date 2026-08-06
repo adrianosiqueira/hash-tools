@@ -4,11 +4,20 @@ import hashtools.service.ChecksumCheckingService;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.service.ChecksumGenerationService;
 import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
+import hashtools.strategy.checksumsource.ChecksumSource;
+import hashtools.strategy.inputsource.InputSource;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public final class ExceptionResult implements ChecksumCheckingService.Result, ChecksumComparisonService.Result, ChecksumGenerationService.Result, ChecksumGeneratorUpdate.Result {
+public final class ExceptionResult
+    implements
+    ChecksumCheckingService.Result,
+    ChecksumComparisonService.Result,
+    ChecksumGenerationService.Result,
+    ChecksumGeneratorUpdate.Result,
+    ChecksumSource.Result,
+    InputSource.Result {
 
     private Exception exception;
 

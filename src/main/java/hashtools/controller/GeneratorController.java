@@ -8,12 +8,9 @@ import hashtools.domain.result.ExceptionResult;
 import hashtools.domain.result.ProblemResult;
 import hashtools.service.ChecksumGenerationService;
 import hashtools.strategy.algorithmsource.CheckBoxAlgorithmSource;
-import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
-import hashtools.strategy.checksumgeneratorupdater.TextChecksumGeneratorUpdate;
-import hashtools.strategy.inputidentification.InputFileIdentification;
-import hashtools.strategy.inputidentification.InputTextIdentification;
-import hashtools.strategy.problemdetection.InputFileProblemDetection;
-import hashtools.strategy.problemdetection.InputTextProblemDetection;
+import hashtools.strategy.inputsource.FileInputSource;
+import hashtools.strategy.inputsource.InputSource;
+import hashtools.strategy.inputsource.TextInputSource;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -95,18 +92,15 @@ public class GeneratorController extends AbstractController {
 
 
     private ChecksumGenerationContext createGenerationContext() {
+        InputSource inputSource = chkInput.isSelected()
+            ? new FileInputSource(txtInput.getText())
+            : new TextInputSource(txtInput.getText());
+
+
+
         ChecksumGenerationContext context = new ChecksumGenerationContext();
         context.setAlgorithmSource(new CheckBoxAlgorithmSource(pnlAlgorithm));
-
-        if (chkInput.isSelected()) {
-            context.setInputIdentification(new InputFileIdentification(txtInput.getText()));
-            context.setChecksumGeneratorUpdate(new FileChecksumGeneratorUpdate(txtInput.getText()));
-            context.setProblemDetection(new InputFileProblemDetection(txtInput.getText()));
-        } else {
-            context.setInputIdentification(new InputTextIdentification(txtInput.getText()));
-            context.setChecksumGeneratorUpdate(new TextChecksumGeneratorUpdate(txtInput.getText()));
-            context.setProblemDetection(new InputTextProblemDetection(txtInput.getText()));
-        }
+        context.setInputSource(inputSource);
 
         return context;
     }

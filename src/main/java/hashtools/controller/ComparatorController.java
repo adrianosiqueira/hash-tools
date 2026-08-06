@@ -3,17 +3,15 @@ package hashtools.controller;
 import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.context.ChecksumComparisonContext;
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumComparisonResult;
 import hashtools.domain.result.ExceptionResult;
 import hashtools.domain.result.ProblemResult;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.strategy.algorithmsource.ComboBoxAlgorithmSource;
-import hashtools.strategy.checksumgeneratorupdater.FileChecksumGeneratorUpdate;
-import hashtools.strategy.checksumgeneratorupdater.TextChecksumGeneratorUpdate;
-import hashtools.strategy.inputidentification.InputFileIdentification;
-import hashtools.strategy.inputidentification.InputTextIdentification;
-import hashtools.strategy.problemdetection.InputFileProblemDetection;
-import hashtools.strategy.problemdetection.InputTextProblemDetection;
+import hashtools.strategy.inputsource.FileInputSource;
+import hashtools.strategy.inputsource.InputSource;
+import hashtools.strategy.inputsource.TextInputSource;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -82,6 +80,7 @@ public class ComparatorController extends AbstractController {
 
             // Processing
             switch (comparisonService.compareChecksums(context)) {
+                case CanceledResult _ -> {}
                 case ExceptionResult result -> this.processResult(result);
                 case ProblemResult result -> this.processResult(result);
                 case ChecksumComparisonResult result -> this.processResult(result);
@@ -151,28 +150,20 @@ public class ComparatorController extends AbstractController {
     }
 
     private ChecksumComparisonContext createComparisonContext() {
+        InputSource inputSource1 = chkInput1.isSelected()
+            ? new FileInputSource(txtInput1.getText())
+            : new TextInputSource(txtInput1.getText());
+
+        InputSource inputSource2 = chkInput2.isSelected()
+            ? new FileInputSource(txtInput2.getText())
+            : new TextInputSource(txtInput2.getText());
+
+
+
         ChecksumComparisonContext context = new ChecksumComparisonContext();
+        context.setInputSource1(inputSource1);
+        context.setInputSource2(inputSource2);
         context.setAlgorithmSource(new ComboBoxAlgorithmSource(cmbAlgorithm));
-
-        if (chkInput1.isSelected()) {
-            context.setInputIdentification1(new InputFileIdentification(txtInput1.getText()));
-            context.setChecksumGeneratorUpdate1(new FileChecksumGeneratorUpdate(txtInput1.getText()));
-            context.setProblemDetection1(new InputFileProblemDetection(txtInput1.getText()));
-        } else {
-            context.setInputIdentification1(new InputTextIdentification(txtInput1.getText()));
-            context.setChecksumGeneratorUpdate1(new TextChecksumGeneratorUpdate(txtInput1.getText()));
-            context.setProblemDetection1(new InputTextProblemDetection(txtInput1.getText()));
-        }
-
-        if (chkInput2.isSelected()) {
-            context.setInputIdentification2(new InputFileIdentification(txtInput2.getText()));
-            context.setChecksumGeneratorUpdate2(new FileChecksumGeneratorUpdate(txtInput2.getText()));
-            context.setProblemDetection2(new InputFileProblemDetection(txtInput2.getText()));
-        } else {
-            context.setInputIdentification2(new InputTextIdentification(txtInput2.getText()));
-            context.setChecksumGeneratorUpdate2(new TextChecksumGeneratorUpdate(txtInput2.getText()));
-            context.setProblemDetection2(new InputTextProblemDetection(txtInput2.getText()));
-        }
 
         return context;
     }

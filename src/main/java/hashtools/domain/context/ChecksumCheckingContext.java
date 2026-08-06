@@ -1,10 +1,8 @@
 package hashtools.domain.context;
 
 import hashtools.domain.algorithm.ChecksumGenerator;
-import hashtools.strategy.checksumextraction.ChecksumExtraction;
-import hashtools.strategy.checksumgeneratorupdater.ChecksumGeneratorUpdate;
-import hashtools.strategy.inputidentification.InputIdentification;
-import hashtools.strategy.problemdetection.ProblemDetection;
+import hashtools.strategy.checksumsource.ChecksumSource;
+import hashtools.strategy.inputsource.InputSource;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -12,67 +10,45 @@ import java.util.Optional;
 
 public class ChecksumCheckingContext {
 
-    private InputIdentification inputIdentification;
-    private ChecksumGeneratorUpdate checksumGeneratorUpdate;
-    private ProblemDetection inputProblemDetection;
-
-    private ChecksumExtraction checksumExtraction;
-    private ProblemDetection checksumProblemDetection;
+    private InputSource inputSource;
+    private ChecksumSource checksumSource;
 
 
 
     public ChecksumCheckingContext() {
-        this.inputIdentification = new InputIdentification() {};
-        this.checksumGeneratorUpdate = new ChecksumGeneratorUpdate() {};
-        this.inputProblemDetection = new ProblemDetection() {};
-
-        this.checksumExtraction = new ChecksumExtraction() {};
-        this.checksumProblemDetection = new ProblemDetection() {};
+        this.inputSource = new InputSource() {};
+        this.checksumSource = new ChecksumSource() {};
     }
 
 
 
-    public String getIdentification() {
-        return inputIdentification.getIdentification();
-    }
-
-    public ChecksumGeneratorUpdate.Result updateChecksumGenerators(Collection<ChecksumGenerator> generators) {
-        return checksumGeneratorUpdate.updateChecksumGenerators(generators);
+    public InputSource.Result updateChecksumGenerators(Collection<ChecksumGenerator> generators) {
+        return inputSource.updateChecksumGenerators(generators);
     }
 
     public void cancelChecksumGeneratorsUpdate() {
-        checksumGeneratorUpdate.cancelChecksumGeneratorsUpdate();
+        inputSource.cancelChecksumGeneratorsUpdate();
     }
 
     public Optional<String> detectProblem() {
-        return inputProblemDetection
+        return inputSource
             .detectProblem()
-            .or(checksumProblemDetection::detectProblem);
+            .or(checksumSource::detectProblem);
     }
 
-    public ChecksumExtraction.Result extractOfficialChecksums() {
-        return checksumExtraction.extractOfficialChecksums();
+    public ChecksumSource.Result extractOfficialChecksums() {
+        return checksumSource.extractOfficialChecksums();
     }
 
-
-
-    public void setInputIdentification(InputIdentification inputIdentification) {
-        this.inputIdentification = Objects.requireNonNull(inputIdentification);
+    public void cancelChecksumExtraction() {
+        checksumSource.cancelChecksumsExtraction();
     }
 
-    public void setChecksumGeneratorUpdate(ChecksumGeneratorUpdate checksumGeneratorUpdate) {
-        this.checksumGeneratorUpdate = Objects.requireNonNull(checksumGeneratorUpdate);
+    public void setInputSource(InputSource inputSource) {
+        this.inputSource = Objects.requireNonNull(inputSource);
     }
 
-    public void setInputProblemDetection(ProblemDetection inputProblemDetection) {
-        this.inputProblemDetection = Objects.requireNonNull(inputProblemDetection);
-    }
-
-    public void setChecksumExtraction(ChecksumExtraction checksumExtraction) {
-        this.checksumExtraction = Objects.requireNonNull(checksumExtraction);
-    }
-
-    public void setChecksumProblemDetection(ProblemDetection checksumProblemDetection) {
-        this.checksumProblemDetection = checksumProblemDetection;
+    public void setChecksumSource(ChecksumSource checksumSource) {
+        this.checksumSource = Objects.requireNonNull(checksumSource);
     }
 }
