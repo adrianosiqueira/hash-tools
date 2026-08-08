@@ -4,7 +4,11 @@ import hashtools.service.ChecksumCheckingService;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.service.ChecksumGenerationService;
 
-public final class ProblemResult implements ChecksumCheckingService.Result, ChecksumComparisonService.Result, ChecksumGenerationService.Result {
+public final class ProblemResult
+    implements
+    ChecksumCheckingService.Result,
+    ChecksumComparisonService.Result,
+    ChecksumGenerationService.Result {
 
     private String description;
 
