@@ -56,7 +56,7 @@ public class ApplicationService {
     }
 
     private void swapController(AbstractController controller) {
-        activeController.close();
+        activeController.stopAllServicesProcessing();
         activeController = controller;
     }
 }

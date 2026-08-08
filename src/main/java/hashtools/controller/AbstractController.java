@@ -16,14 +16,13 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class AbstractController implements AutoCloseable, Initializable {
-
-    @Override
-    public void close() {
-    }
+public abstract class AbstractController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+
+    public void stopAllServicesProcessing() {
     }
 
 
