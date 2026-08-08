@@ -46,7 +46,7 @@ public class ChecksumComparisonService {
 
         // Processing
         Future<InputSource.Result> futureResult1 = CompletableFuture.supplyAsync(() -> context.updateChecksumGenerators1(generators1));
-        Future<InputSource.Result> futureResult2 = CompletableFuture.supplyAsync(() -> context.updateChecksumGenerators1(generators2));
+        Future<InputSource.Result> futureResult2 = CompletableFuture.supplyAsync(() -> context.updateChecksumGenerators2(generators2));
 
 
 
