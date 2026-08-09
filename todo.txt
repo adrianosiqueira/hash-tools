@@ -1,7 +1,1 @@
-- rename parameter to context
-- refactor parameter to work like a context
-
-- refactor enhanced file into a file proxy
-
-- refactor algorithm to create a digest
-- refactor input source to update all algorithms at once
+- design a progress tracking system.

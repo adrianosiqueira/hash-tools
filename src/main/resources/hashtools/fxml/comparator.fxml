@@ -25,8 +25,8 @@
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
-        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
-        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
+        <RowConstraints valignment="CENTER" vgrow="NEVER"/>
+        <RowConstraints valignment="CENTER" vgrow="NEVER"/>
     </rowConstraints>
 
 
@@ -50,8 +50,8 @@
 
 
 
-    <Label GridPane.columnIndex="0" GridPane.rowIndex="3" text="Equality"/>
-    <Label GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" fx:id="lblEquality" maxWidth="1E6"/>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="5" text="Equality"/>
+    <Label GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" fx:id="lblEquality" maxWidth="1E6"/>
 
 
 
@@ -59,7 +59,7 @@
 
 
 
-    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="5" alignment="CENTER" spacing="20">
+    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="3" alignment="CENTER" spacing="20">
         <Button HBox.hgrow="NEVER" onAction="#performChecksumComparison" text="Execute"/>
         <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
     </HBox>

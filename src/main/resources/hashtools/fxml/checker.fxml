@@ -23,8 +23,8 @@
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
-        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
-        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
+        <RowConstraints valignment="CENTER" vgrow="NEVER"/>
+        <RowConstraints valignment="CENTER" vgrow="NEVER"/>
     </rowConstraints>
 
 
@@ -43,8 +43,10 @@
 
 
 
-    <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Reliability"/>
-    <Label GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="lblReliability" maxWidth="1E6"/>
+    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" alignment="CENTER" spacing="20">
+        <Button HBox.hgrow="NEVER" onAction="#performChecksumChecking" text="Execute"/>
+        <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
+    </HBox>
 
 
 
@@ -52,8 +54,6 @@
 
 
 
-    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="4" alignment="CENTER" spacing="20">
-        <Button HBox.hgrow="NEVER" onAction="#performChecksumChecking" text="Execute"/>
-        <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
-    </HBox>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="4" text="Reliability"/>
+    <Label GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4" fx:id="lblReliability" maxWidth="1E6"/>
 </GridPane>

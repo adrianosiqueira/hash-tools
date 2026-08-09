@@ -4,7 +4,6 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -22,7 +21,6 @@
     <rowConstraints>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="TOP" vgrow="ALWAYS"/>
-        <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
         <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
     </rowConstraints>
 
@@ -63,11 +61,7 @@
 
 
 
-    <Separator GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" maxWidth="1E6"/>
-
-
-
-    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="3" alignment="CENTER" spacing="20">
+    <HBox GridPane.columnIndex="0" GridPane.columnSpan="4" GridPane.rowIndex="2" alignment="CENTER" spacing="20">
         <Button HBox.hgrow="NEVER" onAction="#performChecksumGeneration" text="Execute"/>
         <ProgressBar HBox.hgrow="ALWAYS" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
     </HBox>
