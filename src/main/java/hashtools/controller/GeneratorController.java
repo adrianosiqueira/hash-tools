@@ -61,7 +61,7 @@ public class GeneratorController extends AbstractController {
     private void performChecksumGeneration() {
         threadFactory.newThread(() -> {
             // User feedback
-            disableUi(pnlRoot);
+            super.disableUi(pnlRoot);
 
 
 
@@ -77,6 +77,11 @@ public class GeneratorController extends AbstractController {
                 case ExceptionResult result -> this.processResult(result);
                 case ProblemResult result -> this.processResult(result);
             }
+
+
+
+            // User feedback
+            super.enableUi(pnlRoot);
         }).start();
     }
 
@@ -96,6 +101,8 @@ public class GeneratorController extends AbstractController {
             ? new FileInputSource(txtInput.getText())
             : new TextInputSource(txtInput.getText());
 
+        inputSource.setProgressTracking(this::trackProgress);
+
 
 
         ChecksumGenerationContext context = new ChecksumGenerationContext();
@@ -107,12 +114,10 @@ public class GeneratorController extends AbstractController {
 
     private void processResult(ExceptionResult result) {
         result.consumeException(super::logException);
-        super.enableUi(pnlRoot);
     }
 
     private void processResult(ProblemResult result) {
         super.showMessageDialog("Hash Tools", "Problem", result.getDescription());
-        super.enableUi(pnlRoot);
     }
 
     private void processResult(ChecksumGenerationResult result) {
@@ -128,7 +133,10 @@ public class GeneratorController extends AbstractController {
                 }
             }
         );
+    }
 
-        super.enableUi(pnlRoot);
+    @Override
+    protected void trackProgress(double progress) {
+        prgProgress.setProgress(progress);
     }
 }

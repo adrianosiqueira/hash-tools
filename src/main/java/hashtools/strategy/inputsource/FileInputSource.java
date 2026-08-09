@@ -8,7 +8,9 @@ import hashtools.domain.result.ExceptionResult;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class FileInputSource implements InputSource {
 
@@ -23,12 +25,14 @@ public class FileInputSource implements InputSource {
 
     private EnhancedFile file;
     private boolean canceled;
+    private Consumer<Double> progressTracking;
 
 
 
     public FileInputSource(String filePath) {
         this.file = EnhancedFile.createFromFilePath(filePath);
         this.canceled = false;
+        this.progressTracking = _ -> {};
     }
 
 
@@ -39,9 +43,17 @@ public class FileInputSource implements InputSource {
         this.buffer = new byte[ONE_MEBIBYTE];
 
         try (InputStream stream = file.getInputStream()) {
+            double requiredCycles = (double) file.getSizeInBytes() / buffer.length;
+            long runCycles = 0;
+
             while (this.isNotCanceled() && this.readFile(stream)) {
                 this.updateAllAlgorithms();
+
+                runCycles++;
+                progressTracking.accept(runCycles / requiredCycles);
             }
+
+            progressTracking.accept(1.0);
         } catch (Exception e) {
             return new ExceptionResult(e);
         }
@@ -70,6 +82,11 @@ public class FileInputSource implements InputSource {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void setProgressTracking(Consumer<Double> tracking) {
+        this.progressTracking = Objects.requireNonNull(tracking);
     }
 
 

@@ -4,16 +4,20 @@ import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.result.ExceptionResult;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class TextInputSource implements InputSource {
 
     private String text;
+    private Consumer<Double> progressTracking;
 
 
 
     public TextInputSource(String text) {
         this.text = text;
+        this.progressTracking = _ -> {};
     }
 
 
@@ -23,6 +27,7 @@ public class TextInputSource implements InputSource {
         try {
             byte[] bytes = text.getBytes();
             generators.forEach(messageDigest -> messageDigest.receiveBytes(bytes));
+            progressTracking.accept(1.0);
         } catch (Exception e) {
             return new ExceptionResult(e);
         }
@@ -42,5 +47,10 @@ public class TextInputSource implements InputSource {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public void setProgressTracking(Consumer<Double> tracking) {
+        this.progressTracking = Objects.requireNonNull(tracking);
     }
 }

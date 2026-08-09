@@ -165,6 +165,9 @@ public class ComparatorController extends AbstractController {
             ? new FileInputSource(txtInput2.getText())
             : new TextInputSource(txtInput2.getText());
 
+        inputSource1.setProgressTracking(this::trackProgress);
+        inputSource2.setProgressTracking(this::trackProgress);
+
 
 
         ChecksumComparisonContext context = new ChecksumComparisonContext();
@@ -196,5 +199,10 @@ public class ComparatorController extends AbstractController {
     @Override
     protected void cleanUi() {
         Platform.runLater(() -> lblEquality.setText(""));
+    }
+
+    @Override
+    synchronized protected void trackProgress(double progress) {
+        prgProgress.setProgress(progress);
     }
 }

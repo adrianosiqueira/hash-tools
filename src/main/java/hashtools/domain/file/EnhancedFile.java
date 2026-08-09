@@ -55,6 +55,10 @@ public class EnhancedFile {
             .toString();
     }
 
+    public long getSizeInBytes() throws IOException {
+        return Files.size(path);
+    }
+
     public void replaceContent(String content) throws IOException {
         Files.writeString(
             path,

@@ -84,7 +84,7 @@ public class CheckerController extends AbstractController {
 
 
             // User feedback
-            this.enableUi(pnlRoot);
+            super.enableUi(pnlRoot);
         }).start();
     }
 
@@ -117,6 +117,8 @@ public class CheckerController extends AbstractController {
             ? new FileChecksumSource(txtChecksum.getText())
             : new TextChecksumSource(txtChecksum.getText());
 
+        inputSource.setProgressTracking(this::trackProgress);
+
 
 
         ChecksumCheckingContext context = new ChecksumCheckingContext();
@@ -144,5 +146,10 @@ public class CheckerController extends AbstractController {
     @Override
     protected void cleanUi() {
         Platform.runLater(() -> lblReliability.setText(""));
+    }
+
+    @Override
+    protected void trackProgress(double progress) {
+        prgProgress.setProgress(progress);
     }
 }

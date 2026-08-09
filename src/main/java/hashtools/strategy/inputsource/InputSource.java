@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface InputSource {
 
@@ -34,6 +35,9 @@ public interface InputSource {
 
     @Deprecated(forRemoval = true)
     default void cancel() {
+    }
+
+    default void setProgressTracking(Consumer<Double> tracking) {
     }
 
 
