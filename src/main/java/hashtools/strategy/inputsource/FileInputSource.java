@@ -39,6 +39,12 @@ public class FileInputSource implements InputSource {
 
     @Override
     public Result updateChecksumGenerators(Collection<ChecksumGenerator> generators) {
+        if (generators.isEmpty()) {
+            return new CanceledResult();
+        }
+
+
+
         this.generators = generators;
         this.buffer = new byte[ONE_MEBIBYTE];
 

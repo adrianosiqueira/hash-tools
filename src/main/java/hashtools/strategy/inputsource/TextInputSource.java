@@ -1,6 +1,7 @@
 package hashtools.strategy.inputsource;
 
 import hashtools.domain.algorithm.ChecksumGenerator;
+import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ExceptionResult;
 
 import java.util.Collection;
@@ -24,6 +25,12 @@ public class TextInputSource implements InputSource {
 
     @Override
     public Result updateChecksumGenerators(Collection<ChecksumGenerator> generators) {
+        if (generators.isEmpty()) {
+            return new CanceledResult();
+        }
+
+
+
         try {
             byte[] bytes = text.getBytes();
             generators.forEach(messageDigest -> messageDigest.receiveBytes(bytes));
