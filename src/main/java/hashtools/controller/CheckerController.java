@@ -14,8 +14,10 @@ import hashtools.strategy.inputsource.FileInputSource;
 import hashtools.strategy.inputsource.InputSource;
 import hashtools.strategy.inputsource.TextInputSource;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -42,7 +44,7 @@ public class CheckerController extends AbstractController {
     @FXML
     private ProgressBar prgProgress;
     @FXML
-    private ProgressBar prgReliability;
+    private Label lblReliability;
 
     private ChecksumCheckingService checksumCheckingService;
     private ThreadFactory threadFactory;
@@ -62,7 +64,7 @@ public class CheckerController extends AbstractController {
         threadFactory.newThread(() -> {
             // User feedback
             super.disableUi(pnlRoot);
-            super.cleanUi();
+            this.cleanUi();
 
 
 
@@ -78,6 +80,11 @@ public class CheckerController extends AbstractController {
                 case ProblemResult result -> this.processResult(result);
                 case ChecksumCheckingResult result -> this.processResult(result);
             }
+
+
+
+            // User feedback
+            this.enableUi(pnlRoot);
         }).start();
     }
 
@@ -121,24 +128,21 @@ public class CheckerController extends AbstractController {
 
     private void processResult(ExceptionResult result) {
         result.consumeException(super::logException);
-        super.enableUi(pnlRoot);
     }
 
     private void processResult(ProblemResult result) {
         super.showMessageDialog("Hash Tools", "Problem", result.getDescription());
-        super.enableUi(pnlRoot);
     }
 
     private void processResult(ChecksumCheckingResult result) {
         double reliability = result.calculateReliability();
-        prgReliability.setProgress(reliability);
-        super.enableUi(pnlRoot);
+        Platform.runLater(() -> lblReliability.setText("%.0f %%".formatted(reliability)));
     }
 
 
 
     @Override
     protected void cleanUi() {
-        prgReliability.setProgress(0.0);
+        Platform.runLater(() -> lblReliability.setText(""));
     }
 }

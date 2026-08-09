@@ -44,7 +44,7 @@
 
 
     <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Reliability"/>
-    <ProgressBar GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="prgReliability" maxWidth="1E6" progress="0.0"/>
+    <Label GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="lblReliability" maxWidth="1E6"/>
 
 
 

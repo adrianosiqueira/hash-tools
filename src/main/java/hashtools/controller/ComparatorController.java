@@ -13,9 +13,11 @@ import hashtools.strategy.inputsource.FileInputSource;
 import hashtools.strategy.inputsource.InputSource;
 import hashtools.strategy.inputsource.TextInputSource;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
@@ -48,7 +50,7 @@ public class ComparatorController extends AbstractController {
     @FXML
     private ProgressBar prgProgress;
     @FXML
-    private ProgressBar prgEquality;
+    private Label lblEquality;
 
     private ChecksumComparisonService comparisonService;
     private ThreadFactory threadFactory;
@@ -69,7 +71,7 @@ public class ComparatorController extends AbstractController {
         threadFactory.newThread(() -> {
             // User feedback
             super.disableUi(pnlRoot);
-            super.cleanUi();
+            this.cleanUi();
 
 
 
@@ -85,6 +87,11 @@ public class ComparatorController extends AbstractController {
                 case ProblemResult result -> this.processResult(result);
                 case ChecksumComparisonResult result -> this.processResult(result);
             }
+
+
+
+            // User feedback
+            super.enableUi(pnlRoot);
         }).start();
     }
 
@@ -170,24 +177,24 @@ public class ComparatorController extends AbstractController {
 
     private void processResult(ExceptionResult result) {
         result.consumeException(super::logException);
-        super.enableUi(pnlRoot);
     }
 
     private void processResult(ProblemResult result) {
         super.showMessageDialog("Hash Tools", "Problem", result.getDescription());
-        super.enableUi(pnlRoot);
     }
 
     private void processResult(ChecksumComparisonResult result) {
-        double equality = result.calculateEquality();
-        prgEquality.setProgress(equality);
-        enableUi(pnlRoot);
+        String equality = result.matches()
+            ? "Matches"
+            : "Does not match";
+
+        Platform.runLater(() -> lblEquality.setText(equality));
     }
 
 
 
     @Override
     protected void cleanUi() {
-        prgEquality.setProgress(0.0);
+        Platform.runLater(() -> lblEquality.setText(""));
     }
 }

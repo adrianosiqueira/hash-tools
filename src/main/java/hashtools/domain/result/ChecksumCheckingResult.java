@@ -27,10 +27,11 @@ public final class ChecksumCheckingResult implements ChecksumCheckingService.Res
             return 0.0;
         }
 
-        return (double) checksums
+        return checksums
             .stream()
             .filter(CheckerChecksum::matches)
             .count()
+            * 100.0
             / checksums.size();
     }
 }

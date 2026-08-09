@@ -51,7 +51,7 @@
 
 
     <Label GridPane.columnIndex="0" GridPane.rowIndex="3" text="Equality"/>
-    <ProgressBar GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" fx:id="prgEquality" maxWidth="1E6" progress="0.0"/>
+    <Label GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3" fx:id="lblEquality" maxWidth="1E6"/>
 
 
 

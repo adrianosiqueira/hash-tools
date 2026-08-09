@@ -19,9 +19,7 @@ public final class ChecksumComparisonResult implements ChecksumComparisonService
         this.checksum = checksum;
     }
 
-    public double calculateEquality() {
-        return checksum.matches()
-            ? 1.0
-            : 0.0;
+    public boolean matches() {
+        return checksum.matches();
     }
 }
