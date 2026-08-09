@@ -89,8 +89,10 @@ public class ChecksumCheckingService {
     }
 
     public void cancelChecksumChecking() {
-        context.cancelChecksumGeneratorsUpdate();
-        context.cancelChecksumExtraction();
+        if (context != null) {
+            context.cancelChecksumGeneratorsUpdate();
+            context.cancelChecksumExtraction();
+        }
     }
 
 

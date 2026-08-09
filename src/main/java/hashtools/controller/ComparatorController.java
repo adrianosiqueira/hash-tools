@@ -64,6 +64,11 @@ public class ComparatorController extends AbstractController {
         this.setupAlgorithms();
     }
 
+    @Override
+    public void stopAllServicesProcessing() {
+        comparisonService.cancelChecksumsComparison();
+    }
+
 
 
     @FXML

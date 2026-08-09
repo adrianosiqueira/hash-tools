@@ -86,7 +86,9 @@ public class ChecksumComparisonService {
     }
 
     public void cancelChecksumsComparison() {
-        context.cancelChecksumGeneratorsUpdate();
+        if (context != null) {
+            context.cancelChecksumGeneratorsUpdate();
+        }
     }
 
 

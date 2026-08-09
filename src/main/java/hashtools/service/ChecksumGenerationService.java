@@ -9,7 +9,6 @@ import hashtools.domain.result.ProblemResult;
 import hashtools.strategy.inputsource.InputSource;
 
 import java.util.Collection;
-import java.util.Optional;
 
 public class ChecksumGenerationService {
 
@@ -66,9 +65,9 @@ public class ChecksumGenerationService {
     }
 
     public void cancelChecksumGeneration() {
-        Optional
-            .ofNullable(context)
-            .ifPresent(ChecksumGenerationContext::cancelChecksumGeneratorsUpdate);
+        if (context != null) {
+            context.cancelChecksumGeneratorsUpdate();
+        }
     }
 
 

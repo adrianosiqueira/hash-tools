@@ -57,6 +57,11 @@ public class CheckerController extends AbstractController {
         this.threadFactory = new VirtualThreadFactory();
     }
 
+    @Override
+    public void stopAllServicesProcessing() {
+        checksumCheckingService.cancelChecksumChecking();
+    }
+
 
 
     @FXML
