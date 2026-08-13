@@ -94,6 +94,36 @@ public class GeneratorController extends AbstractController {
         );
     }
 
+    @FXML
+    private void selectAllAlgorithms() {
+        pnlAlgorithm
+            .getChildren()
+            .stream()
+            .filter(CheckBox.class::isInstance)
+            .map(CheckBox.class::cast)
+            .forEach(checkBox -> checkBox.setSelected(true));
+    }
+
+    @FXML
+    private void selectNoAlgorithms() {
+        pnlAlgorithm
+            .getChildren()
+            .stream()
+            .filter(CheckBox.class::isInstance)
+            .map(CheckBox.class::cast)
+            .forEach(checkBox -> checkBox.setSelected(false));
+    }
+
+    @FXML
+    private void invertAlgorithmsSelection() {
+        pnlAlgorithm
+            .getChildren()
+            .stream()
+            .filter(CheckBox.class::isInstance)
+            .map(CheckBox.class::cast)
+            .forEach(checkBox -> checkBox.setSelected(!checkBox.isSelected()));
+    }
+
 
 
     private ChecksumGenerationContext createGenerationContext() {
