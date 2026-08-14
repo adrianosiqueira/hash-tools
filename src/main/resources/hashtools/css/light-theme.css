@@ -1,0 +1,200 @@
+* {
+    FIRST_LAYER_BACKGROUND: linear-gradient(to bottom, rgb(255, 200, 255), rgb(255, 230, 200));
+    SECOND_LAYER_BACKGROUND: rgb(255, 255, 255);
+
+    CONTRAST_COLOR: rgb(0, 0, 255);
+    HOVER_CONTRAST_COLOR: rgb(230, 230, 255);
+
+    TEXT_COLOR: rgb(0, 0, 0);
+}
+
+
+
+.island-pane {
+    -fx-background-color: SECOND_LAYER_BACKGROUND;
+    -fx-background-radius: 20;
+}
+
+.module-pane {
+    -fx-background-color: SECOND_LAYER_BACKGROUND;
+}
+
+.root-pane {
+    -fx-background-color: FIRST_LAYER_BACKGROUND;
+}
+
+
+
+.button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+
+    -fx-border-color: CONTRAST_COLOR;
+    -fx-border-radius: 5;
+
+    -fx-text-fill: TEXT_COLOR;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: HOVER_CONTRAST_COLOR;
+}
+
+
+
+.check-box {
+    -fx-text-fill: TEXT_COLOR;
+    -fx-cursor: hand;
+}
+
+.check-box:hover {
+    -fx-text-fill: CONTRAST_COLOR;
+}
+
+.check-box .box {
+    -fx-background-color: HOVER_CONTRAST_COLOR;
+    -fx-background-radius: 5;
+
+    -fx-border-color: CONTRAST_COLOR;
+    -fx-border-radius: 5;
+    -fx-border-width: 0 1;
+}
+
+.check-box:selected .box {
+    -fx-background-color: transparent;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: CONTRAST_COLOR;
+}
+
+
+
+.combo-box {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+
+    -fx-cursor: hand;
+}
+
+.combo-box .arrow {
+    -fx-background-color: TEXT_COLOR;
+}
+
+.combo-box:hover .arrow {
+    -fx-background-color: CONTRAST_COLOR;
+}
+
+.combo-box .list-cell {
+    /* the cell of the combo-box */
+    -fx-text-fill: TEXT_COLOR;
+}
+
+.combo-box:hover .list-cell {
+    /* the cell of the combo-box */
+    -fx-text-fill: CONTRAST_COLOR;
+}
+
+.combo-box .list-view {
+    /* the popup of the combo-box */
+    -fx-background-color: SECOND_LAYER_BACKGROUND;
+    -fx-background-radius: 5;
+
+    -fx-border-color: CONTRAST_COLOR;
+    -fx-border-radius: 5;
+
+    -fx-padding: 10;
+    -fx-effect: none;
+}
+
+.combo-box .list-view .list-cell {
+    /* the cell of the popup of the combo-box */
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+
+    -fx-text-fill: TEXT_COLOR;
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: HOVER_CONTRAST_COLOR;
+}
+
+
+
+.hyperlink {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+
+    -fx-underline: false;
+
+    -fx-text-fill: TEXT_COLOR;
+    -fx-cursor: hand;
+}
+
+.hyperlink:hover {
+    -fx-text-fill: CONTRAST_COLOR;
+}
+
+
+
+.label {
+    -fx-text-fill: TEXT_COLOR;
+}
+
+
+
+.progress-bar .bar {
+    -fx-background-color: CONTRAST_COLOR;
+    -fx-background-radius: 5;
+    -fx-background-insets: 5;
+}
+
+.progress-bar .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+
+    -fx-border-color: CONTRAST_COLOR;
+    -fx-border-radius: 5;
+}
+
+
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+
+    -fx-border-color: transparent transparent CONTRAST_COLOR transparent;
+    -fx-border-radius: 0;
+
+    -fx-text-fill: TEXT_COLOR;
+    -fx-padding: 0 0 5 0;
+
+    -fx-highlight-fill: HOVER_CONTRAST_COLOR;
+    -fx-highlight-text-fill: TEXT_COLOR;
+}
+
+
+
+.toggle-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+
+    -fx-border-color: transparent;
+    -fx-border-radius: 20;
+
+    -fx-text-fill: TEXT_COLOR;
+    -fx-cursor: hand;
+}
+
+.toggle-button:hover {
+    -fx-background-color: HOVER_CONTRAST_COLOR;
+}
+
+.toggle-button:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: CONTRAST_COLOR;
+    -fx-text-fill: CONTRAST_COLOR;
+}
