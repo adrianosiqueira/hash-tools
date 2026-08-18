@@ -1,9 +1,9 @@
 * {
-    FIRST_LAYER_BACKGROUND: linear-gradient(to bottom, rgb(255, 200, 255), rgb(255, 230, 200));
+    FIRST_LAYER_BACKGROUND: linear-gradient(to bottom, rgb(255, 200, 255), rgb(255, 200, 130));
     SECOND_LAYER_BACKGROUND: rgb(255, 255, 255);
 
     CONTRAST_COLOR: rgb(0, 0, 255);
-    HOVER_CONTRAST_COLOR: rgb(230, 230, 255);
+    HOVER_CONTRAST_COLOR: rgb(210, 210, 255);
 
     TEXT_COLOR: rgb(0, 0, 0);
 }
