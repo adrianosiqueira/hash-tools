@@ -1,16 +1,18 @@
 package hashtools.controller;
 
-import hashtools.domain.context.ChecksumGenerationContext;
+import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.file.FileDialog;
-import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumGenerationResult;
-import hashtools.domain.result.ExceptionResult;
-import hashtools.domain.result.ProblemResult;
 import hashtools.service.ChecksumGenerationService;
-import hashtools.strategy.algorithmsource.CheckBoxAlgorithmSource;
-import hashtools.strategy.inputsource.FileInputSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.strategy.inputsource.TextInputSource;
+import hashtools.strategy.generatorupdate.FileGeneratorUpdate;
+import hashtools.strategy.generatorupdate.GeneratorUpdate;
+import hashtools.strategy.generatorupdate.TextGeneratorUpdate;
+import hashtools.strategy.identification.FileIdentification;
+import hashtools.strategy.identification.Identification;
+import hashtools.strategy.identification.TextIdentification;
+import hashtools.strategy.problemdetection.InputFileProblemDetection;
+import hashtools.strategy.problemdetection.InputTextProblemDetection;
+import hashtools.strategy.problemdetection.ProblemDetection;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -20,6 +22,8 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ThreadFactory;
 
@@ -60,27 +64,11 @@ public class GeneratorController extends AbstractController {
     @FXML
     private void performChecksumGeneration() {
         threadFactory.newThread(() -> {
-            // User feedback
             super.disableUi(pnlRoot);
 
+            this.setupTheService();
+            generationService.generateChecksums();
 
-
-            // Data retrieval
-            ChecksumGenerationContext context = this.createGenerationContext();
-
-
-
-            // Processing
-            switch (generationService.generateChecksums(context)) {
-                case CanceledResult _ -> {}
-                case ChecksumGenerationResult result -> this.processResult(result);
-                case ExceptionResult result -> this.processResult(result);
-                case ProblemResult result -> this.processResult(result);
-            }
-
-
-
-            // User feedback
             super.enableUi(pnlRoot);
         }).start();
     }
@@ -126,28 +114,56 @@ public class GeneratorController extends AbstractController {
 
 
 
-    private ChecksumGenerationContext createGenerationContext() {
-        InputSource inputSource = chkInput.isSelected()
-            ? new FileInputSource(txtInput.getText())
-            : new TextInputSource(txtInput.getText());
+    private void setupTheService() {
+        generationService.initSetup();
 
-        inputSource.setProgressTracking(this::trackProgress);
+        generationService.setExceptionConsumer(super::logException);
+        generationService.setProblemConsumer(this::reportProblem);
+        generationService.setProgressConsumer(this::trackProgress);
+        generationService.setResultConsumer(this::processResult);
 
 
 
-        ChecksumGenerationContext context = new ChecksumGenerationContext();
-        context.setAlgorithmSource(new CheckBoxAlgorithmSource(pnlAlgorithm));
-        context.setInputSource(inputSource);
+        ProblemDetection inputProblemDetection = chkInput.isSelected()
+            ? new InputFileProblemDetection(txtInput.getText())
+            : new InputTextProblemDetection(txtInput.getText());
 
-        return context;
+        generationService.setInputProblemDetection(inputProblemDetection);
+
+
+
+        GeneratorUpdate generatorUpdate = chkInput.isSelected()
+            ? new FileGeneratorUpdate(txtInput.getText())
+            : new TextGeneratorUpdate(txtInput.getText());
+
+        generationService.setGeneratorUpdate(generatorUpdate);
+
+
+
+        Collection<Algorithm> algorithms = pnlAlgorithm
+            .getChildren()
+            .stream()
+            .filter(CheckBox.class::isInstance)
+            .map(CheckBox.class::cast)
+            .filter(CheckBox::isSelected)
+            .map(CheckBox::getText)
+            .map(Algorithm::getByName)
+            .flatMap(Optional::stream)
+            .toList();
+
+        generationService.setAlgorithms(algorithms);
+
+
+
+        Identification identification = chkInput.isSelected()
+            ? new FileIdentification(txtInput.getText())
+            : new TextIdentification(txtInput.getText());
+
+        generationService.setIdentification(identification);
     }
 
-    private void processResult(ExceptionResult result) {
-        result.consumeException(super::logException);
-    }
-
-    private void processResult(ProblemResult result) {
-        super.showMessageDialog("Hash Tools", "Problem", result.getDescription());
+    private void reportProblem(String problem) {
+        super.showMessageDialog("Hash Tools", "Problem", problem);
     }
 
     private void processResult(ChecksumGenerationResult result) {
