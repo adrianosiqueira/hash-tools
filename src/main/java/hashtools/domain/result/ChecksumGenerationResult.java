@@ -1,14 +1,13 @@
 package hashtools.domain.result;
 
 import hashtools.domain.checksum.Checksum;
-import hashtools.service.ChecksumGenerationService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public final class ChecksumGenerationResult implements ChecksumGenerationService.Result {
+public final class ChecksumGenerationResult {
 
     private List<Checksum> checksums;
     private String identification;
