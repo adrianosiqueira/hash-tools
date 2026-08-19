@@ -1,18 +1,16 @@
 package hashtools.controller;
 
-import hashtools.domain.context.ChecksumCheckingContext;
 import hashtools.domain.file.FileDialog;
-import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumCheckingResult;
-import hashtools.domain.result.ExceptionResult;
-import hashtools.domain.result.ProblemResult;
 import hashtools.service.ChecksumCheckingService;
-import hashtools.strategy.checksumsource.ChecksumSource;
-import hashtools.strategy.checksumsource.FileChecksumSource;
-import hashtools.strategy.checksumsource.TextChecksumSource;
-import hashtools.strategy.inputsource.FileInputSource;
-import hashtools.strategy.inputsource.InputSource;
-import hashtools.strategy.inputsource.TextInputSource;
+import hashtools.strategy.checksumextraction.FileChecksumExtraction;
+import hashtools.strategy.checksumextraction.TextChecksumExtraction;
+import hashtools.strategy.generatorupdate.FileGeneratorUpdate;
+import hashtools.strategy.generatorupdate.TextGeneratorUpdate;
+import hashtools.strategy.problemdetection.ChecksumFileProblemDetection;
+import hashtools.strategy.problemdetection.ChecksumTextProblemDetection;
+import hashtools.strategy.problemdetection.InputFileProblemDetection;
+import hashtools.strategy.problemdetection.InputTextProblemDetection;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -46,20 +44,20 @@ public class CheckerController extends AbstractController {
     @FXML
     private Label lblReliability;
 
-    private ChecksumCheckingService checksumCheckingService;
+    private ChecksumCheckingService checkingService;
     private ThreadFactory threadFactory;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.checksumCheckingService = new ChecksumCheckingService();
+        this.checkingService = new ChecksumCheckingService();
         this.threadFactory = new VirtualThreadFactory();
     }
 
     @Override
     public void stopAllServicesProcessing() {
-        checksumCheckingService.cancelChecksumChecking();
+        checkingService.cancelChecksumChecking();
     }
 
 
@@ -67,28 +65,12 @@ public class CheckerController extends AbstractController {
     @FXML
     private void performChecksumChecking() {
         threadFactory.newThread(() -> {
-            // User feedback
             super.disableUi(pnlRoot);
             this.cleanUi();
 
+            this.setupService();
+            checkingService.checkChecksums();
 
-
-            // Data retrieval
-            ChecksumCheckingContext context = this.createCheckingContext();
-
-
-
-            // Processing
-            switch (checksumCheckingService.checkChecksums(context)) {
-                case CanceledResult _ -> {}
-                case ExceptionResult result -> this.processResult(result);
-                case ProblemResult result -> this.processResult(result);
-                case ChecksumCheckingResult result -> this.processResult(result);
-            }
-
-
-
-            // User feedback
             super.enableUi(pnlRoot);
         }).start();
     }
@@ -113,32 +95,36 @@ public class CheckerController extends AbstractController {
 
 
 
-    private ChecksumCheckingContext createCheckingContext() {
-        InputSource inputSource = chkInput.isSelected()
-            ? new FileInputSource(txtInput.getText())
-            : new TextInputSource(txtInput.getText());
-
-        ChecksumSource checksumSource = chkChecksum.isSelected()
-            ? new FileChecksumSource(txtChecksum.getText())
-            : new TextChecksumSource(txtChecksum.getText());
-
-        inputSource.setProgressTracking(this::trackProgress);
+    private void setupService() {
+        checkingService.initSetup();
+        checkingService.setExceptionConsumer(super::logException);
+        checkingService.setProblemConsumer(this::reportProblem);
+        checkingService.setProgressConsumer(this::trackProgress);
+        checkingService.setResultConsumer(this::processResult);
 
 
 
-        ChecksumCheckingContext context = new ChecksumCheckingContext();
-        context.setInputSource(inputSource);
-        context.setChecksumSource(checksumSource);
+        if (chkInput.isSelected()) {
+            checkingService.setInputProblemDetection(new InputFileProblemDetection(txtInput.getText()));
+            checkingService.setGeneratorUpdate(new FileGeneratorUpdate(txtInput.getText()));
+        } else {
+            checkingService.setInputProblemDetection(new InputTextProblemDetection(txtInput.getText()));
+            checkingService.setGeneratorUpdate(new TextGeneratorUpdate(txtInput.getText()));
+        }
 
-        return context;
+
+
+        if (chkChecksum.isSelected()) {
+            checkingService.setChecksumProblemDetection(new ChecksumFileProblemDetection(txtChecksum.getText()));
+            checkingService.setChecksumExtraction(new FileChecksumExtraction(txtChecksum.getText()));
+        } else {
+            checkingService.setChecksumProblemDetection(new ChecksumTextProblemDetection(txtChecksum.getText()));
+            checkingService.setChecksumExtraction(new TextChecksumExtraction(txtChecksum.getText()));
+        }
     }
 
-    private void processResult(ExceptionResult result) {
-        result.consumeException(super::logException);
-    }
-
-    private void processResult(ProblemResult result) {
-        super.showMessageDialog("Hash Tools", "Problem", result.getDescription());
+    private void reportProblem(String problem) {
+        super.showMessageDialog("Hash Tools", "Problem", problem);
     }
 
     private void processResult(ChecksumCheckingResult result) {
