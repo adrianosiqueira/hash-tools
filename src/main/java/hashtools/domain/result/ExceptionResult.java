@@ -1,6 +1,5 @@
 package hashtools.domain.result;
 
-import hashtools.service.ChecksumCheckingService;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.service.ChecksumGenerationService;
 
@@ -9,7 +8,6 @@ import java.util.function.Consumer;
 
 public final class ExceptionResult
     implements
-    ChecksumCheckingService.Result,
     ChecksumComparisonService.Result,
     ChecksumGenerationService.Result {
 

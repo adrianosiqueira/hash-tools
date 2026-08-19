@@ -3,10 +3,7 @@ package hashtools.service;
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.checksum.CheckerChecksum;
 import hashtools.domain.checksum.Checksum;
-import hashtools.domain.result.CanceledResult;
 import hashtools.domain.result.ChecksumCheckingResult;
-import hashtools.domain.result.ExceptionResult;
-import hashtools.domain.result.ProblemResult;
 import hashtools.strategy.checksumextraction.ChecksumExtraction;
 import hashtools.strategy.generatorupdate.GeneratorUpdate;
 import hashtools.strategy.problemdetection.ProblemDetection;
@@ -167,10 +164,6 @@ public class ChecksumCheckingService {
     private boolean isCanceled() {
         return canceled;
     }
-
-
-
-    public sealed interface Result permits CanceledResult, ExceptionResult, ProblemResult, ChecksumCheckingResult {}
 
 
 
