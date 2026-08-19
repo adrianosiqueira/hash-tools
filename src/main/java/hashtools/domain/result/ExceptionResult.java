@@ -1,15 +1,11 @@
 package hashtools.domain.result;
 
-import hashtools.service.ChecksumComparisonService;
 import hashtools.service.ChecksumGenerationService;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public final class ExceptionResult
-    implements
-    ChecksumComparisonService.Result,
-    ChecksumGenerationService.Result {
+public final class ExceptionResult implements ChecksumGenerationService.Result {
 
     private Exception exception;
 

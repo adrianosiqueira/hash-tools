@@ -1,12 +1,8 @@
 package hashtools.domain.result;
 
-import hashtools.service.ChecksumComparisonService;
 import hashtools.service.ChecksumGenerationService;
 
-public final class ProblemResult
-    implements
-    ChecksumComparisonService.Result,
-    ChecksumGenerationService.Result {
+public final class ProblemResult implements ChecksumGenerationService.Result {
 
     private String description;
 

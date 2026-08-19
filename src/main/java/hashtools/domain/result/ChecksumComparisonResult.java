@@ -1,9 +1,8 @@
 package hashtools.domain.result;
 
 import hashtools.domain.checksum.ComparatorChecksum;
-import hashtools.service.ChecksumComparisonService;
 
-public final class ChecksumComparisonResult implements ChecksumComparisonService.Result {
+public final class ChecksumComparisonResult {
 
     private ComparatorChecksum checksum;
 
