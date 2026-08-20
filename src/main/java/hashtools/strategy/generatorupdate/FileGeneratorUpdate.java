@@ -33,9 +33,19 @@ public class FileGeneratorUpdate implements GeneratorUpdate {
         try (InputStream stream = file.getInputStream()) {
             this.buffer = new byte[ONE_MEBIBYTE];
 
+            // Progress tracking
+            double requiredCycles = (double) file.getSizeInBytes() / ONE_MEBIBYTE;
+            int runCycles = 0;
+            progressConsumer.accept(0.0);
+
             while (this.isNotCanceled() && this.readFile(stream)) {
                 this.updateGenerators(generators);
+
+                runCycles++;
+                progressConsumer.accept(runCycles / requiredCycles);
             }
+
+            progressConsumer.accept(1.0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

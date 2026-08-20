@@ -20,7 +20,10 @@ public class TextGeneratorUpdate implements GeneratorUpdate {
     @Override
     public void update(Collection<ChecksumGenerator> generators, Consumer<Double> progressConsumer) throws RuntimeException {
         byte[] bytes = text.getBytes();
+        progressConsumer.accept(0.0);
 
         generators.forEach(generator -> generator.receiveBytes(bytes));
+
+        progressConsumer.accept(1.0);
     }
 }
