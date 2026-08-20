@@ -5,14 +5,11 @@ import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.service.ChecksumGenerationService;
 import hashtools.strategy.generatorupdate.FileGeneratorUpdate;
-import hashtools.strategy.generatorupdate.GeneratorUpdate;
 import hashtools.strategy.generatorupdate.TextGeneratorUpdate;
 import hashtools.strategy.identification.FileIdentification;
-import hashtools.strategy.identification.Identification;
 import hashtools.strategy.identification.TextIdentification;
 import hashtools.strategy.problemdetection.InputFileProblemDetection;
 import hashtools.strategy.problemdetection.InputTextProblemDetection;
-import hashtools.strategy.problemdetection.ProblemDetection;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -125,19 +122,15 @@ public class GeneratorController extends AbstractController {
 
 
 
-        ProblemDetection inputProblemDetection = chkInput.isSelected()
-            ? new InputFileProblemDetection(txtInput.getText())
-            : new InputTextProblemDetection(txtInput.getText());
-
-        generationService.setInputProblemDetection(inputProblemDetection);
-
-
-
-        GeneratorUpdate generatorUpdate = chkInput.isSelected()
-            ? new FileGeneratorUpdate(txtInput.getText())
-            : new TextGeneratorUpdate(txtInput.getText());
-
-        generationService.setGeneratorUpdate(generatorUpdate);
+        if (chkInput.isSelected()) {
+            generationService.setInputProblemDetection(new InputFileProblemDetection(txtInput.getText()));
+            generationService.setGeneratorUpdate(new FileGeneratorUpdate(txtInput.getText()));
+            generationService.setIdentification(new FileIdentification(txtInput.getText()));
+        } else {
+            generationService.setInputProblemDetection(new InputTextProblemDetection(txtInput.getText()));
+            generationService.setGeneratorUpdate(new TextGeneratorUpdate(txtInput.getText()));
+            generationService.setIdentification(new TextIdentification(txtInput.getText()));
+        }
 
 
 
@@ -153,14 +146,6 @@ public class GeneratorController extends AbstractController {
             .toList();
 
         generationService.setAlgorithms(algorithms);
-
-
-
-        Identification identification = chkInput.isSelected()
-            ? new FileIdentification(txtInput.getText())
-            : new TextIdentification(txtInput.getText());
-
-        generationService.setIdentification(identification);
     }
 
     private void reportProblem(String problem) {
