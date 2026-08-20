@@ -65,6 +65,7 @@ public class GeneratorController extends AbstractController {
     private void performChecksumGeneration() {
         threadFactory.newThread(() -> {
             super.disableUi(pnlRoot);
+            this.cleanUi();
 
             this.setupTheService();
             generationService.generateChecksums();
