@@ -146,6 +146,51 @@
 
 
 
+.menu-button {
+    -fx-background-color: SECOND_LAYER_BACKGROUND;
+    -fx-background-radius: 5;
+
+    -fx-border-color: CONTRAST_COLOR;
+    -fx-border-radius: 5;
+
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: HOVER_CONTRAST_COLOR;
+}
+
+.menu-button .arrow {
+    -fx-background-color: TEXT_COLOR;
+}
+
+.menu-button .label {
+    /* Also affects the menu-item text color */
+    -fx-text-fill: TEXT_COLOR;
+}
+
+.menu-button .context-menu {
+    -fx-background-color: SECOND_LAYER_BACKGROUND;
+    -fx-background-radius: 5;
+
+    -fx-border-color: CONTRAST_COLOR;
+    -fx-border-radius: 5;
+
+    -fx-padding: 10;
+}
+
+.menu-button .context-menu .menu-item {
+    -fx-background-color: SECOND_LAYER_BACKGROUND;
+    -fx-background-radius: 5;
+}
+
+.menu-button .context-menu .menu-item:hover {
+    -fx-background-color: HOVER_CONTRAST_COLOR;
+    -fx-background-radius: 5;
+}
+
+
+
 .progress-bar .bar {
     -fx-background-color: CONTRAST_COLOR;
     -fx-background-radius: 5;

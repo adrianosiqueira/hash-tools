@@ -5,10 +5,12 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
-<VBox alignment="CENTER" fx:controller="hashtools.controller.GeneratorController" fx:id="pnlRoot" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<VBox alignment="CENTER" fx:controller="hashtools.controller.GeneratorController" fx:id="pnlRoot" spacing="40" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
 
     <GridPane alignment="CENTER" hgap="20" styleClass="island-pane" vgap="20">
         <padding>
@@ -80,4 +82,20 @@
         <Button GridPane.columnIndex="0" GridPane.rowIndex="2" onAction="#performChecksumGeneration" text="Execute"/>
         <ProgressBar GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2" fx:id="prgProgress" maxWidth="1E6" progress="0.0"/>
     </GridPane>
+
+
+
+    <HBox alignment="CENTER" fx:id="pnlResult" spacing="20" styleClass="island-pane">
+        <padding>
+            <Insets topRightBottomLeft="20"/>
+        </padding>
+
+        <Label HBox.hgrow="ALWAYS" maxWidth="1E6" text="Checksum generation done." visible="false"/>
+        <MenuButton HBox.hgrow="NEVER" popupSide="RIGHT" text="Action" visible="false">
+            <items>
+                <MenuItem onAction="#saveResultToFile" text="Save"/>
+                <MenuItem onAction="#showResultIntoDialog" text="Show"/>
+            </items>
+        </MenuButton>
+    </HBox>
 </VBox>

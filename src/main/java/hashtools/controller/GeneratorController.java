@@ -13,7 +13,10 @@ import hashtools.strategy.problemdetection.InputFileProblemDetection;
 import hashtools.strategy.problemdetection.InputTextProblemDetection;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -40,6 +43,9 @@ public class GeneratorController extends AbstractController {
 
     @FXML
     private ProgressBar prgProgress;
+
+    @FXML
+    private Pane pnlResult;
 
     private ChecksumGenerationService generationService;
     private ThreadFactory threadFactory;
@@ -72,11 +78,13 @@ public class GeneratorController extends AbstractController {
         threadFactory.newThread(() -> {
             super.disableUi(pnlRoot);
             this.cleanUi();
+            this.hideResultActions();
 
             this.setupTheService();
             generationService.generateChecksums();
 
             super.enableUi(pnlRoot);
+            this.showResultActions();
         }).start();
     }
 
@@ -119,7 +127,57 @@ public class GeneratorController extends AbstractController {
             .forEach(checkBox -> checkBox.setSelected(!checkBox.isSelected()));
     }
 
+    @FXML
+    private void saveResultToFile() {
+        super.openFile(
+            "Select where to save the checksums",
+            FileDialog::openForWriting,
+            file -> {
+                try {
+                    tempFile.copyTo(file);
+                } catch (Exception e) {
+                    super.logException(e);
+                }
+            }
+        );
+    }
 
+    @FXML
+    private void showResultIntoDialog() {
+        Label contentNode = new Label();
+        contentNode.setWrapText(false);
+
+        try {
+            contentNode.setText(tempFile.getContent());
+        } catch (Exception e) {
+            super.logException(e);
+            contentNode.setText("Error: " + e.getMessage());
+        }
+
+        Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+        dialog.setTitle("Hash Tools");
+        dialog.setHeaderText("Generated checksums");
+        dialog.setResizable(true);
+
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.setContent(contentNode);
+
+        dialog.show();
+    }
+
+
+
+    private void hideResultActions() {
+        pnlResult
+            .getChildren()
+            .forEach(node -> node.setVisible(false));
+    }
+
+    private void showResultActions() {
+        pnlResult
+            .getChildren()
+            .forEach(node -> node.setVisible(true));
+    }
 
     private void setupTheService() {
         generationService.initSetup();
