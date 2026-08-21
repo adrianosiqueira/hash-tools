@@ -86,6 +86,10 @@ public class EnhancedFile {
         return Files.newInputStream(path);
     }
 
+    public void delete() throws IOException {
+        Files.deleteIfExists(path);
+    }
+
 
 
     private String getFileExtension() {
