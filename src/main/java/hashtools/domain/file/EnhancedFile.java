@@ -34,6 +34,16 @@ public class EnhancedFile {
         return enhancedFile;
     }
 
+    public static EnhancedFile createTemporaryFile() throws RuntimeException {
+        try {
+            EnhancedFile enhancedFile = new EnhancedFile();
+            enhancedFile.path = Files.createTempFile("hash-tools-", ".tmp");
+            return enhancedFile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
     public boolean exists() {
