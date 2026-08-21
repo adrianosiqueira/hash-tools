@@ -1,6 +1,7 @@
 package hashtools.controller;
 
 import hashtools.domain.algorithm.Algorithm;
+import hashtools.domain.file.EnhancedFile;
 import hashtools.domain.file.FileDialog;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.service.ChecksumGenerationService;
@@ -42,6 +43,7 @@ public class GeneratorController extends AbstractController {
 
     private ChecksumGenerationService generationService;
     private ThreadFactory threadFactory;
+    private EnhancedFile tempFile;
 
 
 
@@ -49,11 +51,18 @@ public class GeneratorController extends AbstractController {
     public void initialize(URL location, ResourceBundle resources) {
         this.generationService = new ChecksumGenerationService();
         this.threadFactory = new VirtualThreadFactory();
+        this.tempFile = EnhancedFile.createTemporaryFile();
     }
 
     @Override
     public void stopAllServicesProcessing() {
         generationService.cancelChecksumGeneration();
+
+        try {
+            tempFile.delete();
+        } catch (Exception e) {
+            super.logException(e);
+        }
     }
 
 
@@ -153,18 +162,12 @@ public class GeneratorController extends AbstractController {
     }
 
     private void processResult(ChecksumGenerationResult result) {
-        super.openFile(
-            "Select where to save the checksums",
-            FileDialog::openForWriting,
-            file -> {
-                try {
-                    String content = result.formatForSaving();
-                    file.replaceContent(content);
-                } catch (IOException e) {
-                    super.logException(e);
-                }
-            }
-        );
+        try {
+            String content = result.formatForSaving();
+            tempFile.replaceContent(content);
+        } catch (IOException e) {
+            super.logException(e);
+        }
     }
 
     @Override
