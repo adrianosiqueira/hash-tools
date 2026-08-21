@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EnhancedFile {
@@ -85,6 +86,12 @@ public class EnhancedFile {
 
     public InputStream getInputStream() throws IOException {
         return Files.newInputStream(path);
+    }
+
+    public String getContent() throws IOException {
+        return this
+            .getLinesStream()
+            .collect(Collectors.joining(System.lineSeparator()));
     }
 
     public void copyTo(EnhancedFile destination) throws IOException {
