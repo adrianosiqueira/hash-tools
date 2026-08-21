@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.stream.Stream;
 
@@ -84,6 +85,14 @@ public class EnhancedFile {
 
     public InputStream getInputStream() throws IOException {
         return Files.newInputStream(path);
+    }
+
+    public void copyTo(EnhancedFile destination) throws IOException {
+        Files.copy(
+            path,
+            destination.path,
+            StandardCopyOption.REPLACE_EXISTING
+        );
     }
 
     public void delete() throws IOException {
