@@ -15,6 +15,9 @@ public class ApplicationService {
 
     public ApplicationService() {
         this.activeController = new AbstractController() {};
+
+        Runtime runtime = Runtime.getRuntime();
+        runtime.addShutdownHook(new Thread(activeController::stopAllServicesProcessing));
     }
 
 
