@@ -40,6 +40,10 @@ public class JavaFxLoader {
         loader.setResources(bundle);
     }
 
+    public void setController(Object controller) {
+        loader.setController(controller);
+    }
+
     public void load() throws IOException {
         loader.load();
     }
