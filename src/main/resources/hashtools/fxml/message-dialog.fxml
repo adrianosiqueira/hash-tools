@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox styleClass="message-dialog-pane" stylesheets="@../css/light-theme.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <StackPane VBox.vgrow="NEVER" styleClass="header-pane">
+        <padding>
+            <Insets topRightBottomLeft="10"/>
+        </padding>
+
+        <Label fx:id="headerLabel"/>
+    </StackPane>
+
+
+
+    <VBox VBox.vgrow="ALWAYS" spacing="20" styleClass="content-pane">
+        <padding>
+            <Insets topRightBottomLeft="20"/>
+        </padding>
+
+
+
+        <StackPane VBox.vgrow="ALWAYS" styleClass="message-pane, island-pane">
+            <padding>
+                <Insets topRightBottomLeft="20"/>
+            </padding>
+
+            <Label alignment="TOP_LEFT" fx:id="messageLabel" maxHeight="1E6" maxWidth="1E6" textAlignment="JUSTIFY" wrapText="true"/>
+        </StackPane>
+
+
+
+        <HBox VBox.vgrow="NEVER" alignment="CENTER_RIGHT" styleClass="button-pane, island-pane">
+            <padding>
+                <Insets topRightBottomLeft="20"/>
+            </padding>
+
+            <Button onAction="#close" text="Ok"/>
+        </HBox>
+    </VBox>
+</VBox>

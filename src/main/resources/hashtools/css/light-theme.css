@@ -191,6 +191,23 @@
 
 
 
+.message-dialog-pane .header-pane {
+    -fx-background-color: SECOND_LAYER_BACKGROUND;
+}
+
+.message-dialog-pane .header-pane .label {
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+
+    -fx-text-fill: TEXT_COLOR;
+}
+
+.message-dialog-pane .content-pane {
+    -fx-background-color: FIRST_LAYER_BACKGROUND;
+}
+
+
+
 .progress-bar .bar {
     -fx-background-color: CONTRAST_COLOR;
     -fx-background-radius: 5;
