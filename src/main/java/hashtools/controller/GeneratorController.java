@@ -12,11 +12,9 @@ import hashtools.strategy.identification.TextIdentification;
 import hashtools.strategy.problemdetection.InputFileProblemDetection;
 import hashtools.strategy.problemdetection.InputTextProblemDetection;
 import hashtools.strategy.threadfactory.VirtualThreadFactory;
+import hashtools.window.MessageDialog;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -144,23 +142,16 @@ public class GeneratorController extends AbstractController {
 
     @FXML
     private void showResultIntoDialog() {
-        Label contentNode = new Label();
-        contentNode.setWrapText(false);
+        MessageDialog dialog = new MessageDialog();
+        dialog.setTitle("Hash Tools");
+        dialog.setHeader("Generated checksums");
 
         try {
-            contentNode.setText(tempFile.getContent());
+            dialog.setMessage(tempFile.getContent());
         } catch (Exception e) {
             super.logException(e);
-            contentNode.setText("Error: " + e.getMessage());
+            dialog.setMessage("Error: " + e.getMessage());
         }
-
-        Alert dialog = new Alert(Alert.AlertType.INFORMATION);
-        dialog.setTitle("Hash Tools");
-        dialog.setHeaderText("Generated checksums");
-        dialog.setResizable(true);
-
-        DialogPane dialogPane = dialog.getDialogPane();
-        dialogPane.setContent(contentNode);
 
         dialog.show();
     }

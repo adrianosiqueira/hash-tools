@@ -2,11 +2,11 @@ package hashtools.controller;
 
 import hashtools.domain.file.EnhancedFile;
 import hashtools.domain.file.FileDialog;
+import hashtools.window.MessageDialog;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Control;
 import javafx.scene.layout.Pane;
 
@@ -52,11 +52,11 @@ public abstract class AbstractController implements Initializable {
 
     protected void showMessageDialog(String title, String header, String content) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle(title);
-            alert.setHeaderText(header);
-            alert.setContentText(content);
-            alert.show();
+            MessageDialog dialog = new MessageDialog();
+            dialog.setTitle(title);
+            dialog.setHeader(header);
+            dialog.setMessage(content);
+            dialog.show();
         });
     }
 
