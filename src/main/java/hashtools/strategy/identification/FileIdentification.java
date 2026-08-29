@@ -16,6 +16,6 @@ public class FileIdentification implements Identification {
 
     @Override
     public String identify() {
-        return file.getAbsolutePath();
+        return file.getFileName();
     }
 }

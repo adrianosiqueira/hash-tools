@@ -67,6 +67,12 @@ public class EnhancedFile {
             .toString();
     }
 
+    public String getFileName() {
+        return path
+            .getFileName()
+            .toString();
+    }
+
     public long getSizeInBytes() throws IOException {
         return Files.size(path);
     }
