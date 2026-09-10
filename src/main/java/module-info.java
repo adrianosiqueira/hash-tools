@@ -7,6 +7,7 @@ module hash.tools {
     exports hashtools.controller;
     exports hashtools.domain.algorithm;
     exports hashtools.domain.checksum;
+    exports hashtools.domain.commom;
     exports hashtools.domain.file;
     exports hashtools.domain.result;
     exports hashtools.service;
@@ -21,6 +22,7 @@ module hash.tools {
     opens hashtools.controller;
     opens hashtools.domain.algorithm;
     opens hashtools.domain.checksum;
+    opens hashtools.domain.commom;
     opens hashtools.domain.file;
     opens hashtools.domain.result;
     opens hashtools.service;
