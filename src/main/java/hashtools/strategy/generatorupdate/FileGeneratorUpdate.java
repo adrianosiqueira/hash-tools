@@ -1,6 +1,7 @@
 package hashtools.strategy.generatorupdate;
 
 import hashtools.domain.algorithm.ChecksumGenerator;
+import hashtools.domain.commom.Result;
 import hashtools.domain.file.EnhancedFile;
 
 import java.io.IOException;
@@ -54,6 +55,43 @@ public class FileGeneratorUpdate implements GeneratorUpdate {
     @Override
     public void cancel() {
         canceled = true;
+    }
+
+    @Override
+    public Result<Void, String> updateGenerators(Collection<ChecksumGenerator> generators, Consumer<Double> progressTracker) {
+        try (var inputStream = file.getInputStream()) {
+            // Setup
+            var buffer = new byte[ONE_MEBIBYTE];
+            var bytesRead = 0;
+
+            // Progress tracking
+            var requiredCycles = (double) file.getSizeInBytes() / ONE_MEBIBYTE;
+            var runCycles = 0;
+            progressTracker.accept(0.0);
+
+            // Processing
+            while ((bytesRead = inputStream.read(buffer)) != END_OF_FILE) {
+                if (Thread.currentThread().isInterrupted()) {
+                    // Operation has been canceled
+                    return Result.ok(null);
+                }
+
+                for (var generator : generators) {
+                    generator.receiveBytes(buffer, bytesRead);
+                }
+
+                runCycles++;
+                progressTracker.accept(runCycles / requiredCycles);
+            }
+
+            return Result.ok(null);
+        } catch (IOException e) {
+            return Result.error(e.getMessage());
+        } catch (Exception e) {
+            return Result.error("Failed to update the generators");
+        } finally {
+            progressTracker.accept(1.0);
+        }
     }
 
 
