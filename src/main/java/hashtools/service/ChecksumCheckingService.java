@@ -1,8 +1,8 @@
 package hashtools.service;
 
 import hashtools.domain.algorithm.ChecksumGenerator;
-import hashtools.domain.checksum.CheckerChecksum;
 import hashtools.domain.checksum.Checksum;
+import hashtools.domain.checksum.ChecksumPair;
 import hashtools.domain.result.ChecksumCheckingResult;
 import hashtools.strategy.checksumextraction.ChecksumExtraction;
 import hashtools.strategy.generatorupdate.GeneratorUpdate;
@@ -189,10 +189,10 @@ public class ChecksumCheckingService {
 
 
 
-        public CheckerChecksum decodeIntoCheckerChecksum() {
-            CheckerChecksum checkerChecksum = new CheckerChecksum();
-            checkerChecksum.setOfficial(checksum);
-            checkerChecksum.setGenerated(generator.decodeIntoChecksum());
+        public ChecksumPair decodeIntoCheckerChecksum() {
+            ChecksumPair checkerChecksum = new ChecksumPair();
+            checkerChecksum.setOfficialChecksum(checksum);
+            checkerChecksum.setGeneratedChecksum(generator.decodeIntoChecksum());
             return checkerChecksum;
         }
 

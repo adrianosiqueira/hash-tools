@@ -1,20 +1,20 @@
 package hashtools.domain.result;
 
-import hashtools.domain.checksum.ComparatorChecksum;
+import hashtools.domain.checksum.ChecksumPair;
 
 public final class ChecksumComparisonResult {
 
-    private ComparatorChecksum checksum;
+    private ChecksumPair checksum;
 
 
 
     public ChecksumComparisonResult() {
-        this.checksum = new ComparatorChecksum();
+        this.checksum = new ChecksumPair();
     }
 
 
 
-    public void setChecksum(ComparatorChecksum checksum) {
+    public void setChecksum(ChecksumPair checksum) {
         this.checksum = checksum;
     }
 

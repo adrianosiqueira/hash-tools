@@ -3,7 +3,7 @@ package hashtools.service;
 import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.checksum.Checksum;
-import hashtools.domain.checksum.ComparatorChecksum;
+import hashtools.domain.checksum.ChecksumPair;
 import hashtools.domain.result.ChecksumComparisonResult;
 import hashtools.strategy.generatorupdate.GeneratorUpdate;
 import hashtools.strategy.problemdetection.ProblemDetection;
@@ -69,11 +69,11 @@ public class ChecksumComparisonService {
             return;
         }
 
-        ComparatorChecksum checksum = new ComparatorChecksum();
+        ChecksumPair checksum = new ChecksumPair();
 
         try {
-            checksum.setChecksum1(futureChecksum1.get());
-            checksum.setChecksum2(futureChecksum2.get());
+            checksum.setGeneratedChecksum1(futureChecksum1.get());
+            checksum.setGeneratedChecksum2(futureChecksum2.get());
         } catch (Exception e) {
             exceptionConsumer.accept(e);
             return;

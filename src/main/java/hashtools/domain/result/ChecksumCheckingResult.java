@@ -1,13 +1,13 @@
 package hashtools.domain.result;
 
-import hashtools.domain.checksum.CheckerChecksum;
+import hashtools.domain.checksum.ChecksumPair;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ChecksumCheckingResult {
 
-    private List<CheckerChecksum> checksums;
+    private List<ChecksumPair> checksums;
 
 
 
@@ -17,7 +17,7 @@ public final class ChecksumCheckingResult {
 
 
 
-    public void addChecksum(CheckerChecksum checksum) {
+    public void addChecksum(ChecksumPair checksum) {
         this.checksums.add(checksum);
     }
 
@@ -28,7 +28,7 @@ public final class ChecksumCheckingResult {
 
         return checksums
             .stream()
-            .filter(CheckerChecksum::matches)
+            .filter(ChecksumPair::matches)
             .count()
             * 100.0
             / checksums.size();
