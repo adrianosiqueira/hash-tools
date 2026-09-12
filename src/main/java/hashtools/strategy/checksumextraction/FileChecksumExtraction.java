@@ -42,11 +42,11 @@ public class FileChecksumExtraction implements ChecksumExtraction {
                 .filter(Checksum::isValid)
                 .toList();
 
-            return Result.ok(checksums);
+            return new Result.Ok<>(checksums);
         } catch (IOException e) {
-            return Result.error(e.getMessage());
+            return new Result.Error<>(e.getMessage());
         } catch (Exception e) {
-            return Result.error("Failed to extract checksums");
+            return new Result.Error<>("Failed to extract checksums");
         }
     }
 }

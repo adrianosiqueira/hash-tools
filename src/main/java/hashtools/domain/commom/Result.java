@@ -1,48 +1,60 @@
 package hashtools.domain.commom;
 
-public class Result<R, E> {
+public sealed interface Result<RESULT_TYPE, ERROR_TYPE> {
 
-    private R value;
-    private E error;
+    RESULT_TYPE getValue() throws IllegalStateException;
 
-    private boolean isError;
+    ERROR_TYPE getError() throws IllegalStateException;
+
+    boolean isOk();
+
+    boolean isError();
 
 
 
-    private Result() {
+    record Ok<RESULT_TYPE, ERROR_TYPE>(RESULT_TYPE value) implements Result<RESULT_TYPE, ERROR_TYPE> {
+        @Override
+        public RESULT_TYPE getValue() throws IllegalStateException {
+            return value;
+        }
+
+        @Override
+        public ERROR_TYPE getError() throws IllegalStateException {
+            throw new IllegalStateException("Cannot get error from Ok result");
+        }
+
+        @Override
+        public boolean isOk() {
+            return true;
+        }
+
+        @Override
+        public boolean isError() {
+            return false;
+        }
     }
 
 
 
-    public static <R, E> Result<R, E> ok(R value) {
-        var result = new Result<R, E>();
-        result.value = value;
-        result.error = null;
-        result.isError = false;
+    record Error<RESULT_TYPE, ERROR_TYPE>(ERROR_TYPE error) implements Result<RESULT_TYPE, ERROR_TYPE> {
+        @Override
+        public RESULT_TYPE getValue() throws IllegalStateException {
+            throw new IllegalStateException("Cannot get value from Error result");
+        }
 
-        return result;
-    }
+        @Override
+        public ERROR_TYPE getError() throws IllegalStateException {
+            return error;
+        }
 
-    public static <R, E> Result<R, E> error(E error) {
-        var result = new Result<R, E>();
-        result.value = null;
-        result.error = error;
-        result.isError = true;
+        @Override
+        public boolean isOk() {
+            return false;
+        }
 
-        return result;
-    }
-
-
-
-    public R getValue() {
-        return value;
-    }
-
-    public E getError() {
-        return error;
-    }
-
-    public boolean isError() {
-        return isError;
+        @Override
+        public boolean isError() {
+            return true;
+        }
     }
 }

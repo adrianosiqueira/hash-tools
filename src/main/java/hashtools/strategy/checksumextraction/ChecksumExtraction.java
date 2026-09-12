@@ -14,6 +14,6 @@ public interface ChecksumExtraction {
     }
 
     default Result<Collection<Checksum>, String> extractChecksums() {
-        return Result.ok(List.of());
+        return new Result.Ok<>(List.of());
     }
 }

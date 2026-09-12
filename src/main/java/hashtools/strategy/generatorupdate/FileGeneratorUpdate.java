@@ -73,7 +73,7 @@ public class FileGeneratorUpdate implements GeneratorUpdate {
             while ((bytesRead = inputStream.read(buffer)) != END_OF_FILE) {
                 if (Thread.currentThread().isInterrupted()) {
                     // Operation has been canceled
-                    return Result.ok(null);
+                    return new Result.Ok<>(null);
                 }
 
                 for (var generator : generators) {
@@ -84,11 +84,11 @@ public class FileGeneratorUpdate implements GeneratorUpdate {
                 progressTracker.accept(runCycles / requiredCycles);
             }
 
-            return Result.ok(null);
+            return new Result.Ok<>(null);
         } catch (IOException e) {
-            return Result.error(e.getMessage());
+            return new Result.Error<>(e.getMessage());
         } catch (Exception e) {
-            return Result.error("Failed to update the generators");
+            return new Result.Error<>("Failed to update the generators");
         } finally {
             progressTracker.accept(1.0);
         }

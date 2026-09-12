@@ -40,9 +40,9 @@ public class TextChecksumExtraction implements ChecksumExtraction {
                 .filter(Checksum::isValid)
                 .toList();
 
-            return Result.ok(checksums);
+            return new Result.Ok<>(checksums);
         } catch (Exception e) {
-            return Result.error("Failed to extract checksums");
+            return new Result.Error<>("Failed to extract checksums");
         }
     }
 }

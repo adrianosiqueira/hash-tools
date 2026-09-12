@@ -17,6 +17,6 @@ public interface GeneratorUpdate {
     }
 
     default Result<Void, String> updateGenerators(Collection<ChecksumGenerator> generators, Consumer<Double> progressTracker) {
-        return Result.ok(null);
+        return new Result.Ok<>(null);
     }
 }

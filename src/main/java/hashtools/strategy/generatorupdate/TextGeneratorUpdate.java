@@ -38,9 +38,9 @@ public class TextGeneratorUpdate implements GeneratorUpdate {
                 generator.receiveBytes(bytes);
             }
 
-            return Result.ok(null);
+            return new Result.Ok<>(null);
         } catch (Exception e) {
-            return Result.error("Failed to update the generators");
+            return new Result.Error<>("Failed to update the generators");
         } finally {
             progressTracker.accept(1.0);
         }
