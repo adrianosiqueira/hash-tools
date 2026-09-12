@@ -4,7 +4,6 @@ import hashtools.domain.checksum.Checksum;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public final class ChecksumGenerationResult {
@@ -32,7 +31,7 @@ public final class ChecksumGenerationResult {
             .collect(Collectors.joining("\n"));
     }
 
-    public void setIdentification(Supplier<String> identification) {
-        this.identification = identification.get();
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 }
