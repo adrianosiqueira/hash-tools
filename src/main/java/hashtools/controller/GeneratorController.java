@@ -3,6 +3,7 @@ package hashtools.controller;
 import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.file.EnhancedFile;
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.parameter.ChecksumGenerationParameter;
 import hashtools.domain.result.ChecksumGenerationResult;
 import hashtools.service.ChecksumGenerationService;
 import hashtools.strategy.generatorupdate.FileGeneratorUpdate;
@@ -21,7 +22,6 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ThreadFactory;
@@ -45,24 +45,23 @@ public class GeneratorController extends AbstractController {
     @FXML
     private Pane pnlResult;
 
-    private ChecksumGenerationService generationService;
     private ThreadFactory threadFactory;
+    private Thread checksumGenerationThread;
     private EnhancedFile tempFile;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.generationService = new ChecksumGenerationService();
         this.threadFactory = new VirtualThreadFactory();
+        this.checksumGenerationThread = new Thread(() -> {});
         this.tempFile = EnhancedFile.createTemporaryFile();
     }
 
     @Override
     public void stopAllServicesProcessing() {
-        generationService.cancelChecksumGeneration();
-
         try {
+            checksumGenerationThread.interrupt();
             tempFile.delete();
         } catch (Exception e) {
             super.logException(e);
@@ -73,17 +72,32 @@ public class GeneratorController extends AbstractController {
 
     @FXML
     private void performChecksumGeneration() {
-        threadFactory.newThread(() -> {
+        this.checksumGenerationThread = threadFactory.newThread(() -> {
             super.disableUi(pnlRoot);
             this.cleanUi();
             this.hideResultActions();
 
-            this.setupTheService();
-            generationService.generateChecksums();
+
+
+            var parameter = this.createChecksumGenerationParameter();
+
+            var service = new ChecksumGenerationService();
+            var generationResult = service.generateChecksums(parameter);
+
+            if (generationResult.isOk()) {
+                var result = generationResult.getValue();
+                this.processResult(result);
+            } else {
+                var error = generationResult.getError();
+                this.reportProblem(error);
+            }
+
+
 
             super.enableUi(pnlRoot);
             this.showResultActions();
-        }).start();
+        });
+        checksumGenerationThread.start();
     }
 
     @FXML
@@ -170,29 +184,8 @@ public class GeneratorController extends AbstractController {
             .forEach(node -> node.setVisible(true));
     }
 
-    private void setupTheService() {
-        generationService.initSetup();
-
-        generationService.setExceptionConsumer(super::logException);
-        generationService.setProblemConsumer(this::reportProblem);
-        generationService.setProgressConsumer(this::trackProgress);
-        generationService.setResultConsumer(this::processResult);
-
-
-
-        if (chkInput.isSelected()) {
-            generationService.setInputProblemDetection(new InputFileProblemDetection(txtInput.getText()));
-            generationService.setGeneratorUpdate(new FileGeneratorUpdate(txtInput.getText()));
-            generationService.setIdentification(new FileIdentification(txtInput.getText()));
-        } else {
-            generationService.setInputProblemDetection(new InputTextProblemDetection(txtInput.getText()));
-            generationService.setGeneratorUpdate(new TextGeneratorUpdate(txtInput.getText()));
-            generationService.setIdentification(new TextIdentification(txtInput.getText()));
-        }
-
-
-
-        Collection<Algorithm> algorithms = pnlAlgorithm
+    private ChecksumGenerationParameter createChecksumGenerationParameter() {
+        var algorithms = pnlAlgorithm
             .getChildren()
             .stream()
             .filter(CheckBox.class::isInstance)
@@ -203,7 +196,21 @@ public class GeneratorController extends AbstractController {
             .flatMap(Optional::stream)
             .toList();
 
-        generationService.setAlgorithms(algorithms);
+        var parameter = new ChecksumGenerationParameter();
+        parameter.setAlgorithms(algorithms);
+        parameter.setProgressTracker(this::trackProgress);
+
+        if (chkInput.isSelected()) {
+            parameter.setInputProblemDetection(new InputFileProblemDetection(txtInput.getText()));
+            parameter.setGeneratorUpdate(new FileGeneratorUpdate(txtInput.getText()));
+            parameter.setIdentification(new FileIdentification(txtInput.getText()));
+        } else {
+            parameter.setInputProblemDetection(new InputTextProblemDetection(txtInput.getText()));
+            parameter.setGeneratorUpdate(new TextGeneratorUpdate(txtInput.getText()));
+            parameter.setIdentification(new TextIdentification(txtInput.getText()));
+        }
+
+        return parameter;
     }
 
     private void reportProblem(String problem) {

@@ -1,152 +1,63 @@
 package hashtools.service;
 
-import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.algorithm.ChecksumGenerator;
+import hashtools.domain.commom.Result;
+import hashtools.domain.parameter.ChecksumGenerationParameter;
 import hashtools.domain.result.ChecksumGenerationResult;
-import hashtools.strategy.generatorupdate.GeneratorUpdate;
-import hashtools.strategy.identification.Identification;
-import hashtools.strategy.problemdetection.ProblemDetection;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.ArrayList;
 
 public class ChecksumGenerationService {
 
-    private Consumer<Exception> exceptionConsumer;
-    private Consumer<String> problemConsumer;
-    private Consumer<Double> progressConsumer;
-    private Consumer<ChecksumGenerationResult> resultConsumer;
-
-    private ProblemDetection inputProblemDetection;
-    private GeneratorUpdate generatorUpdate;
-    private Collection<Algorithm> algorithms;
-    private Identification identification;
-
-    private boolean canceled;
-
-
-
-    public ChecksumGenerationService() {
-        this.initSetup();
-    }
-
-
-
-    public void generateChecksums() {
+    public Result<ChecksumGenerationResult, String> generateChecksums(ChecksumGenerationParameter parameter) {
         // Problem detection
-        if (this.isCanceled()) {
-            return;
-        }
+        var problem = parameter
+            .getInputProblemDetection()
+            .detect();
 
-        String problem = inputProblemDetection
-            .detect()
-            .orElse(null);
-
-        if (problem != null) {
-            problemConsumer.accept(problem);
-            return;
+        if (problem.isPresent()) {
+            var error = problem.get();
+            return new Result.Error<>(error);
         }
 
 
 
         // Data getting
-        if (this.isCanceled()) {
-            return;
-        }
+        var generators = new ArrayList<ChecksumGenerator>();
 
-        Collection<ChecksumGenerator> generators = algorithms
-            .stream()
-            .map(ChecksumGenerator::createFromAlgorithm)
-            .toList();
+        for (var algorithm : parameter.getAlgorithms()) {
+            var generator = ChecksumGenerator.createFromAlgorithm(algorithm);
+            generators.add(generator);
+        }
 
 
 
         // Processing
-        if (this.isCanceled()) {
-            return;
-        }
+        var generatorUpdate = parameter.getGeneratorUpdate();
+        var progressTracker = parameter.getProgressTracker();
 
-        try {
-            generatorUpdate.update(generators, progressConsumer);
-        } catch (RuntimeException e) {
-            exceptionConsumer.accept(e);
-            return;
+        var updateResult = generatorUpdate.updateGenerators(generators, progressTracker);
+
+        if (updateResult.isError()) {
+            var error = updateResult.getError();
+            return new Result.Error<>(error);
         }
 
 
 
         // Result collecting
-        if (this.isCanceled()) {
-            return;
+        var identification = parameter
+            .getIdentification()
+            .identify();
+
+        var checksumGenerationResult = new ChecksumGenerationResult();
+        checksumGenerationResult.setIdentification(identification);
+
+        for (var generator : generators) {
+            var checksum = generator.decodeIntoChecksum();
+            checksumGenerationResult.addChecksum(checksum);
         }
 
-        ChecksumGenerationResult result = new ChecksumGenerationResult();
-        result.setIdentification(identification::identify);
-
-        generators
-            .stream()
-            .map(ChecksumGenerator::decodeIntoChecksum)
-            .forEach(result::addChecksum);
-
-        resultConsumer.accept(result);
-    }
-
-    public void cancelChecksumGeneration() {
-        canceled = true;
-    }
-
-
-
-    public void initSetup() {
-        this.exceptionConsumer = _ -> {};
-        this.problemConsumer = _ -> {};
-        this.progressConsumer = _ -> {};
-        this.resultConsumer = _ -> {};
-
-        this.inputProblemDetection = new ProblemDetection() {};
-        this.generatorUpdate = new GeneratorUpdate() {};
-        this.algorithms = List.of();
-        this.identification = new Identification() {};
-
-        this.canceled = false;
-    }
-
-    public void setExceptionConsumer(Consumer<Exception> exceptionConsumer) {
-        this.exceptionConsumer = exceptionConsumer;
-    }
-
-    public void setProblemConsumer(Consumer<String> problemConsumer) {
-        this.problemConsumer = problemConsumer;
-    }
-
-    public void setProgressConsumer(Consumer<Double> progressConsumer) {
-        this.progressConsumer = progressConsumer;
-    }
-
-    public void setResultConsumer(Consumer<ChecksumGenerationResult> resultConsumer) {
-        this.resultConsumer = resultConsumer;
-    }
-
-    public void setInputProblemDetection(ProblemDetection inputProblemDetection) {
-        this.inputProblemDetection = inputProblemDetection;
-    }
-
-    public void setGeneratorUpdate(GeneratorUpdate generatorUpdate) {
-        this.generatorUpdate = generatorUpdate;
-    }
-
-    public void setAlgorithms(Collection<Algorithm> algorithms) {
-        this.algorithms = algorithms;
-    }
-
-    public void setIdentification(Identification identification) {
-        this.identification = identification;
-    }
-
-
-
-    private boolean isCanceled() {
-        return canceled;
+        return new Result.Ok<>(checksumGenerationResult);
     }
 }
