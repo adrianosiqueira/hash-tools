@@ -73,7 +73,7 @@ public class FileGeneratorUpdate implements GeneratorUpdate {
             while ((bytesRead = inputStream.read(buffer)) != END_OF_FILE) {
                 if (Thread.currentThread().isInterrupted()) {
                     // Operation has been canceled
-                    return new Result.Ok<>(null);
+                    return new Result.Error<>("Update canceled");
                 }
 
                 for (var generator : generators) {
