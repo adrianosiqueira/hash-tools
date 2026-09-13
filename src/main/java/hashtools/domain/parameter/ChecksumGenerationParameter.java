@@ -14,7 +14,9 @@ public class ChecksumGenerationParameter {
     private GeneratorUpdate generatorUpdate;
     private Identification identification;
     private ProblemDetection inputProblemDetection;
+
     private Collection<Algorithm> algorithms;
+
     private Consumer<Double> progressTracker;
 
 
@@ -23,7 +25,9 @@ public class ChecksumGenerationParameter {
         this.generatorUpdate = new GeneratorUpdate() {};
         this.identification = new Identification() {};
         this.inputProblemDetection = new ProblemDetection() {};
+
         this.algorithms = List.of();
+
         this.progressTracker = _ -> {};
     }
 

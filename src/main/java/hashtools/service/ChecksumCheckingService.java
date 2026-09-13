@@ -3,201 +3,81 @@ package hashtools.service;
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.checksum.Checksum;
 import hashtools.domain.checksum.ChecksumPair;
+import hashtools.domain.commom.Result;
+import hashtools.domain.parameter.ChecksumCheckingParameter;
 import hashtools.domain.result.ChecksumCheckingResult;
-import hashtools.strategy.checksumextraction.ChecksumExtraction;
-import hashtools.strategy.generatorupdate.GeneratorUpdate;
-import hashtools.strategy.problemdetection.ProblemDetection;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.HashMap;
 
 public class ChecksumCheckingService {
 
-    private Consumer<Exception> exceptionConsumer;
-    private Consumer<String> problemConsumer;
-    private Consumer<Double> progressConsumer;
-    private Consumer<ChecksumCheckingResult> resultConsumer;
-
-    private ProblemDetection inputProblemDetection;
-    private GeneratorUpdate generatorUpdate;
-    private ProblemDetection checksumProblemDetection;
-    private ChecksumExtraction checksumExtraction;
-
-    private boolean canceled;
-
-
-
-    public ChecksumCheckingService() {
-        this.initSetup();
-    }
-
-
-
-    public void checkChecksums() {
+    public Result<ChecksumCheckingResult, String> checkChecksums(ChecksumCheckingParameter parameter) {
         // Problem detection
-        if (this.isCanceled()) {
-            return;
-        }
-
-        String problem = inputProblemDetection
+        var problem = parameter
+            .getInputProblemDetection()
             .detect()
-            .or(checksumProblemDetection::detect)
-            .orElse(null);
+            .or(parameter.getChecksumProblemDetection()::detect);
 
-        if (problem != null) {
-            problemConsumer.accept(problem);
-            return;
+        if (problem.isPresent()) {
+            var error = problem.get();
+            return new Result.Error<>(error);
         }
 
 
 
         // Data getting
-        if (this.isCanceled()) {
-            return;
+        var extractionResult = parameter
+            .getChecksumExtraction()
+            .extractChecksums();
+
+        if (extractionResult.isError()) {
+            var error = extractionResult.getError();
+            return new Result.Error<>(error);
         }
 
-        Collection<ChecksumWithGeneratorMap> checksumsMap;
-        List<ChecksumGenerator> generators;
+        var officialChecksums = extractionResult.getValue();
+        var checksumGeneratorsMap = new HashMap<Checksum, ChecksumGenerator>();
 
-        try {
-            checksumsMap = checksumExtraction
-                .extract()
-                .stream()
-                .map(ChecksumWithGeneratorMap::createFromChecksum)
-                .toList();
+        for (var officialChecksum : officialChecksums) {
+            var algorithm = officialChecksum.getAlgorithm();
+            var generator = ChecksumGenerator.createFromAlgorithm(algorithm);
 
-            generators = checksumsMap
-                .stream()
-                .map(ChecksumWithGeneratorMap::getChecksumGenerator)
-                .toList();
-        } catch (Exception e) {
-            exceptionConsumer.accept(e);
-            return;
+            checksumGeneratorsMap.put(officialChecksum, generator);
         }
 
 
 
         // Processing
-        if (this.isCanceled()) {
-            return;
-        }
+        var generatorUpdate = parameter.getGeneratorUpdate();
+        var progressTracker = parameter.getProgressTracker();
+        var generators = checksumGeneratorsMap.values();
 
-        try {
-            generatorUpdate.update(generators, progressConsumer);
-        } catch (Exception e) {
-            exceptionConsumer.accept(e);
-            return;
+        var updateResult = generatorUpdate.updateGenerators(generators, progressTracker);
+
+        if (updateResult.isError()) {
+            var error = updateResult.getError();
+            return new Result.Error<>(error);
         }
 
 
 
         // Result collecting
-        if (this.isCanceled()) {
-            return;
+        var checksumCheckingResult = new ChecksumCheckingResult();
+
+        for (var entry : checksumGeneratorsMap.entrySet()) {
+            var officialChecksum = entry.getKey();
+
+            var generatedChecksum = entry
+                .getValue()
+                .decodeIntoChecksum();
+
+            var checksumPair = new ChecksumPair();
+            checksumPair.setOfficialChecksum(officialChecksum);
+            checksumPair.setGeneratedChecksum(generatedChecksum);
+
+            checksumCheckingResult.addChecksum(checksumPair);
         }
 
-        ChecksumCheckingResult result = new ChecksumCheckingResult();
-
-        checksumsMap
-            .stream()
-            .map(ChecksumWithGeneratorMap::decodeIntoCheckerChecksum)
-            .forEach(result::addChecksum);
-
-        resultConsumer.accept(result);
-    }
-
-    public void cancelChecksumChecking() {
-        generatorUpdate.cancel();
-    }
-
-
-
-    public void initSetup() {
-        this.exceptionConsumer = _ -> {};
-        this.problemConsumer = _ -> {};
-        this.progressConsumer = _ -> {};
-        this.resultConsumer = _ -> {};
-
-        this.inputProblemDetection = new ProblemDetection() {};
-        this.generatorUpdate = new GeneratorUpdate() {};
-        this.checksumProblemDetection = new ProblemDetection() {};
-        this.checksumExtraction = new ChecksumExtraction() {};
-
-        this.canceled = false;
-    }
-
-    public void setExceptionConsumer(Consumer<Exception> exceptionConsumer) {
-        this.exceptionConsumer = exceptionConsumer;
-    }
-
-    public void setProblemConsumer(Consumer<String> problemConsumer) {
-        this.problemConsumer = problemConsumer;
-    }
-
-    public void setProgressConsumer(Consumer<Double> progressConsumer) {
-        this.progressConsumer = progressConsumer;
-    }
-
-    public void setResultConsumer(Consumer<ChecksumCheckingResult> resultConsumer) {
-        this.resultConsumer = resultConsumer;
-    }
-
-    public void setInputProblemDetection(ProblemDetection inputProblemDetection) {
-        this.inputProblemDetection = inputProblemDetection;
-    }
-
-    public void setChecksumProblemDetection(ProblemDetection checksumProblemDetection) {
-        this.checksumProblemDetection = checksumProblemDetection;
-    }
-
-    public void setGeneratorUpdate(GeneratorUpdate generatorUpdate) {
-        this.generatorUpdate = generatorUpdate;
-    }
-
-    public void setChecksumExtraction(ChecksumExtraction checksumExtraction) {
-        this.checksumExtraction = checksumExtraction;
-    }
-
-
-
-    private boolean isCanceled() {
-        return canceled;
-    }
-
-
-
-    private static class ChecksumWithGeneratorMap {
-
-        private Checksum checksum;
-        private ChecksumGenerator generator;
-
-
-
-        private ChecksumWithGeneratorMap() {
-        }
-
-
-
-        public static ChecksumWithGeneratorMap createFromChecksum(Checksum checksum) {
-            ChecksumWithGeneratorMap map = new ChecksumWithGeneratorMap();
-            map.checksum = checksum;
-            map.generator = ChecksumGenerator.createFromChecksum(checksum);
-
-            return map;
-        }
-
-
-
-        public ChecksumPair decodeIntoCheckerChecksum() {
-            ChecksumPair checkerChecksum = new ChecksumPair();
-            checkerChecksum.setOfficialChecksum(checksum);
-            checkerChecksum.setGeneratedChecksum(generator.decodeIntoChecksum());
-            return checkerChecksum;
-        }
-
-        public ChecksumGenerator getChecksumGenerator() {
-            return generator;
-        }
+        return new Result.Ok<>(checksumCheckingResult);
     }
 }

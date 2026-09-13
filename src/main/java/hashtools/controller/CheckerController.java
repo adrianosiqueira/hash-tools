@@ -1,6 +1,7 @@
 package hashtools.controller;
 
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.parameter.ChecksumCheckingParameter;
 import hashtools.domain.result.ChecksumCheckingResult;
 import hashtools.service.ChecksumCheckingService;
 import hashtools.strategy.checksumextraction.FileChecksumExtraction;
@@ -44,35 +45,50 @@ public class CheckerController extends AbstractController {
     @FXML
     private Label lblReliability;
 
-    private ChecksumCheckingService checkingService;
     private ThreadFactory threadFactory;
+    private Thread checksumCheckingThread;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.checkingService = new ChecksumCheckingService();
         this.threadFactory = new VirtualThreadFactory();
+        this.checksumCheckingThread = new Thread(() -> {});
     }
 
     @Override
     public void stopAllServicesProcessing() {
-        checkingService.cancelChecksumChecking();
+        checksumCheckingThread.interrupt();
     }
 
 
 
     @FXML
     private void performChecksumChecking() {
-        threadFactory.newThread(() -> {
+        this.checksumCheckingThread = threadFactory.newThread(() -> {
             super.disableUi(pnlRoot);
             this.cleanUi();
 
-            this.setupService();
-            checkingService.checkChecksums();
+
+
+            var parameter = this.createChecksumCheckingParameter();
+            var service = new ChecksumCheckingService();
+
+            var checkingResult = service.checkChecksums(parameter);
+
+            if (checkingResult.isOk()) {
+                var result = checkingResult.getValue();
+                this.processResult(result);
+            } else {
+                var error = checkingResult.getError();
+                this.reportProblem(error);
+            }
+
+
 
             super.enableUi(pnlRoot);
-        }).start();
+        });
+        checksumCheckingThread.start();
     }
 
     @FXML
@@ -95,32 +111,27 @@ public class CheckerController extends AbstractController {
 
 
 
-    private void setupService() {
-        checkingService.initSetup();
-        checkingService.setExceptionConsumer(super::logException);
-        checkingService.setProblemConsumer(this::reportProblem);
-        checkingService.setProgressConsumer(this::trackProgress);
-        checkingService.setResultConsumer(this::processResult);
-
-
+    private ChecksumCheckingParameter createChecksumCheckingParameter() {
+        var parameter = new ChecksumCheckingParameter();
+        parameter.setProgressTracker(this::trackProgress);
 
         if (chkInput.isSelected()) {
-            checkingService.setInputProblemDetection(new InputFileProblemDetection(txtInput.getText()));
-            checkingService.setGeneratorUpdate(new FileGeneratorUpdate(txtInput.getText()));
+            parameter.setInputProblemDetection(new InputFileProblemDetection(txtInput.getText()));
+            parameter.setGeneratorUpdate(new FileGeneratorUpdate(txtInput.getText()));
         } else {
-            checkingService.setInputProblemDetection(new InputTextProblemDetection(txtInput.getText()));
-            checkingService.setGeneratorUpdate(new TextGeneratorUpdate(txtInput.getText()));
+            parameter.setInputProblemDetection(new InputTextProblemDetection(txtInput.getText()));
+            parameter.setGeneratorUpdate(new TextGeneratorUpdate(txtInput.getText()));
         }
-
-
 
         if (chkChecksum.isSelected()) {
-            checkingService.setChecksumProblemDetection(new ChecksumFileProblemDetection(txtChecksum.getText()));
-            checkingService.setChecksumExtraction(new FileChecksumExtraction(txtChecksum.getText()));
+            parameter.setChecksumProblemDetection(new ChecksumFileProblemDetection(txtChecksum.getText()));
+            parameter.setChecksumExtraction(new FileChecksumExtraction(txtChecksum.getText()));
         } else {
-            checkingService.setChecksumProblemDetection(new ChecksumTextProblemDetection(txtChecksum.getText()));
-            checkingService.setChecksumExtraction(new TextChecksumExtraction(txtChecksum.getText()));
+            parameter.setChecksumProblemDetection(new ChecksumTextProblemDetection(txtChecksum.getText()));
+            parameter.setChecksumExtraction(new TextChecksumExtraction(txtChecksum.getText()));
         }
+
+        return parameter;
     }
 
     private void reportProblem(String problem) {
