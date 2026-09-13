@@ -9,15 +9,12 @@ import java.util.function.Consumer;
 
 public class ApplicationService {
 
-    private AbstractController activeController;
+    private Thread shutdownHook;
 
 
 
     public ApplicationService() {
-        this.activeController = new AbstractController() {};
-
-        Runtime runtime = Runtime.getRuntime();
-        runtime.addShutdownHook(new Thread(activeController::stopAllServicesProcessing));
+        this.shutdownHook = new Thread(() -> {});
     }
 
 
@@ -59,7 +56,19 @@ public class ApplicationService {
     }
 
     private void swapController(AbstractController controller) {
-        activeController.stopAllServicesProcessing();
-        activeController = controller;
+        try {
+            shutdownHook.start();
+            shutdownHook.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+        var runtime = Runtime.getRuntime();
+        runtime.removeShutdownHook(shutdownHook);
+
+        shutdownHook = new Thread(controller::stopAllServicesProcessing);
+        runtime.addShutdownHook(shutdownHook);
     }
 }
