@@ -2,6 +2,7 @@ package hashtools.controller;
 
 import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.file.FileDialog;
+import hashtools.domain.parameter.ChecksumComparisonParameter;
 import hashtools.domain.result.ChecksumComparisonResult;
 import hashtools.service.ChecksumComparisonService;
 import hashtools.strategy.generatorupdate.FileGeneratorUpdate;
@@ -48,36 +49,49 @@ public class ComparatorController extends AbstractController {
     @FXML
     private Label lblEquality;
 
-    private ChecksumComparisonService comparisonService;
     private ThreadFactory threadFactory;
+    private Thread checksumComparisonThread;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.comparisonService = new ChecksumComparisonService();
         this.threadFactory = new VirtualThreadFactory();
+        this.checksumComparisonThread = new Thread(() -> {});
         this.setupAlgorithms();
     }
 
     @Override
     public void stopAllServicesProcessing() {
-        comparisonService.cancelChecksumsComparison();
+        checksumComparisonThread.interrupt();
     }
 
 
 
     @FXML
     private void performChecksumComparison() {
-        threadFactory.newThread(() -> {
+        this.checksumComparisonThread = threadFactory.newThread(() -> {
             super.disableUi(pnlRoot);
             this.cleanUi();
 
-            this.setupService();
-            comparisonService.compareChecksums();
+            var parameter = this.createChecksumComparisonParameter();
+
+            var service = new ChecksumComparisonService();
+            var comparisonResult = service.compareChecksums(parameter);
+
+            if (comparisonResult.isOk()) {
+                var result = comparisonResult.getValue();
+                this.processResult(result);
+            } else {
+                var error = comparisonResult.getError();
+                this.reportProblem(error);
+            }
+
+
 
             super.enableUi(pnlRoot);
-        }).start();
+        });
+        checksumComparisonThread.start();
     }
 
     @FXML
@@ -141,33 +155,28 @@ public class ComparatorController extends AbstractController {
         });
     }
 
-    private void setupService() {
-        comparisonService.initSetup();
-        comparisonService.setExceptionConsumer(super::logException);
-        comparisonService.setProblemConsumer(this::reportProblem);
-        comparisonService.setProgressConsumer(this::trackProgress);
-        comparisonService.setResultConsumer(this::processResult);
-        comparisonService.setAlgorithm(cmbAlgorithm.getValue());
-
-
+    private ChecksumComparisonParameter createChecksumComparisonParameter() {
+        var parameter = new ChecksumComparisonParameter();
+        parameter.setAlgorithm(cmbAlgorithm.getValue());
+        parameter.setProgressTracker(this::trackProgress);
 
         if (chkInput1.isSelected()) {
-            comparisonService.setInputProblemDetection1(new InputFileProblemDetection(txtInput1.getText()));
-            comparisonService.setGeneratorUpdate1(new FileGeneratorUpdate(txtInput1.getText()));
+            parameter.setInputProblemDetection1(new InputFileProblemDetection(txtInput1.getText()));
+            parameter.setGeneratorUpdate1(new FileGeneratorUpdate(txtInput1.getText()));
         } else {
-            comparisonService.setInputProblemDetection1(new InputTextProblemDetection(txtInput1.getText()));
-            comparisonService.setGeneratorUpdate1(new TextGeneratorUpdate(txtInput1.getText()));
+            parameter.setInputProblemDetection1(new InputTextProblemDetection(txtInput1.getText()));
+            parameter.setGeneratorUpdate1(new TextGeneratorUpdate(txtInput1.getText()));
         }
-
-
 
         if (chkInput2.isSelected()) {
-            comparisonService.setInputProblemDetection2(new InputFileProblemDetection(txtInput2.getText()));
-            comparisonService.setGeneratorUpdate2(new FileGeneratorUpdate(txtInput2.getText()));
+            parameter.setInputProblemDetection2(new InputFileProblemDetection(txtInput2.getText()));
+            parameter.setGeneratorUpdate2(new FileGeneratorUpdate(txtInput2.getText()));
         } else {
-            comparisonService.setInputProblemDetection2(new InputTextProblemDetection(txtInput2.getText()));
-            comparisonService.setGeneratorUpdate2(new TextGeneratorUpdate(txtInput2.getText()));
+            parameter.setInputProblemDetection2(new InputTextProblemDetection(txtInput2.getText()));
+            parameter.setGeneratorUpdate2(new TextGeneratorUpdate(txtInput2.getText()));
         }
+
+        return parameter;
     }
 
     private void reportProblem(String problem) {

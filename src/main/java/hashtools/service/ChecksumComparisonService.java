@@ -4,155 +4,107 @@ import hashtools.domain.algorithm.Algorithm;
 import hashtools.domain.algorithm.ChecksumGenerator;
 import hashtools.domain.checksum.Checksum;
 import hashtools.domain.checksum.ChecksumPair;
+import hashtools.domain.commom.Result;
+import hashtools.domain.parameter.ChecksumComparisonParameter;
 import hashtools.domain.result.ChecksumComparisonResult;
 import hashtools.strategy.generatorupdate.GeneratorUpdate;
-import hashtools.strategy.problemdetection.ProblemDetection;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class ChecksumComparisonService {
 
-    private Consumer<Exception> exceptionConsumer;
-    private Consumer<String> problemConsumer;
-    private Consumer<Double> progressConsumer;
-    private Consumer<ChecksumComparisonResult> resultConsumer;
-
-    private ProblemDetection inputProblemDetection1;
-    private GeneratorUpdate generatorUpdate1;
-    private ProblemDetection inputProblemDetection2;
-    private GeneratorUpdate generatorUpdate2;
-    private Algorithm algorithm;
-
-    private boolean canceled;
-
-
-
-    public ChecksumComparisonService() {
-        this.initSetup();
-    }
-
-
-
-    public void compareChecksums() {
+    public Result<ChecksumComparisonResult, String> compareChecksums(ChecksumComparisonParameter parameter) {
         // Problem detection
-        if (this.isCanceled()) {
-            return;
-        }
-
-        String problem = inputProblemDetection1
+        var problem = parameter
+            .getInputProblemDetection1()
             .detect()
-            .or(inputProblemDetection2::detect)
-            .orElse(null);
+            .or(parameter.getInputProblemDetection2()::detect);
 
-        if (problem != null) {
-            problemConsumer.accept(problem);
-            return;
+        if (problem.isPresent()) {
+            var error = problem.get();
+            return new Result.Error<>(error);
         }
 
 
 
         // Processing
-        if (this.isCanceled()) {
-            return;
-        }
+        var futureChecksum1 = new CompletableFuture<Result<Checksum, String>>();
+        var futureChecksum2 = new CompletableFuture<Result<Checksum, String>>();
 
-        Future<Checksum> futureChecksum1 = CompletableFuture.supplyAsync(() -> this.generateChecksum(generatorUpdate1));
-        Future<Checksum> futureChecksum2 = CompletableFuture.supplyAsync(() -> this.generateChecksum(generatorUpdate2));
+        var threadPool = Executors.newFixedThreadPool(
+            Runtime.getRuntime().availableProcessors(),
+            Thread.ofPlatform().daemon()::unstarted
+        );
+        threadPool.execute(() -> this.generateChecksum(
+            parameter.getGeneratorUpdate1(),
+            parameter.getAlgorithm(),
+            parameter.getProgressTracker(),
+            futureChecksum1::complete
+        ));
+        threadPool.execute(() -> this.generateChecksum(
+            parameter.getGeneratorUpdate2(),
+            parameter.getAlgorithm(),
+            parameter.getProgressTracker(),
+            futureChecksum2::complete
+        ));
 
 
 
         // Result getting
-        if (this.isCanceled()) {
-            return;
-        }
-
-        ChecksumPair checksum = new ChecksumPair();
-
         try {
-            checksum.setGeneratedChecksum1(futureChecksum1.get());
-            checksum.setGeneratedChecksum2(futureChecksum2.get());
-        } catch (Exception e) {
-            exceptionConsumer.accept(e);
-            return;
+            var generationResult1 = futureChecksum1.get();
+            var generationResult2 = futureChecksum2.get();
+
+            if (generationResult1.isError()) {
+                var error = generationResult1.getError();
+                return new Result.Error<>(error);
+            } else if (generationResult2.isError()) {
+                var error = generationResult2.getError();
+                return new Result.Error<>(error);
+            }
+
+            Checksum checksum1 = generationResult1.getValue();
+            Checksum checksum2 = generationResult2.getValue();
+
+            var checksumPair = new ChecksumPair();
+            checksumPair.setGeneratedChecksum1(checksum1);
+            checksumPair.setGeneratedChecksum2(checksum2);
+
+            var checksumComparisonResult = new ChecksumComparisonResult();
+            checksumComparisonResult.setChecksum(checksumPair);
+            return new Result.Ok<>(checksumComparisonResult);
+        } catch (ExecutionException e) {
+            var error = e.getMessage();
+            return new Result.Error<>(error);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            threadPool.shutdownNow();
+            return new Result.Error<>("Checksum comparison canceled");
+        } finally {
+            /*
+             * Do not use try-with-resources because it prevents the current
+             * thread from being interrupted.
+             */
+            threadPool.close();
         }
-
-        ChecksumComparisonResult result = new ChecksumComparisonResult();
-        result.setChecksum(checksum);
-
-        resultConsumer.accept(result);
     }
 
-    public void cancelChecksumsComparison() {
-        canceled = true;
-    }
+    private void generateChecksum(GeneratorUpdate generatorUpdate, Algorithm algorithm, Consumer<Double> progressTracker, Consumer<Result<Checksum, String>> resultConsumer) {
+        var generator = ChecksumGenerator.createFromAlgorithm(algorithm);
+        var updateResult = generatorUpdate.updateGenerators(List.of(generator), progressTracker);
 
-
-
-    private Checksum generateChecksum(GeneratorUpdate generatorUpdate) {
-        ChecksumGenerator generator = ChecksumGenerator.createFromAlgorithm(algorithm);
-        generatorUpdate.update(List.of(generator), progressConsumer);
-        return generator.decodeIntoChecksum();
-    }
-
-
-
-    public void initSetup() {
-        this.exceptionConsumer = _ -> {};
-        this.problemConsumer = _ -> {};
-        this.progressConsumer = _ -> {};
-        this.resultConsumer = _ -> {};
-
-        this.inputProblemDetection1 = new ProblemDetection() {};
-        this.generatorUpdate1 = new GeneratorUpdate() {};
-        this.inputProblemDetection2 = new ProblemDetection() {};
-        this.generatorUpdate2 = new GeneratorUpdate() {};
-        this.algorithm = Algorithm.MD5;
-
-        this.canceled = false;
-    }
-
-    public void setExceptionConsumer(Consumer<Exception> exceptionConsumer) {
-        this.exceptionConsumer = exceptionConsumer;
-    }
-
-    public void setProblemConsumer(Consumer<String> problemConsumer) {
-        this.problemConsumer = problemConsumer;
-    }
-
-    public void setProgressConsumer(Consumer<Double> progressConsumer) {
-        this.progressConsumer = progressConsumer;
-    }
-
-    public void setResultConsumer(Consumer<ChecksumComparisonResult> resultConsumer) {
-        this.resultConsumer = resultConsumer;
-    }
-
-    public void setInputProblemDetection1(ProblemDetection inputProblemDetection1) {
-        this.inputProblemDetection1 = inputProblemDetection1;
-    }
-
-    public void setGeneratorUpdate1(GeneratorUpdate generatorUpdate1) {
-        this.generatorUpdate1 = generatorUpdate1;
-    }
-
-    public void setInputProblemDetection2(ProblemDetection inputProblemDetection2) {
-        this.inputProblemDetection2 = inputProblemDetection2;
-    }
-
-    public void setGeneratorUpdate2(GeneratorUpdate generatorUpdate2) {
-        this.generatorUpdate2 = generatorUpdate2;
-    }
-
-    public void setAlgorithm(Algorithm algorithm) {
-        this.algorithm = algorithm;
-    }
-
-
-
-    private boolean isCanceled() {
-        return canceled;
+        if (updateResult.isOk()) {
+            var checksum = generator.decodeIntoChecksum();
+            var result = new Result.Ok<Checksum, String>(checksum);
+            resultConsumer.accept(result);
+        } else {
+            var error = updateResult.getError();
+            var result = new Result.Error<Checksum, String>(error);
+            resultConsumer.accept(result);
+        }
     }
 }
