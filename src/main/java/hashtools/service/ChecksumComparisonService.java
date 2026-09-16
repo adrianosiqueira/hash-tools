@@ -1,13 +1,14 @@
 package hashtools.service;
 
 import hashtools.domain.checksum.Algorithm;
-import hashtools.domain.checksum.ChecksumGenerator;
 import hashtools.domain.checksum.Checksum;
+import hashtools.domain.checksum.ChecksumGenerator;
 import hashtools.domain.checksum.ChecksumPair;
 import hashtools.domain.commom.Result;
 import hashtools.domain.parameter.ChecksumComparisonParameter;
 import hashtools.domain.result.ChecksumComparisonResult;
 import hashtools.strategy.generatorupdate.GeneratorUpdate;
+import hashtools.strategy.threadfactory.ThreadFactories;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +38,7 @@ public class ChecksumComparisonService {
 
         var threadPool = Executors.newFixedThreadPool(
             Runtime.getRuntime().availableProcessors(),
-            Thread.ofPlatform().daemon()::unstarted
+            ThreadFactories::newPlatformDaemon
         );
         threadPool.execute(() -> this.generateChecksum(
             parameter.getGeneratorUpdate1(),

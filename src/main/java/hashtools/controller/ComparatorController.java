@@ -9,7 +9,7 @@ import hashtools.strategy.generatorupdate.FileGeneratorUpdate;
 import hashtools.strategy.generatorupdate.TextGeneratorUpdate;
 import hashtools.strategy.problemdetection.InputFileProblemDetection;
 import hashtools.strategy.problemdetection.InputTextProblemDetection;
-import hashtools.strategy.threadfactory.VirtualThreadFactory;
+import hashtools.strategy.threadfactory.ThreadFactories;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -56,7 +56,7 @@ public class ComparatorController extends AbstractController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.threadFactory = new VirtualThreadFactory();
+        this.threadFactory = ThreadFactories::newVirtual;
         this.checksumComparisonThread = new Thread(() -> {});
         this.setupAlgorithms();
     }

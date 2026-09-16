@@ -12,7 +12,7 @@ import hashtools.strategy.identification.FileIdentification;
 import hashtools.strategy.identification.TextIdentification;
 import hashtools.strategy.problemdetection.InputFileProblemDetection;
 import hashtools.strategy.problemdetection.InputTextProblemDetection;
-import hashtools.strategy.threadfactory.VirtualThreadFactory;
+import hashtools.strategy.threadfactory.ThreadFactories;
 import hashtools.window.MessageDialog;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -53,7 +53,7 @@ public class GeneratorController extends AbstractController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.threadFactory = new VirtualThreadFactory();
+        this.threadFactory = ThreadFactories::newVirtual;
         this.checksumGenerationThread = new Thread(() -> {});
         this.tempFile = EnhancedFile.createTemporaryFile();
     }
