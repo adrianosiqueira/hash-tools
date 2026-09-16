@@ -1,4 +1,4 @@
-package hashtools.domain.algorithm;
+package hashtools.domain.checksum;
 
 import java.util.Comparator;
 import java.util.List;

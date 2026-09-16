@@ -1,6 +1,6 @@
 package hashtools.controller;
 
-import hashtools.domain.algorithm.Algorithm;
+import hashtools.domain.checksum.Algorithm;
 import hashtools.domain.file.FileDialog;
 import hashtools.domain.parameter.ChecksumComparisonParameter;
 import hashtools.domain.result.ChecksumComparisonResult;

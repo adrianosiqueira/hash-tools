@@ -1,6 +1,6 @@
 package hashtools.domain.parameter;
 
-import hashtools.domain.algorithm.Algorithm;
+import hashtools.domain.checksum.Algorithm;
 import hashtools.strategy.generatorupdate.GeneratorUpdate;
 import hashtools.strategy.identification.Identification;
 import hashtools.strategy.problemdetection.ProblemDetection;

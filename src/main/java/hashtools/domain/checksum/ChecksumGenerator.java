@@ -1,6 +1,4 @@
-package hashtools.domain.algorithm;
-
-import hashtools.domain.checksum.Checksum;
+package hashtools.domain.checksum;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -1,6 +1,6 @@
 package hashtools.service;
 
-import hashtools.domain.algorithm.ChecksumGenerator;
+import hashtools.domain.checksum.ChecksumGenerator;
 import hashtools.domain.checksum.Checksum;
 import hashtools.domain.checksum.ChecksumPair;
 import hashtools.domain.commom.Result;

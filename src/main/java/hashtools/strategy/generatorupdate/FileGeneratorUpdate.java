@@ -1,6 +1,6 @@
 package hashtools.strategy.generatorupdate;
 
-import hashtools.domain.algorithm.ChecksumGenerator;
+import hashtools.domain.checksum.ChecksumGenerator;
 import hashtools.domain.commom.Result;
 import hashtools.domain.file.EnhancedFile;
 
