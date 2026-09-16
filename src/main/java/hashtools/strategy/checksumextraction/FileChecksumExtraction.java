@@ -21,19 +21,6 @@ public class FileChecksumExtraction implements ChecksumExtraction {
 
 
     @Override
-    public Collection<Checksum> extract() throws RuntimeException {
-        try (Stream<String> lines = file.getLinesStream()) {
-            return lines
-                .map(line -> line.split(" ")[0])
-                .map(Checksum::createFromHash)
-                .filter(Checksum::isValid)
-                .toList();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public Result<Collection<Checksum>, String> extractChecksums() {
         try (Stream<String> lines = file.getLinesStream()) {
             var checksums = lines

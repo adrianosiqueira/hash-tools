@@ -19,19 +19,6 @@ public class TextChecksumExtraction implements ChecksumExtraction {
 
 
     @Override
-    public Collection<Checksum> extract() throws RuntimeException {
-        try (Stream<String> lines = text.lines()) {
-            return lines
-                .map(line -> line.split(" ")[0])
-                .map(Checksum::createFromHash)
-                .filter(Checksum::isValid)
-                .toList();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public Result<Collection<Checksum>, String> extractChecksums() {
         try (Stream<String> lines = text.lines()) {
             var checksums = lines
