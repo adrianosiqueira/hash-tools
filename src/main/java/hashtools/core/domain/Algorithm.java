@@ -1,5 +1,7 @@
 package hashtools.core.domain;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 public enum Algorithm {
@@ -35,5 +37,16 @@ public enum Algorithm {
         }
 
         return Optional.empty();
+    }
+
+
+
+    public ChecksumGenerator createChecksumGenerator() {
+        try {
+            var messageDigest = MessageDigest.getInstance(name);
+            return new ChecksumGenerator(messageDigest);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Internal error regarding the algorithm name", e);
+        }
     }
 }
