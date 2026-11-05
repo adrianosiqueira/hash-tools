@@ -24,4 +24,20 @@ public class CheckingChecksums {
     public Collection<CheckingChecksum> getChecksums() {
         return checksums;
     }
+
+    public double calculateReliability() {
+        if (checksums.isEmpty()) {
+            return 0.0;
+        }
+
+        var reliability = 0.0;
+
+        for (var checksum : checksums) {
+            if (checksum.matches()) {
+                reliability += 1.0;
+            }
+        }
+
+        return reliability / checksums.size();
+    }
 }
