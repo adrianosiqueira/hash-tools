@@ -46,6 +46,8 @@ public class CheckingChecksumGenerators {
             var checkingChecksum = new CheckingChecksum();
             checkingChecksum.setOfficialChecksum(officialChecksum);
             checkingChecksum.setGeneratedChecksum(generatedChecksum);
+
+            consumer.accept(checkingChecksum);
         }
     }
 }
