@@ -7,22 +7,32 @@ import org.junit.jupiter.api.Test;
 class StringChecksumProblemDetectionTest {
 
     @Test
-    void detect() {
+    void constructor() {
         Assertions.assertDoesNotThrow(
-            () -> new StringChecksumProblemDetection("a".repeat(32)).detect(),
-            "Should not throw an exception for a valid string"
+            () -> new StringChecksumProblemDetection(""),
+            "Should not throw an exception when the string is not null"
         );
 
         Assertions.assertThrows(
             NullPointerException.class,
-            () -> new StringChecksumProblemDetection(null).detect(),
-            "Should throw a NullPointerException for a null string"
+            () -> new StringChecksumProblemDetection(null),
+            "Should throw a NullPointerException when the string is null"
+        );
+    }
+
+
+
+    @Test
+    void detect() {
+        Assertions.assertDoesNotThrow(
+            () -> new StringChecksumProblemDetection("a".repeat(32)).detect(),
+            "Should not throw an exception when the string is valid"
         );
 
         Assertions.assertThrows(
             ProblemException.class,
             () -> new StringChecksumProblemDetection("").detect(),
-            "Should throw a ProblemException for an empty string"
+            "Should throw a ProblemException when the string is empty"
         );
     }
 }
